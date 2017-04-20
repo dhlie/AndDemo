@@ -163,16 +163,17 @@ public class SlideFinishFrameLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        long time = System.currentTimeMillis();
+        long time = System.nanoTime();
         drawScrim(canvas);
         drawEdgeShadow(canvas);
         super.dispatchDraw(canvas);
-        if (LLog.PRINT_LOG) LLog.i("liftcircly----dispatchDraw:"+(System.currentTimeMillis()-time));
+        if (LLog.PRINT_LOG) LLog.i("liftcircly----dispatchDraw:"+(System.nanoTime()-time)/1000);
     }
 
     private void drawScrim(Canvas canvas) {
         if (getScrollX() != 0 && mPreviousActivity != null) {
             canvas.save();
+            canvas.clipRect(getScrollX(), 0, 0, getBottom());//优化过度绘制,只画可见部分
             canvas.translate(getScrollX() - mScrimeMaxDistance * (1- mScrollPercent), 0);
             mPreviousActivity.getWindow().getDecorView().draw(canvas);
             canvas.restore();
