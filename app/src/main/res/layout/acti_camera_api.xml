@@ -286,6 +286,30 @@
                 android:scaleType="matrix"
                 android:background="@color/titlebar_background"
                 android:src="@drawable/poker"/>
+
+            <LinearLayout
+                android:id="@+id/ll_btns"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:text="MatrixEditActivity"/>
+
+                <Button
+                    android:id="@+id/btn1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="8dp"
+                    android:layout_marginLeft="10dp"
+                    android:text="CameraMatrixActivity"/>
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

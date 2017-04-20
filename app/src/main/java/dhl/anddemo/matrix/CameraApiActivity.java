@@ -1,9 +1,8 @@
 package dhl.anddemo.matrix;
 
-import android.graphics.Bitmap;
+import android.content.Intent;
 import android.graphics.Camera;
 import android.graphics.Matrix;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -79,6 +78,7 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
         setContentView(R.layout.acti_camera_api);
 
         TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
+        titleBar.setTitle(getClass().getSimpleName());
         titleBar.setLeftBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +132,19 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
         mSeekbarZTranslate.setOnTouchListener(mOnTouchListener);
         mSeekbarXSkew.setOnTouchListener(mOnTouchListener);
         mSeekbarYSkew.setOnTouchListener(mOnTouchListener);
+
+        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), MatrixEditActivity.class));
+            }
+        });
+        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getApplicationContext(), CarAnimationActivity.class));
+            }
+        });
 
         // refresh
         refreshImage();

@@ -29,6 +29,7 @@ public class MatrixEditActivity extends BaseActivity {
         setContentView(R.layout.acti_matrix_edit);
 
         TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
+        titleBar.setTitle(getClass().getSimpleName());
         titleBar.setLeftBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

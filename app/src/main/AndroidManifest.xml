@@ -18,7 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="dhl.anddemo.matrix.CameraMatrixActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
+        <activity android:name="dhl.anddemo.matrix.CarAnimationActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.matrix.CameraApiActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.matrix.MatrixEditActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
     </application>

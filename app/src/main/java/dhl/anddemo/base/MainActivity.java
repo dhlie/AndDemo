@@ -6,8 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
-import dhl.anddemo.matrix.CameraMatrixActivity;
+import dhl.anddemo.matrix.CameraApiActivity;
 
 public class MainActivity extends BaseActivity {
 
@@ -25,7 +24,7 @@ public class MainActivity extends BaseActivity {
     public void onItemClick(View view) {
         switch (view.getId()) {
             case R.id.tv_camera_matrix:
-                startActivity(new Intent(getApplicationContext(), CameraMatrixActivity.class));
+                startActivity(new Intent(getApplicationContext(), CameraApiActivity.class));
                 break;
         }
     }

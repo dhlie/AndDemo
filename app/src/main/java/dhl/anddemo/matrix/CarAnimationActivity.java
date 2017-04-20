@@ -14,7 +14,7 @@ import dhl.anddemo.base.TitleBar;
  * Created by DuanHl on 2017/4/19.
  */
 
-public class CameraMatrixActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class CarAnimationActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
 
     private SeekBar mSeekbarYRotate;
     private TextView mTVYRotate;
@@ -26,6 +26,7 @@ public class CameraMatrixActivity extends BaseActivity implements SeekBar.OnSeek
         setContentView(R.layout.acti_camera_matrix);
 
         TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
+        titleBar.setTitle(getClass().getSimpleName());
         titleBar.setLeftBtnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -40,18 +41,6 @@ public class CameraMatrixActivity extends BaseActivity implements SeekBar.OnSeek
         mSeekbarYRotate.setOnSeekBarChangeListener(this);
         mTVYRotate = (TextView) findViewById(R.id.txtYRotate);
 
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), CameraApiActivity.class));
-            }
-        });
-        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MatrixEditActivity.class));
-            }
-        });
     }
 
     @Override
