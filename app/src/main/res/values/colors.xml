@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_background">#ffffff</color>
+    <color name="transparent">@android:color/transparent</color>
+    <color name="titlebar_background">#263238</color>
+    <color name="titlebar_textColor">#ffffff</color>
+    <color name="btn_press_bg">#33000000</color>
+    <color name="divider_line">#DADADA</color>
+</resources>

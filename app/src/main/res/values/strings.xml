@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AndDemo</string>
+    <string name="actionbar_title">Title</string>
+</resources>

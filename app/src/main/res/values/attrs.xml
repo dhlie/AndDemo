@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- titleBar -->
+    <declare-styleable name="TitleBar">
+        <attr name="leftDrawable" format="reference" />
+        <attr name="leftText" format="string" />
+        <attr name="rightDrawable" format="reference" />
+        <attr name="rightText" format="string" />
+        <attr name="title_text" format="string" />
+    </declare-styleable>
+
+</resources>

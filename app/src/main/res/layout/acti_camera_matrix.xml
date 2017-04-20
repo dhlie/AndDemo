@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+    <dhl.anddemo.base.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftDrawable="@drawable/ic_menu_back" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:background="@color/main_background">
+
+        <dhl.anddemo.matrix.CarWheelView
+            android:id="@+id/mv1"
+            android:layout_width="300px"
+            android:layout_height="300px"
+            android:background="#33ffff00"/>
+
+        <LinearLayout
+            android:id="@+id/ll_btns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+            <Button
+                android:id="@+id/btn"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="CameraApiActivity"/>
+
+            <Button
+                android:id="@+id/btn1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:layout_marginLeft="10dp"
+                android:text="MatrixEditActivity"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_above="@id/ll_btns"
+            android:layout_marginBottom="20dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="y轴旋转:"/>
+            <SeekBar
+                android:id="@+id/seekbarYRotate"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:progress="0"
+                android:max="360"/>
+            <TextView
+                android:id="@+id/txtYRotate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0゜"/>
+        </LinearLayout>
+
+        <dhl.anddemo.matrix.CarView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+    </RelativeLayout>
+</LinearLayout>

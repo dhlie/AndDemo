@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <dhl.anddemo.base.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftDrawable="@drawable/ic_menu_back"
+        app:rightText="重置"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titlebar"
+        android:background="@color/main_background">
+
+        <Button
+            android:id="@+id/btn_reset"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="16dp"
+            android:text="Reset"/>
+
+        <Button
+            android:id="@+id/btn_apply"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/btn_reset"
+            android:layout_marginRight="16dp"
+            android:text="apply"/>
+
+        <EditText
+            android:id="@+id/et11"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et12"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et11"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et13"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et12"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et21"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et11"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et22"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et11"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et11"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et23"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et11"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et12"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et31"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et21"
+            android:layout_marginLeft="20dp"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et32"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et21"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et31"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <EditText
+            android:id="@+id/et33"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/et21"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@id/et12"
+            android:gravity="center_horizontal"
+            android:inputType="numberDecimal"/>
+
+        <FrameLayout
+            android:id="@+id/fl_iv"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/et31"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:scaleType="matrix"
+                android:src="@drawable/poker"
+                android:background="@color/titlebar_background"/>
+        </FrameLayout>
+
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 所有界面 顶部条高度 -->
+    <dimen name="titleBarHeight">48dp</dimen>
+    <dimen name="titlebarHorPadding">10dp</dimen>
+</resources>

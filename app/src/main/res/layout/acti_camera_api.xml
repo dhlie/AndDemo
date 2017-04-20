@@ -1,0 +1,292 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <dhl.anddemo.base.TitleBar
+        android:id="@+id/titlebar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:leftDrawable="@drawable/ic_menu_back"
+        app:rightText="重置"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/titlebar"
+        android:background="@color/main_background">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="10dp"
+            android:orientation="vertical">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:text="Camera:    xyz轴旋转(0  -  360)"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="x轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarXRotate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="360"/>
+
+                <TextView
+                    android:id="@+id/txtXRotate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0゜"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="y轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarYRotate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="360" />
+
+                <TextView
+                    android:id="@+id/txtYRotate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0゜"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="z轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarZRotate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="360"/>
+
+                <TextView
+                    android:id="@+id/txtZRotate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0゜"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Camera:    xyz轴移动(-100  -  100)"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="x轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarXTranslate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="200"
+                    android:progress="100"/>
+
+                <TextView
+                    android:id="@+id/txtXTranslate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="y轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarYTranslate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="200"
+                    android:progress="100"/>
+
+                <TextView
+                    android:id="@+id/txtYTranslate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="z轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarZTranslate"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="200"
+                    android:progress="100"/>
+
+                <TextView
+                    android:id="@+id/txtZTranslate"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0"/>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_vertical"
+                android:text="Matrix:    xy轴倾斜(-1.0  -  1.0)"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="x轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarXSkew"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="200"
+                    android:progress="100"/>
+
+                <TextView
+                    android:id="@+id/txtXSkew"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0.0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="y轴:"/>
+
+                <SeekBar
+                    android:id="@+id/seekbarYSkew"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:max="200"
+                    android:progress="100"/>
+
+                <TextView
+                    android:id="@+id/txtYSkew"
+                    android:layout_width="40dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:text="0.0"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/iv_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:scaleType="matrix"
+                android:background="@color/titlebar_background"
+                android:src="@drawable/poker"/>
+        </LinearLayout>
+    </ScrollView>
+
+</RelativeLayout>
