@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:leftDrawable="@drawable/ic_menu_back"
-        app:rightText="重置"/>
+        app:rightFirstText="重置"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -50,7 +50,7 @@
 
                 <TextView
                     android:id="@+id/txtXRotate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0゜"/>
@@ -79,7 +79,7 @@
 
                 <TextView
                     android:id="@+id/txtYRotate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0゜"/>
@@ -108,7 +108,7 @@
 
                 <TextView
                     android:id="@+id/txtZRotate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0゜"/>
@@ -145,7 +145,7 @@
 
                 <TextView
                     android:id="@+id/txtXTranslate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0"/>
@@ -175,7 +175,7 @@
 
                 <TextView
                     android:id="@+id/txtYTranslate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0"/>
@@ -205,7 +205,7 @@
 
                 <TextView
                     android:id="@+id/txtZTranslate"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0"/>
@@ -242,7 +242,7 @@
 
                 <TextView
                     android:id="@+id/txtXSkew"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0.0"/>
@@ -272,7 +272,7 @@
 
                 <TextView
                     android:id="@+id/txtYSkew"
-                    android:layout_width="40dp"
+                    android:layout_width="60dp"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:text="0.0"/>
@@ -308,7 +308,7 @@
                     android:layout_weight="1"
                     android:padding="8dp"
                     android:layout_marginLeft="10dp"
-                    android:text="CameraMatrixActivity"/>
+                    android:text="CarAnimationActivity"/>
             </LinearLayout>
         </LinearLayout>
     </ScrollView>

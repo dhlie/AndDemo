@@ -25,14 +25,15 @@ public class CarAnimationActivity extends BaseActivity implements SeekBar.OnSeek
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acti_camera_matrix);
 
-        TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
-        titleBar.setTitle(getClass().getSimpleName());
-        titleBar.setLeftBtnClickListener(new View.OnClickListener() {
+        TitleBar.SimpleTitleBarClickListener titleBarClickListener = new TitleBar.SimpleTitleBarClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onLeftClick(View v) {
                 finish();
             }
-        });
+        };
+        TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
+        titleBar.setTitleBarClickListener(titleBarClickListener);
+        titleBar.setTitle(getClass().getSimpleName());
 
         mCarWheelView = (CarWheelView) findViewById(R.id.mv1);
         mCarWheelView.startAnim();

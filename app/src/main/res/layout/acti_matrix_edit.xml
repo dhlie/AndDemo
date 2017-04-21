@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:leftDrawable="@drawable/ic_menu_back"
-        app:rightText="重置"/>
+        app:rightFirstText="重置"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

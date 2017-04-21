@@ -6,12 +6,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import dhl.anddemo.R;
@@ -24,24 +25,41 @@ import dhl.anddemo.base.util.DeviceInfo;
  */
 public class TitleBar extends FrameLayout {
 
-    private static final int TITLE_TEXT_SIZE = 18;
-    private static final int RIGHT_TEXT_SIZE = 16;
-
     private View            mLeftView;
     private View            mRightView;
     private View            mCenterView;
     private View            mStatusBarView;
     private FrameLayout     mTitleBarParent;
 
-    private Drawable        mLeftBtnDrawable;
-    private Drawable        mRightBtnDrawable;
-    private String          mLeftBtnText;
-    private String          mRightBtnText;
-    private String          mTitleText;
-
     private int             mTitleBarHeight;
     private int             mHorPadding;
     private int             mTopMargin;
+    private OnTitleBarClickListener mClickCallback;
+    private OnClickListener mClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            if (mClickCallback == null) return;
+            if (v == mLeftView) {
+                mClickCallback.onLeftClick(v);
+            } else if (v == mCenterView) {
+                mClickCallback.onTitleClick(v);
+            } else {
+                if (v == mRightView) {
+                    mClickCallback.onRightFirstClick(v);
+                } else {
+                    int index = ((ViewGroup)mRightView).indexOfChild(v);
+                    int childCount = ((ViewGroup)mRightView).getChildCount();
+                    if (index == childCount-1) {
+                        mClickCallback.onRightFirstClick(v);
+                    } else if (index == childCount-2) {
+                        mClickCallback.onRightSecondClick(v);
+                    } else if (index == childCount-3) {
+                        mClickCallback.onRightThirdClick(v);
+                    }
+                }
+            }
+        }
+    };
 
     public TitleBar(Context context) {
         this(context, null);
@@ -53,25 +71,9 @@ public class TitleBar extends FrameLayout {
 
     public TitleBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
-        try {
-            mLeftBtnDrawable = typedArray.getDrawable(R.styleable.TitleBar_leftDrawable);
-            mRightBtnDrawable = typedArray.getDrawable(R.styleable.TitleBar_rightDrawable);
-            mLeftBtnText = typedArray.getString(R.styleable.TitleBar_leftText);
-            mRightBtnText = typedArray.getString(R.styleable.TitleBar_rightText);
-            mTitleText = typedArray.getString(R.styleable.TitleBar_title_text);
-        } catch (Exception e) {
-        } finally {
-            typedArray.recycle();
-        }
 
         mTitleBarHeight = getResources().getDimensionPixelSize(R.dimen.titleBarHeight);
         mHorPadding = getResources().getDimensionPixelSize(R.dimen.titlebarHorPadding);
-
-        initView(context);
-    }
-
-    private void initView(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             mTopMargin = DeviceInfo.getStatusBarHeight(context);
         }
@@ -89,64 +91,91 @@ public class TitleBar extends FrameLayout {
         } else {
             mTitleBarParent = this;
         }
-
         //标题栏默认背景色
         mTitleBarParent.setBackgroundResource(R.color.titlebar_background);
         //状态栏默认背景色
         if (mStatusBarView != null) mStatusBarView.setBackgroundResource(R.color.titlebar_background);
 
-        addLeftButton();
-        addRightButton();
+        String title = null;
+        Drawable leftDrawable = null;
+        String leftText = null;
+        Drawable rightFirstDrawable = null;
+        String rightFirstText = null;
+        Drawable rightSecondDrawable = null;
+        String rightSecondText = null;
+        Drawable rightThirdDrawable = null;
+        String rightThirdText = null;
+        TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.TitleBar);
+        try {
+            title = typedArray.getString(R.styleable.TitleBar_titleText);
+            leftDrawable = typedArray.getDrawable(R.styleable.TitleBar_leftDrawable);
+            leftText = typedArray.getString(R.styleable.TitleBar_leftText);
+            rightFirstDrawable = typedArray.getDrawable(R.styleable.TitleBar_rightFirstDrawable);
+            rightFirstText = typedArray.getString(R.styleable.TitleBar_rightFirstText);
+            rightSecondDrawable = typedArray.getDrawable(R.styleable.TitleBar_rightSecondDrawable);
+            rightSecondText = typedArray.getString(R.styleable.TitleBar_rightSecondText);
+            rightThirdDrawable = typedArray.getDrawable(R.styleable.TitleBar_rightThirdDrawable);
+            rightThirdText = typedArray.getString(R.styleable.TitleBar_rightThirdText);
+        } catch (Exception e) {
+        } finally {
+            typedArray.recycle();
+        }
 
-        //添加标题
-        TextView textView = new TextView(context);
-        textView.setText(mTitleText);
-        textView.setSingleLine(true);
-        textView.setEllipsize(TextUtils.TruncateAt.END);
-        textView.setGravity(Gravity.CENTER);
-        textView.setTextSize(TITLE_TEXT_SIZE);
-        textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, mTitleBarHeight);
-        params.gravity = Gravity.CENTER_HORIZONTAL;
-        mTitleBarParent.addView(textView, params);
-        mCenterView = textView;
-
-        mCenterView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-
-            public void onGlobalLayout() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                    mCenterView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                }else{
-                    mCenterView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                }
-                recomputeTitleWidth();
-            }
-        });
+        addTitleTextView(title);
+        addLeftButton(leftDrawable, leftText);
+        addRightButton(rightFirstDrawable, rightFirstText, rightSecondDrawable, rightSecondText, rightThirdDrawable, rightThirdText);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = MeasureSpec.getSize(widthMeasureSpec);
-        int height = mTitleBarHeight + mTopMargin;
-        setMeasuredDimension(width, height);
+        super.onMeasure(widthMeasureSpec, MeasureSpec.makeMeasureSpec(mTitleBarHeight + mTopMargin, MeasureSpec.EXACTLY));
+
+        if (mCenterView != null) {
+            int w = getMeasuredWidth();
+            int lw = mLeftView != null ? mLeftView.getMeasuredWidth() : 0;
+            int rw = mRightView != null ? mRightView.getMeasuredWidth() : 0;
+            int cw = mCenterView != null ? mCenterView.getMeasuredWidth() : 0;
+
+            int max = lw > rw ? lw : rw;
+            if ((mHorPadding + max)*2 + cw > w) {
+                mCenterView.measure(MeasureSpec.makeMeasureSpec(w - (mHorPadding + max)*2, MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(mTitleBarHeight, MeasureSpec.EXACTLY));
+            }
+        }
     }
 
-    private void addLeftButton() {
-        removeLeftBtn();
-        if (mLeftBtnDrawable != null && !TextUtils.isEmpty(mLeftBtnText)) {
-            throw new RuntimeException("you should use youself view as left button (@see setLeftView)");
-        } else if (mLeftBtnDrawable != null) {
+    private void addTitleTextView(String title) {
+        removeCenterView();
+        if (title == null || title.length() == 0) return;
+        //添加标题
+        TextView textView = new TextView(getContext());
+        textView.setText(title);
+        textView.setSingleLine(true);
+        textView.setEllipsize(TextUtils.TruncateAt.END);
+        textView.setGravity(Gravity.CENTER);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.titlebar_title_textsize));
+        textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, mTitleBarHeight);
+        params.gravity = Gravity.CENTER_HORIZONTAL;
+        textView.setOnClickListener(mClickListener);
+        mCenterView = textView;
+        mTitleBarParent.addView(mCenterView, params);
+    }
+
+    private void addLeftButton(Drawable drawable, String text) {
+        removeLeftView();
+        if (drawable != null && !TextUtils.isEmpty(text)) {
+            throw new RuntimeException("按钮只能是图片或文字(@see #setLeftView())");
+        } else if (drawable != null) {
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setImageDrawable(mLeftBtnDrawable);
+            imageView.setImageDrawable(drawable);
             mLeftView = imageView;
-        } else if (!TextUtils.isEmpty(mLeftBtnText)) {
+        } else if (!TextUtils.isEmpty(text)) {
             TextView textView = new TextView(getContext());
             textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
-            textView.setTextSize(RIGHT_TEXT_SIZE);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.titlebar_right_textsize));
             textView.setSingleLine(true);
-            textView.setText(mLeftBtnText);
+            textView.setText(text);
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(mHorPadding, 0, mHorPadding, 0);
             mLeftView = textView;
@@ -154,10 +183,10 @@ public class TitleBar extends FrameLayout {
 
         if (mLeftView != null) {
             mLeftView.setBackgroundResource(R.drawable.button_pressed_selector);
-            mLeftView.setClickable(false);
+            mLeftView.setOnClickListener(mClickListener);
             int width;
-            if (mLeftBtnDrawable != null) {
-                width = (int) ((float)mLeftBtnDrawable.getIntrinsicWidth() * mTitleBarHeight / mLeftBtnDrawable.getIntrinsicHeight());
+            if (drawable != null) {
+                width = (int) ((float)drawable.getIntrinsicWidth() * mTitleBarHeight / drawable.getIntrinsicHeight());
                 width = width < mTitleBarHeight ? mTitleBarHeight : width;
             } else {
                 width = LayoutParams.WRAP_CONTENT;
@@ -168,44 +197,124 @@ public class TitleBar extends FrameLayout {
         }
     }
 
-    private void addRightButton() {
-        removeRightBtn();
-        if (mRightBtnDrawable != null && !TextUtils.isEmpty(mRightBtnText)) {
-            throw new RuntimeException("you should use youself view as right button (@see setRightView)");
-        } else if (mRightBtnDrawable != null) {
+    private void addRightButton(Drawable fDrawable, String fText, Drawable sDrawable, String sText, Drawable tDrawable, String tText) {
+        removeRightView();
+
+        int btnCount = 0;
+        View firstView = null;
+        int fvWidth = LayoutParams.WRAP_CONTENT;
+        if (fDrawable != null && !TextUtils.isEmpty(fText)) {
+            throw new RuntimeException("按钮只能是图片或文字 (@see #setRightView())");
+        } else if (fDrawable != null) {
             ImageView imageView = new ImageView(getContext());
             imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
-            imageView.setImageDrawable(mRightBtnDrawable);
-            mRightView = imageView;
-        } else if (!TextUtils.isEmpty(mRightBtnText)) {
+            imageView.setImageDrawable(fDrawable);
+            firstView = imageView;
+        } else if (!TextUtils.isEmpty(fText)) {
             TextView textView = new TextView(getContext());
             textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
-            textView.setTextSize(RIGHT_TEXT_SIZE);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.titlebar_right_textsize));
             textView.setSingleLine(true);
-            textView.setText(mRightBtnText);
+            textView.setText(fText);
             textView.setGravity(Gravity.CENTER);
             textView.setPadding(mHorPadding, 0, mHorPadding, 0);
-            mRightView = textView;
+            firstView = textView;
+        }
+        if (firstView != null) {
+            btnCount++;
+            firstView.setBackgroundResource(R.drawable.button_pressed_selector);
+            firstView.setOnClickListener(mClickListener);
+            if (fDrawable != null) {
+                fvWidth = (int) ((float)fDrawable.getIntrinsicWidth() * mTitleBarHeight / fDrawable.getIntrinsicHeight());
+                fvWidth = fvWidth < mTitleBarHeight ? mTitleBarHeight : fvWidth;
+            } else {
+                fvWidth = LayoutParams.WRAP_CONTENT;
+            }
         }
 
-        if (mRightView != null) {
-            mRightView.setBackgroundResource(R.drawable.button_pressed_selector);
-            mRightView.setClickable(false);
-            int width;
-            if (mRightBtnDrawable != null) {
-                width = (int) ((float)mRightBtnDrawable.getIntrinsicWidth() * mTitleBarHeight / mRightBtnDrawable.getIntrinsicHeight());
-                width = width < mTitleBarHeight ? mTitleBarHeight : width;
+        View secondView = null;
+        int svWidth = LayoutParams.WRAP_CONTENT;
+        if (sDrawable != null && !TextUtils.isEmpty(sText)) {
+            throw new RuntimeException("按钮只能是图片或文字 (@see #setRightView())");
+        } else if (sDrawable != null) {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setImageDrawable(sDrawable);
+            secondView = imageView;
+        } else if (!TextUtils.isEmpty(sText)) {
+            TextView textView = new TextView(getContext());
+            textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.titlebar_right_textsize));
+            textView.setSingleLine(true);
+            textView.setText(sText);
+            textView.setGravity(Gravity.CENTER);
+            textView.setPadding(mHorPadding, 0, mHorPadding, 0);
+            secondView = textView;
+        }
+        if (secondView != null) {
+            btnCount++;
+            secondView.setBackgroundResource(R.drawable.button_pressed_selector);
+            secondView.setOnClickListener(mClickListener);
+            if (sDrawable != null) {
+                svWidth = (int) ((float)sDrawable.getIntrinsicWidth() * mTitleBarHeight / sDrawable.getIntrinsicHeight());
+                svWidth = svWidth < mTitleBarHeight ? mTitleBarHeight : svWidth;
             } else {
-                width = LayoutParams.WRAP_CONTENT;
+                svWidth = LayoutParams.WRAP_CONTENT;
             }
+        }
 
-            LayoutParams params = new LayoutParams(width, mTitleBarHeight);
+        View thirdView = null;
+        int tvWidth = LayoutParams.WRAP_CONTENT;
+        if (tDrawable != null && !TextUtils.isEmpty(tText)) {
+            throw new RuntimeException("按钮只能是图片或文字 (@see #setRightView())");
+        } else if (tDrawable != null) {
+            ImageView imageView = new ImageView(getContext());
+            imageView.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
+            imageView.setImageDrawable(tDrawable);
+            thirdView = imageView;
+        } else if (!TextUtils.isEmpty(tText)) {
+            TextView textView = new TextView(getContext());
+            textView.setTextColor(getResources().getColor(R.color.titlebar_textColor));
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, getResources().getDimensionPixelSize(R.dimen.titlebar_right_textsize));
+            textView.setSingleLine(true);
+            textView.setText(tText);
+            textView.setGravity(Gravity.CENTER);
+            textView.setPadding(mHorPadding, 0, mHorPadding, 0);
+            thirdView = textView;
+        }
+        if (thirdView != null) {
+            btnCount++;
+            thirdView.setBackgroundResource(R.drawable.button_pressed_selector);
+            thirdView.setOnClickListener(mClickListener);
+            if (tDrawable != null) {
+                tvWidth = (int) ((float)tDrawable.getIntrinsicWidth() * mTitleBarHeight / tDrawable.getIntrinsicHeight());
+                tvWidth = tvWidth < mTitleBarHeight ? mTitleBarHeight : tvWidth;
+            } else {
+                tvWidth = LayoutParams.WRAP_CONTENT;
+            }
+        }
+
+        if (btnCount == 0) {
+
+        } else if (btnCount == 1) {
+            mRightView = firstView != null ? firstView : (secondView != null ? secondView : thirdView);
+            LayoutParams params = new LayoutParams(mRightView == firstView ? fvWidth : (mRightView == secondView ? svWidth : tvWidth), mTitleBarHeight);
             params.gravity = Gravity.RIGHT;
+            mTitleBarParent.addView(mRightView, params);
+        } else {
+            LinearLayout linearLayout = new LinearLayout(getContext());
+            linearLayout.setOrientation(LinearLayout.HORIZONTAL);
+            if (thirdView != null) linearLayout.addView(thirdView, new LinearLayout.LayoutParams(tvWidth, mTitleBarHeight));
+            if (secondView != null) linearLayout.addView(secondView, new LinearLayout.LayoutParams(svWidth, mTitleBarHeight));
+            if (firstView != null) linearLayout.addView(firstView, new LinearLayout.LayoutParams(fvWidth, mTitleBarHeight));
+            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, mTitleBarHeight);
+            params.gravity = Gravity.RIGHT;
+            mRightView = linearLayout;
             mTitleBarParent.addView(mRightView, params);
         }
     }
 
-    private void removeLeftBtn() {
+    private void removeLeftView() {
         if (mLeftView != null) {
             mLeftView.setOnClickListener(null);
             mTitleBarParent.removeView(mLeftView);
@@ -213,7 +322,7 @@ public class TitleBar extends FrameLayout {
         }
     }
 
-    private void removeRightBtn() {
+    private void removeRightView() {
         if (mRightView != null) {
             mRightView.setOnClickListener(null);
             mTitleBarParent.removeView(mRightView);
@@ -221,18 +330,23 @@ public class TitleBar extends FrameLayout {
         }
     }
 
-    private void recomputeTitleWidth(){
-        int leftViewWidth = mLeftView != null ? mLeftView.getMeasuredWidth() : 0;
-        int rightViewWidth = mRightView != null ? mRightView.getMeasuredWidth() : 0;
-
-        int bothMargin = leftViewWidth>rightViewWidth?leftViewWidth:rightViewWidth;
-
-        LayoutParams params = (LayoutParams) mCenterView.getLayoutParams();
-        params.setMargins(bothMargin,params.topMargin,bothMargin,params.bottomMargin);
-        mCenterView.setLayoutParams(params);
+    private void removeCenterView() {
+        if (mCenterView != null) {
+            mCenterView.setOnClickListener(null);
+            mTitleBarParent.removeView(mCenterView);
+            mCenterView = null;
+        }
     }
 
     //============= public method =================
+    /**
+     * 获取标题栏高度
+     * @return
+     */
+    public int getTitleBarHeight() {
+        return mTitleBarHeight;
+    }
+
     /**
      * 设置状态栏颜色
      * @param color
@@ -251,42 +365,8 @@ public class TitleBar extends FrameLayout {
         mTitleBarParent.setBackgroundColor(color);
     }
 
-    public void setTitle(String title) {
-        if (mCenterView != null && mCenterView instanceof TextView) {
-            ((TextView)mCenterView).setText(title);
-        }
-    }
-
-    public void setLeftBtnClickListener(OnClickListener lis) {
-        if (mLeftView != null) mLeftView.setOnClickListener(lis);
-    }
-
-    public void setRightBtnClickListener(OnClickListener lis) {
-        if (mRightView != null) mRightView.setOnClickListener(lis);
-    }
-
-    public void setLeftDrawable(Drawable drawable) {
-        if (mLeftView != null && mLeftView instanceof ImageView) {
-            ((ImageView)mLeftView).setImageDrawable(drawable);
-        }
-    }
-
-    public void setRightDrawable(Drawable drawable) {
-        if (mRightView != null && mRightView instanceof ImageView) {
-            ((ImageView)mRightView).setImageDrawable(drawable);
-        }
-    }
-
-    public void setLeftText(String text) {
-        if (mLeftView != null && mLeftView instanceof TextView) {
-            ((TextView)mLeftView).setText(text);
-        }
-    }
-
-    public void setRightText(String text) {
-        if (mRightView != null && mRightView instanceof TextView) {
-            ((TextView)mRightView).setText(text);
-        }
+    public void setTitleBarClickListener(OnTitleBarClickListener lis) {
+        mClickCallback = lis;
     }
 
     public View getLeftView() {
@@ -306,7 +386,7 @@ public class TitleBar extends FrameLayout {
      * @param view
      */
     public void setLeftView(View view) {
-        removeLeftBtn();
+        removeLeftView();
         mLeftView = view;
         if (view == null) return;
         ViewGroup.LayoutParams params = view.getLayoutParams();
@@ -324,7 +404,7 @@ public class TitleBar extends FrameLayout {
      * @param view
      */
     public void setRightView(View view) {
-        removeRightBtn();
+        removeRightView();
         mRightView = view;
         if (view == null) return;
         ViewGroup.LayoutParams params = view.getLayoutParams();
@@ -342,10 +422,7 @@ public class TitleBar extends FrameLayout {
      * @param view
      */
     public void setCenterView(View view) {
-        if (mCenterView != null) {
-            mTitleBarParent.removeView(mCenterView);
-            mCenterView = null;
-        }
+        removeCenterView();
         mCenterView = view;
         if (view == null) return;
         ViewGroup.LayoutParams params = view.getLayoutParams();
@@ -358,26 +435,54 @@ public class TitleBar extends FrameLayout {
         mTitleBarParent.addView(view, params);
     }
 
-    /**
-     * 设置左边按钮的图标或文字(二选一, 如果既有图标又有文字,应该使用seLeftView)
-     * @param drawable  :图标
-     * @param text      :文字
-     */
-    public void setupLeftBtn(Drawable drawable, String text) {
-        mLeftBtnDrawable = drawable;
-        mLeftBtnText = text;
-        addLeftButton();
+    public void setTitle(String title) {
+        if (mCenterView == null) {
+            addTitleTextView(title);
+        } else {
+            if (mCenterView instanceof TextView) {
+                ((TextView) mCenterView).setText(title);
+            } else {
+                addTitleTextView(title);
+            }
+        }
     }
 
     /**
-     * 设置右边按钮的图标或文字(二选一, 如果既有图标又有文字,应该使用seRightView)
+     * 当左边只有一个按钮时,设置左边按钮的图标或文字(二选一, 如果既有图标又有文字,应该使用seLeftView)
      * @param drawable  :图标
      * @param text      :文字
      */
-    public void setupRightBtn(Drawable drawable, String text) {
-        mRightBtnDrawable = drawable;
-        mRightBtnText = text;
-        addRightButton();
+    public void setLeftBtn(Drawable drawable, String text) {
+        if (mLeftView == null) {
+            addLeftButton(drawable, text);
+        } else {
+            if (mLeftView instanceof ImageView) {
+                ((ImageView) mLeftView).setImageDrawable(drawable);
+            } else if (mLeftView instanceof TextView) {
+                ((TextView) mLeftView).setText(text);
+            } else {
+                addLeftButton(drawable, text);
+            }
+        }
+    }
+
+    /**
+     * 当右边只有一个按钮时,设置右边按钮的图标或文字(二选一, 如果既有图标又有文字,应该使用seRightView)
+     * @param drawable  :图标
+     * @param text      :文字
+     */
+    public void setRightBtn(Drawable drawable, String text) {
+        if (mRightView == null) {
+            addRightButton(drawable, text, null, null, null, null);
+        } else {
+            if (mRightView instanceof ImageView) {
+                ((ImageView) mRightView).setImageDrawable(drawable);
+            } else if (mRightView instanceof TextView) {
+                ((TextView) mRightView).setText(text);
+            } else {
+                addRightButton(drawable, text, null, null, null, null);
+            }
+        }
     }
 
     public void setLeftViewWidth(int width) {
@@ -392,5 +497,31 @@ public class TitleBar extends FrameLayout {
             mRightView.getLayoutParams().width = width;
             mRightView.requestLayout();
         }
+    }
+
+    interface OnTitleBarClickListener {
+        void onLeftClick(View v);
+        void onTitleClick(View v);
+        void onRightFirstClick(View v);
+        void onRightSecondClick(View v);
+        void onRightThirdClick(View v);
+    }
+
+    public static class SimpleTitleBarClickListener implements OnTitleBarClickListener {
+
+        @Override
+        public void onLeftClick(View v) {}
+
+        @Override
+        public void onTitleClick(View v) {}
+
+        @Override
+        public void onRightFirstClick(View v) {}
+
+        @Override
+        public void onRightSecondClick(View v) {}
+
+        @Override
+        public void onRightThirdClick(View v) {}
     }
 }

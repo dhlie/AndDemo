@@ -28,20 +28,20 @@ public class MatrixEditActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acti_matrix_edit);
 
-        TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
-        titleBar.setTitle(getClass().getSimpleName());
-        titleBar.setLeftBtnClickListener(new View.OnClickListener() {
+        TitleBar.SimpleTitleBarClickListener titleBarClickListener = new TitleBar.SimpleTitleBarClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onLeftClick(View v) {
                 finish();
             }
-        });
-        titleBar.setRightBtnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
+            public void onRightFirstClick(View v) {
                 reset();
             }
-        });
+        };
+        TitleBar titleBar = (TitleBar) findViewById(R.id.titlebar);
+        titleBar.setTitleBarClickListener(titleBarClickListener);
+        titleBar.setTitle(getClass().getSimpleName());
 
         mIVResult = (ImageView) findViewById(R.id.iv_image);
 

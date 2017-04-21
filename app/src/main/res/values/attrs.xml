@@ -3,11 +3,15 @@
 
     <!-- titleBar -->
     <declare-styleable name="TitleBar">
+        <attr name="titleText" format="string" />
         <attr name="leftDrawable" format="reference" />
         <attr name="leftText" format="string" />
-        <attr name="rightDrawable" format="reference" />
-        <attr name="rightText" format="string" />
-        <attr name="title_text" format="string" />
+        <attr name="rightFirstDrawable" format="reference" />
+        <attr name="rightFirstText" format="string" />
+        <attr name="rightSecondDrawable" format="reference" />
+        <attr name="rightSecondText" format="string" />
+        <attr name="rightThirdDrawable" format="reference" />
+        <attr name="rightThirdText" format="string" />
     </declare-styleable>
 
 </resources>

@@ -4,4 +4,6 @@
     <!-- 所有界面 顶部条高度 -->
     <dimen name="titleBarHeight">48dp</dimen>
     <dimen name="titlebarHorPadding">10dp</dimen>
+    <dimen name="titlebar_title_textsize">18sp</dimen>
+    <dimen name="titlebar_right_textsize">16sp</dimen>
 </resources>
