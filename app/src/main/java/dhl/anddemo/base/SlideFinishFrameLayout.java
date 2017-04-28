@@ -62,7 +62,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
 
             @Override
             public void onViewCaptured(View capturedChild, int activePointerId) {
-                if (capturedChild == SlideFinishFrameLayout.this && mPreviousActivity == null) {
+                if (capturedChild == SlideFinishFrameLayout.this) {
                     mPreviousActivity = App.getInstance().getPreviousActivity(mActivity);
                 }
             }
