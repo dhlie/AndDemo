@@ -40,7 +40,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
         super(context, attrs, defStyleAttr);
         //init
         int colorStart = Color.parseColor("#00000000");
-        int colorEnd = Color.parseColor("#64000000");
+        int colorEnd = Color.parseColor("#7F000000");
         mShadowDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd});
     }
 
@@ -94,7 +94,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
                 scrollTo(-left, 0);
                 final int width = getWidth();
                 mScrollPercent = (float)left/width;
-                if (left >= width) {
+                if (left >= width && !mActivity.isFinishing()) {
                     mActivity.finish();
                     mActivity.overridePendingTransition(0, 0);
                 }
