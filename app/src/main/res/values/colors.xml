@@ -5,5 +5,5 @@
     <color name="titlebar_background">#263238</color>
     <color name="titlebar_textColor">#ffffff</color>
     <color name="btn_press_bg">#33000000</color>
-    <color name="divider_line">#DADADA</color>
+    <color name="divider_line">#aeaeae</color>
 </resources>

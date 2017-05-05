@@ -18,6 +18,7 @@
 package dhl.anddemo.base;
 
 import android.content.Context;
+import android.hardware.SensorManager;
 import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.VelocityTrackerCompat;
 import android.support.v4.view.ViewCompat;
@@ -395,7 +396,9 @@ public class SlideFinishDragHelper {
         mTouchSlop = vc.getScaledTouchSlop();
         mMaxVelocity = vc.getScaledMaximumFlingVelocity();
         mMinVelocity = vc.getScaledMinimumFlingVelocity();
+        mPpi = context.getResources().getDisplayMetrics().density * 160.0f;
         mScroller = ScrollerCompat.create(context, sInterpolator);
+        mPhysicalCoeff = computeDeceleration(0.84f); // look and feel tuning
     }
 
     /**
@@ -1501,5 +1504,43 @@ public class SlideFinishDragHelper {
         if (y > mParentView.getBottom() - mEdgeSize) result |= EDGE_BOTTOM;
 
         return result;
+    }
+
+    private static final float INFLEXION = 0.35f; // Tension lines cross at (INFLEXION, 1)
+    private final float mPpi;
+    private float mFlingFriction = ViewConfiguration.getScrollFriction();
+    // A context-specific coefficient adjusted to physical values.
+    private float mPhysicalCoeff;
+    private static float DECELERATION_RATE = (float) (Math.log(0.78) / Math.log(0.9));
+
+    public int getFlingDistanceX(float velocityX, float velocityY) {
+        float velocity = (float) Math.hypot(velocityX, velocityY);
+        double totalDistance = getSplineFlingDistance(velocity);
+        float coeffX = velocity == 0 ? 1.0f : velocityX / velocity;
+        return (int) Math.round(totalDistance * coeffX);
+    }
+
+    public int getFlingDistanceY(float velocityX, float velocityY) {
+        float velocity = (float) Math.hypot(velocityX, velocityY);
+        double totalDistance = getSplineFlingDistance(velocity);
+        float coeffY = velocity == 0 ? 1.0f : velocityY / velocity;
+        return (int) Math.round(totalDistance * coeffY);
+    }
+
+    private float computeDeceleration(float friction) {
+        return SensorManager.GRAVITY_EARTH   // g (m/s^2)
+                * 39.37f               // inch/meter
+                * mPpi                 // pixels per inch
+                * friction;
+    }
+
+    private double getSplineDeceleration(float velocity) {
+        return Math.log(INFLEXION * Math.abs(velocity) / (mFlingFriction * mPhysicalCoeff));
+    }
+
+    private double getSplineFlingDistance(float velocity) {
+        final double l = getSplineDeceleration(velocity);
+        final double decelMinusOne = DECELERATION_RATE - 1.0;
+        return mFlingFriction * mPhysicalCoeff * Math.exp(DECELERATION_RATE / decelMinusOne * l);
     }
 }

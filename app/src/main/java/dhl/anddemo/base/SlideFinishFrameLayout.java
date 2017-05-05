@@ -102,15 +102,16 @@ public class SlideFinishFrameLayout extends FrameLayout {
 
             @Override
             public void onViewReleased(View releasedChild, float xvel, float yvel) {
-                if (LLog.PRINT_LOG) LLog.i("-----onViewReleased   xvel:"+xvel);
                 if (mPreviousActivity == null) return;
-                int finalX = 0;
-                if (xvel > 4300 || -getScrollX() > getWidth()/2) {
+                int finalX = -getScrollX() + mDragger.getFlingDistanceX(xvel, yvel);
+                if (LLog.PRINT_LOG) LLog.i("-----onViewReleased   xvel:"+xvel + "  yvel:"+yvel + "finalX:"+finalX);
+
+                if (finalX > getWidth()*0.8f || (-getScrollX() > getWidth()/2 && xvel > -200)) {
                     finalX = getWidth();
                 } else {
                     finalX = 0;
-
                 }
+
                 if (mDragger.settleCapturedViewAt(finalX, 0)) {
                     ViewCompat.postInvalidateOnAnimation(SlideFinishFrameLayout.this);
                 }
