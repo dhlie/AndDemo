@@ -20,9 +20,20 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (!(this instanceof MainActivity)) {
+            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+        }
         super.onCreate(savedInstanceState);
         setupTransparencyStatus();
         prepareSlideToFinish();
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+        if (!(this instanceof MainActivity)) {
+            overridePendingTransition(R.anim.left_in, R.anim.right_out);
+        }
     }
 
 
