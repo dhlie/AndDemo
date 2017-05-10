@@ -57,7 +57,7 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
     private int mTranslateX, mTranslateY, mTranslateZ;
     private float mSkewX, mSkewY;
 
-    //解决seekbar在scrollable容器(isInScrollingContainer())时滑动时间冲突
+    //解决seekbar在scrollable容器(isInScrollingContainer())时滑动事件冲突
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
         @Override
         public boolean onTouch(View v, MotionEvent event) {

@@ -64,6 +64,9 @@ public class SlideFinishFrameLayout extends FrameLayout {
             public void onViewCaptured(View capturedChild, int activePointerId) {
                 if (capturedChild == SlideFinishFrameLayout.this) {
                     mPreviousActivity = App.getInstance().getPreviousActivity(mActivity);
+                    if (mPreviousActivity != null && mPreviousActivity.isFinishing()) {
+                        mPreviousActivity = null;
+                    }
                 }
             }
 
