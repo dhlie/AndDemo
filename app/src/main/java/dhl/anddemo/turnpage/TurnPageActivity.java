@@ -10,7 +10,6 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PointF;
-import android.graphics.RectF;
 import android.graphics.Region;
 import android.graphics.Shader;
 import android.graphics.drawable.GradientDrawable;
@@ -28,6 +27,7 @@ import dhl.anddemo.base.util.PixelUtil;
 
 /**
  * Created by DuanHl on 2017/5/16.
+ * 参考文章:http://blog.csdn.net/hmg25/article/details/6306479
  */
 
 public class TurnPageActivity extends BaseActivity {
@@ -184,14 +184,14 @@ public class TurnPageActivity extends BaseActivity {
             canvas.restore();
 
             //绘制阴影
-            mDrawableCurr.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
-            float angle = (float) Math.atan((mWidth-mPointB.x)/(mHeight-mPointH.y));
-            angle = (float) (180/Math.PI*angle);
-            canvas.save();
-            canvas.clipPath(mPath2);
-            canvas.rotate(angle, mPointH.x, mPointH.y);
-            mDrawableNext.draw(canvas);
-            canvas.restore();
+            //mDrawableCurr.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
+            //float angle = (float) Math.atan((mWidth-mPointB.x)/(mHeight-mPointH.y));
+            //angle = (float) (180/Math.PI*angle);
+            //canvas.save();
+            //canvas.clipPath(mPath2);
+            //canvas.rotate(angle, mPointH.x, mPointH.y);
+            //mDrawableNext.draw(canvas);
+            //canvas.restore();
         }
 
         @Override

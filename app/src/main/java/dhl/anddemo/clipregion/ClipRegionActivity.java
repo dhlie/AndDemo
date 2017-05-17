@@ -43,6 +43,8 @@ public class ClipRegionActivity extends BaseActivity {
         titleBar.setTitle(getClass().getSimpleName());
 
         mTVOP = (TextView) findViewById(R.id.tv_op);
+        String text = "演示clipPath(Path path, Region.Op op)第二个参数的含义\nOP.UNION";
+        mTVOP.setText(text);
         FrameLayout fl = (FrameLayout) findViewById(R.id.view_clip);
         mClipView = new ClipRegionView(this);
         mClipView.setOP(Region.Op.UNION);
@@ -52,6 +54,7 @@ public class ClipRegionActivity extends BaseActivity {
     public void onClick(View view) {
         Button btn = (Button) view;
         String text = btn.getText().toString();
+        text = "演示clipPath(Path path, Region.Op op)第二个参数的含义\n" + text;
         mTVOP.setText(text);
         Region.Op op = null;
         if (text.contains(".DIFFERENCE")) {
