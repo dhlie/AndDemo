@@ -71,7 +71,7 @@ public class ClipRegionActivity extends BaseActivity {
         mClipView.invalidate();
     }
 
-    public static class ClipRegionView extends View {
+    private static class ClipRegionView extends View {
 
         private Paint mPaint;
         private Rect mRectOne = new Rect();
