@@ -63,7 +63,8 @@ public class TurnPageActivity extends BaseActivity {
 
         private Bitmap mBPCurr;
         private Bitmap mBPNext;
-        private Matrix mMatrix;
+        private Matrix mMatrixCurr;
+        private Matrix mMatrixNext;
         private Matrix mMatrixCorner;
 
         private int mTouchSlop;
@@ -72,14 +73,16 @@ public class TurnPageActivity extends BaseActivity {
         private int mWidth, mHeight;
 
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
-        private Path mPath1 = new Path();
-        private Path mPath2 = new Path();
-        private float mAngle;//翻起的也叫水平转动的角度
+        private Path mPath1 = new Path();//翻起的书角加上下一页可见部分
+        private Path mPath2 = new Path();//下一页可见部分
+        private float mAngle;//翻起的书角水平转动的角度
         private BitmapShader mShaderCorner;
-        private int mShadowWidthCurr = PixelUtil.dp2px(8);//当前页上的阴影宽度
+        private int mShadowWidthCurr = PixelUtil.dp2px(10);//当前页上的阴影宽度
         private int mShadowWidthNext;//下一页的阴影宽度
-        private GradientDrawable mDrawableCurr;
-        private GradientDrawable mDrawableNext;
+        private GradientDrawable mShadowDrawableCurrB;//靠近底部边的阴影
+        private GradientDrawable mShadowDrawableCurrR;//靠近右边的阴影
+        private GradientDrawable mShadowDrawableCurrC;//角旁边正方形的阴影
+        private GradientDrawable mShadowDrawableNext;//下一页上的阴影
         //绘制过程需要的顶点坐标
         private PointF mPointA = new PointF();
         private PointF mPointB = new PointF();
@@ -91,29 +94,35 @@ public class TurnPageActivity extends BaseActivity {
         private PointF mPointG = new PointF();
         private PointF mPointP = new PointF();
 
+        private PointF mPointQ = new PointF();//角阴影顶点
+
         public PageView(Context context) {
             super(context);
 
-            mBPCurr = BitmapFactory.decodeResource(getResources(), R.drawable.panda);
+            mBPCurr = BitmapFactory.decodeResource(getResources(), R.drawable.page_right_down);
             mBPNext = BitmapFactory.decodeResource(getResources(), R.drawable.panda3);
-            mMatrix = new Matrix();
+            mMatrixCurr = new Matrix();
+            mMatrixNext = new Matrix();
             mMatrixCorner = new Matrix();
             mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
 
             mShaderCorner = new BitmapShader(mBPCurr, Shader.TileMode.MIRROR, Shader.TileMode.MIRROR);
             int colorStart = Color.parseColor("#00000000");
             int colorEnd = Color.parseColor("#7F000000");
-            mDrawableCurr = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd});
-            mDrawableNext = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorEnd, colorStart});
+            int colorEnd2 = Color.parseColor("#1e000000");
+            int colorEnd3 = Color.parseColor("#16000000");
+            mShadowDrawableCurrB = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd2});
+            mShadowDrawableCurrR = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{colorStart, colorEnd2});
+            mShadowDrawableCurrC = new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{colorStart, colorEnd3});
+            mShadowDrawableNext = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorEnd, colorStart});
         }
 
         @Override
         protected void onSizeChanged(int w, int h, int oldw, int oldh) {
             mWidth = w;
             mHeight = h;
-            float s1 = (float) w / mBPCurr.getWidth();
-            float s2 = (float) h / mBPCurr.getHeight();
-            mMatrix.setScale(s1, s2);
+            mMatrixCurr.setScale((float) w / mBPCurr.getWidth(), (float) h / mBPCurr.getHeight());
+            mMatrixNext.setScale((float) w / mBPNext.getWidth(), (float) h / mBPNext.getHeight());
         }
 
         @Override
@@ -129,17 +138,16 @@ public class TurnPageActivity extends BaseActivity {
         private void drawNextPage(Canvas canvas) {
             canvas.save();
             canvas.clipPath(mPath2);
-            canvas.drawBitmap(mBPNext, mMatrix, null);
+            canvas.drawBitmap(mBPNext, mMatrixNext, null);
             canvas.restore();
 
             //绘制阴影
-            mDrawableNext.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
             float angle = (float) Math.atan((mWidth-mPointB.x)/(mHeight-mPointH.y));
             angle = (float) (180/Math.PI*angle);
             canvas.save();
             canvas.clipPath(mPath2);
             canvas.rotate(angle, mPointH.x, mPointH.y);
-            mDrawableNext.draw(canvas);
+            mShadowDrawableNext.draw(canvas);
             canvas.restore();
         }
 
@@ -160,6 +168,8 @@ public class TurnPageActivity extends BaseActivity {
                 mPaint.setAlpha(127);
                 mPaint.setShader(mShaderCorner);
                 canvas.drawPaint(mPaint);
+                mPaint.setAlpha(255);
+                mPaint.setShader(null);
                 canvas.restore();
             } else {
                 canvas.save();
@@ -173,6 +183,7 @@ public class TurnPageActivity extends BaseActivity {
                 mMatrixCorner.postRotate(mAngle, mPointA.x, mPointA.y);
                 mPaint.setAlpha(127);
                 canvas.drawBitmap(mBPCurr, mMatrixCorner, mPaint);
+                mPaint.setAlpha(255);
                 canvas.restore();
             }
         }
@@ -180,18 +191,25 @@ public class TurnPageActivity extends BaseActivity {
         private void drawCurrPage(Canvas canvas) {
             canvas.save();
             canvas.clipPath(mPath1, Region.Op.DIFFERENCE);
-            canvas.drawBitmap(mBPCurr, mMatrix, null);
-            canvas.restore();
+            canvas.drawBitmap(mBPCurr, mMatrixCurr, null);
 
             //绘制阴影
-            //mDrawableCurr.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
-            //float angle = (float) Math.atan((mWidth-mPointB.x)/(mHeight-mPointH.y));
-            //angle = (float) (180/Math.PI*angle);
-            //canvas.save();
-            //canvas.clipPath(mPath2);
-            //canvas.rotate(angle, mPointH.x, mPointH.y);
-            //mDrawableNext.draw(canvas);
-            //canvas.restore();
+            canvas.save();
+            canvas.rotate(mAngle-90, mPointQ.x, mPointQ.y);
+            mShadowDrawableCurrB.draw(canvas);
+            canvas.restore();
+
+            canvas.save();
+            canvas.rotate(mAngle+180, mPointQ.x, mPointQ.y);
+            mShadowDrawableCurrR.draw(canvas);
+            canvas.restore();
+
+            canvas.save();
+            canvas.rotate(mAngle-90, mPointQ.x, mPointQ.y);
+            mShadowDrawableCurrC.draw(canvas);
+            canvas.restore();
+
+            canvas.restore();
         }
 
         @Override
@@ -243,8 +261,8 @@ public class TurnPageActivity extends BaseActivity {
         }
 
         private void setCornerPoint(float motionX, float motionY) {
-            float maxYFromTop = getWidth()*3f/4;//从上边翻页时y的最大值
-            float minYFromBottom = getHeight() - maxYFromTop;//从下边翻页时的y的最小值
+            float maxYFromTop = getWidth()*3f/5;//从上边翻页时y的最大值
+            float minYFromBottom = getBottom() - maxYFromTop;//从下边翻页时的y的最小值
             float x = -1, y = -1;
             switch (mState) {
                 case STATE_TURNING_FROM_LT:
@@ -269,8 +287,9 @@ public class TurnPageActivity extends BaseActivity {
                     break;
                 case STATE_TURNING_FROM_RB:
                     //计算方法参考page_right_down.png
-                    x = motionX;
-                    y = motionY < minYFromBottom ? minYFromBottom : motionY;
+                    x = Math.min(getRight()-1, Math.max(getLeft()+1, motionX));
+                    y = Math.min(getBottom()-1, Math.max(minYFromBottom, motionY));
+                    if (LLog.PRINT_LOG) LLog.i("corner Point:"+x+" - "+y);
                     mPointA.set(x, y);
                     calculateVertexes();
                     invalidate();
@@ -320,7 +339,7 @@ public class TurnPageActivity extends BaseActivity {
                 mAngle = (float) (180/Math.PI*mAngle);//角度
                 mAngle = 90 + (90+mAngle);
             }
-            if (LLog.PRINT_LOG) LLog.i("mAngle  弧度:"+(float) Math.atan((mHeight-mPointA.y)/(mPointC.x-mPointA.x)) +"   角度:"+(float) (180/Math.PI*((float) Math.atan((mHeight-mPointA.y)/(mPointC.x-mPointA.x))))+ "    :"+mAngle);
+            //if (LLog.PRINT_LOG) LLog.i("mAngle  弧度:"+(float) Math.atan((mHeight-mPointA.y)/(mPointC.x-mPointA.x)) +"   角度:"+(float) (180/Math.PI*((float) Math.atan((mHeight-mPointA.y)/(mPointC.x-mPointA.x))))+ "    :"+mAngle);
             //==========计算角旋转角度==============
 
             //==========计算角path==============
@@ -346,7 +365,40 @@ public class TurnPageActivity extends BaseActivity {
 
             //==========计算下一页阴影宽度==============
             mShadowWidthNext = (int) (Math.hypot(mWidth-mPointA.x, mHeight-mPointA.y)/4);
+            mShadowDrawableNext.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
             //==========计算下一页阴影宽度==============
+
+            //==========计算当前页阴影==============
+            //直线ac:y = ax + b  与ac平行的阴影边:y = ax + c
+            //直线ag:y = mx + n  与ag平行的阴影边:y = mx + p
+            float a = (mPointA.y-mPointC.y)/(mPointA.x-mPointC.x);
+            float b = mPointA.y - a*mPointA.x;
+            float m = (mPointA.y-mPointG.y)/(mPointA.x-mPointG.x);
+            float n = mPointA.y-m*mPointA.x;
+
+            //y = ax + b  ax - y + b = 0
+            //y = ax + c  ax - y + c = 0
+            //mShadowWidthCurr = Math.abs(b-c)/Math.sqrt(a*a + 1*1);
+            //Math.abs(b-c) = mShadowWidthCurr*Math.sqrt(a*a + 1*1)
+            float c = 0f;
+            if (a > 0) {
+                c = (float) (b + mShadowWidthCurr*Math.sqrt(a*a + 1));
+            } else {
+                c = (float) (b - mShadowWidthCurr*Math.sqrt(a*a + 1));
+            }
+            float p = (float) (n - mShadowWidthCurr*Math.sqrt(m*m + 1));
+
+            //if (LLog.PRINT_LOG) LLog.i("y = ax + b   a-b "+a+" - "+b);
+            //if (LLog.PRINT_LOG) LLog.i("y = mx + n   m-n "+m+" - "+n);
+
+            //ax + c = mx + p
+            mPointQ.x = (p-c)/(a-m);
+            mPointQ.y = a*mPointQ.x + c;
+
+            mShadowDrawableCurrB.setBounds((int)mPointQ.x, (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+getWidth()+mShadowWidthCurr);
+            mShadowDrawableCurrR.setBounds((int)(mPointQ.x-mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x), (int)mPointQ.y+getHeight()+mShadowWidthCurr);
+            mShadowDrawableCurrC.setBounds((int)mPointQ.x, (int)mPointQ.y, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr);
+            //==========计算当前页阴影==============
         }
 
         /**
@@ -368,8 +420,6 @@ public class TurnPageActivity extends BaseActivity {
             //y1-y2 = a(x1-x2)
             //a = (y1-y2)/(x1-x2)
             //b = y1-a*x1
-            //y = (y1-y2)/(x1-x2) * x +
-
 
             //y = mx + n
             //y3 = m*x3 + n
@@ -390,5 +440,6 @@ public class TurnPageActivity extends BaseActivity {
             result.x = (n-b)/(a-m);
             result.y = a*result.x + b;
         }
+
     }
 }
