@@ -71,6 +71,7 @@ public class TurnPageActivity extends BaseActivity {
         private int mState = STATE_NONE;
         private float mDownX, mDownY;
         private int mWidth, mHeight;
+        private int mCornerX, mCornerY;//翻页角的原始坐标(左上右下四个坐标之一)
 
         private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
         private Path mPath1 = new Path();//翻起的书角加上下一页可见部分
@@ -79,10 +80,14 @@ public class TurnPageActivity extends BaseActivity {
         private BitmapShader mShaderCorner;
         private int mShadowWidthCurr = PixelUtil.dp2px(10);//当前页上的阴影宽度
         private int mShadowWidthNext;//下一页的阴影宽度
-        private GradientDrawable mShadowDrawableCurrB;//靠近底部边的阴影
-        private GradientDrawable mShadowDrawableCurrR;//靠近右边的阴影
-        private GradientDrawable mShadowDrawableCurrC;//角旁边正方形的阴影
+        private GradientDrawable mShadowDrawableH;//水平边的阴影
+        private GradientDrawable mShadowDrawableV;//垂直边的阴影
+        private GradientDrawable mShadowDrawableC;//角旁边正方形的阴影
         private GradientDrawable mShadowDrawableNext;//下一页上的阴影
+        private float mAngleShadowNext;//下一页阴影绘制时的旋转角度
+        private float mAngleShadowH;//水平边阴影绘制时的旋转角度
+        private float mAngleShadowV;//垂直边阴影绘制时的旋转角度
+        private float mAngleShadowC;//角旁边正方形的阴影绘制时的旋转角度
         //绘制过程需要的顶点坐标
         private PointF mPointA = new PointF();
         private PointF mPointB = new PointF();
@@ -100,7 +105,7 @@ public class TurnPageActivity extends BaseActivity {
             super(context);
 
             mBPCurr = BitmapFactory.decodeResource(getResources(), R.drawable.page_right_down);
-            mBPNext = BitmapFactory.decodeResource(getResources(), R.drawable.panda3);
+            mBPNext = BitmapFactory.decodeResource(getResources(), R.drawable.page_left_down);
             mMatrixCurr = new Matrix();
             mMatrixNext = new Matrix();
             mMatrixCorner = new Matrix();
@@ -110,11 +115,11 @@ public class TurnPageActivity extends BaseActivity {
             int colorStart = Color.parseColor("#00000000");
             int colorEnd = Color.parseColor("#7F000000");
             int colorEnd2 = Color.parseColor("#1e000000");
-            int colorEnd3 = Color.parseColor("#16000000");
-            mShadowDrawableCurrB = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd2});
-            mShadowDrawableCurrR = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{colorStart, colorEnd2});
-            mShadowDrawableCurrC = new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{colorStart, colorEnd3});
-            mShadowDrawableNext = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorEnd, colorStart});
+            int colorEnd3 = Color.parseColor("#10000000");
+            mShadowDrawableH = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd2});
+            mShadowDrawableV = new GradientDrawable(GradientDrawable.Orientation.RIGHT_LEFT, new int[]{colorStart, colorEnd2});
+            mShadowDrawableC = new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{colorStart, colorEnd3});
+            mShadowDrawableNext = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd});
         }
 
         @Override
@@ -142,11 +147,9 @@ public class TurnPageActivity extends BaseActivity {
             canvas.restore();
 
             //绘制阴影
-            float angle = (float) Math.atan((mWidth-mPointB.x)/(mHeight-mPointH.y));
-            angle = (float) (180/Math.PI*angle);
             canvas.save();
             canvas.clipPath(mPath2);
-            canvas.rotate(angle, mPointH.x, mPointH.y);
+            canvas.rotate(mAngleShadowNext, mPointH.x, mPointH.y);
             mShadowDrawableNext.draw(canvas);
             canvas.restore();
         }
@@ -158,12 +161,6 @@ public class TurnPageActivity extends BaseActivity {
                 canvas.save();
                 canvas.clipPath(mPath1);
                 canvas.clipPath(mPath2, Region.Op.DIFFERENCE);
-                mMatrixCorner.reset();
-                mMatrixCorner.setScale((float) mWidth / mBPCurr.getWidth(), (float) mHeight / mBPCurr.getHeight());
-                mMatrixCorner.postScale(-1, 1);
-                mMatrixCorner.postTranslate(mWidth, 0);
-                mMatrixCorner.postTranslate(mPointA.x, mPointA.y-mHeight);
-                mMatrixCorner.postRotate(mAngle, mPointA.x, mPointA.y);
                 mShaderCorner.setLocalMatrix(mMatrixCorner);
                 mPaint.setAlpha(127);
                 mPaint.setShader(mShaderCorner);
@@ -175,12 +172,6 @@ public class TurnPageActivity extends BaseActivity {
                 canvas.save();
                 canvas.clipPath(mPath1);
                 canvas.clipPath(mPath2, Region.Op.DIFFERENCE);
-                mMatrixCorner.reset();
-                mMatrixCorner.setScale((float) mWidth / mBPCurr.getWidth(), (float) mHeight / mBPCurr.getHeight());
-                mMatrixCorner.postScale(-1, 1);
-                mMatrixCorner.postTranslate(mWidth, 0);
-                mMatrixCorner.postTranslate(mPointA.x, mPointA.y-mHeight);
-                mMatrixCorner.postRotate(mAngle, mPointA.x, mPointA.y);
                 mPaint.setAlpha(127);
                 canvas.drawBitmap(mBPCurr, mMatrixCorner, mPaint);
                 mPaint.setAlpha(255);
@@ -195,18 +186,18 @@ public class TurnPageActivity extends BaseActivity {
 
             //绘制阴影
             canvas.save();
-            canvas.rotate(mAngle-90, mPointQ.x, mPointQ.y);
-            mShadowDrawableCurrB.draw(canvas);
+            canvas.rotate(mAngleShadowH, mPointQ.x, mPointQ.y);
+            mShadowDrawableH.draw(canvas);
             canvas.restore();
 
             canvas.save();
-            canvas.rotate(mAngle+180, mPointQ.x, mPointQ.y);
-            mShadowDrawableCurrR.draw(canvas);
+            canvas.rotate(mAngleShadowV, mPointQ.x, mPointQ.y);
+            mShadowDrawableV.draw(canvas);
             canvas.restore();
 
             canvas.save();
-            canvas.rotate(mAngle-90, mPointQ.x, mPointQ.y);
-            mShadowDrawableCurrC.draw(canvas);
+            canvas.rotate(mAngleShadowC, mPointQ.x, mPointQ.y);
+            mShadowDrawableC.draw(canvas);
             canvas.restore();
 
             canvas.restore();
@@ -235,18 +226,30 @@ public class TurnPageActivity extends BaseActivity {
                         if (x < getWidth()/2) {
                             if (y < getHeight()/4) {
                                 mState = STATE_TURNING_FROM_LT;
+                                mCornerX = 0;
+                                mCornerY = 0;
                             } else if (y > getHeight() - getHeight()/4) {
                                 mState = STATE_TURNING_FROM_LB;
+                                mCornerX = 0;
+                                mCornerY = mHeight;
                             } else {
                                 mState = STATE_TURNING_FROM_LM;
+                                mCornerX = 0;
+                                mCornerY = mHeight/2;
                             }
                         } else {
                             if (y < getHeight()/4) {
                                 mState = STATE_TURNING_FROM_RT;
+                                mCornerX = mWidth;
+                                mCornerY = 0;
                             } else if (y > getHeight() - getHeight()/4) {
                                 mState = STATE_TURNING_FROM_RB;
+                                mCornerX = mWidth;
+                                mCornerY = mHeight;
                             } else {
                                 mState = STATE_TURNING_FROM_RM;
+                                mCornerX = mWidth;
+                                mCornerY = mHeight/2;
                             }
                         }
                         setCornerPoint(x, y);
@@ -261,8 +264,8 @@ public class TurnPageActivity extends BaseActivity {
         }
 
         private void setCornerPoint(float motionX, float motionY) {
-            float maxYFromTop = getWidth()*3f/5;//从上边翻页时y的最大值
-            float minYFromBottom = getBottom() - maxYFromTop;//从下边翻页时的y的最小值
+            float maxYFromTop = mWidth*3f/5;//从上边翻页时y的最大值
+            float minYFromBottom = mHeight - maxYFromTop;//从下边翻页时的y的最小值
             float x = -1, y = -1;
             switch (mState) {
                 case STATE_TURNING_FROM_LT:
@@ -274,8 +277,13 @@ public class TurnPageActivity extends BaseActivity {
                     //y = motionY;
                     break;
                 case STATE_TURNING_FROM_LB:
-                    //x = motionX;
-                    //y = motionY < minYFromBottom ? minYFromBottom : motionY;
+                    //计算方法参考page_right_down.png
+                    x = Math.min(mWidth-1, Math.max(1, motionX));
+                    y = Math.min(mHeight-1, Math.max(minYFromBottom, motionY));
+                    if (LLog.PRINT_LOG) LLog.i("corner Point:"+x+" - "+y);
+                    mPointA.set(x, y);
+                    calculateVertexes();
+                    invalidate();
                     break;
                 case STATE_TURNING_FROM_RT:
                     //x = motionX;
@@ -287,8 +295,8 @@ public class TurnPageActivity extends BaseActivity {
                     break;
                 case STATE_TURNING_FROM_RB:
                     //计算方法参考page_right_down.png
-                    x = Math.min(getRight()-1, Math.max(getLeft()+1, motionX));
-                    y = Math.min(getBottom()-1, Math.max(minYFromBottom, motionY));
+                    x = Math.min(mWidth-1, Math.max(1, motionX));
+                    y = Math.min(mHeight-1, Math.max(minYFromBottom, motionY));
                     if (LLog.PRINT_LOG) LLog.i("corner Point:"+x+" - "+y);
                     mPointA.set(x, y);
                     calculateVertexes();
@@ -310,18 +318,18 @@ public class TurnPageActivity extends BaseActivity {
             //ox = ((bx+mx)/2 + cx)/2 oy = ((by + my)/2 + cy)/2
             //px = ((nx + hx)/2 + gx)/2 py = ((ny+hy)/2 + gy)/2
 
-            float ex = (mPointA.x + mWidth)/2;
-            float ey = (mPointA.y + mHeight)/2;
-            mPointC.x = ex - (mHeight-ey)/(mWidth-ex)*(mHeight-ey);
-            mPointC.y = mHeight;
-            mPointG.x = mWidth;
-            mPointG.y = ey - (mWidth-ex)/(mHeight-ey)* (mWidth-ex);
+            float ex = (mPointA.x + mCornerX)/2;
+            float ey = (mPointA.y + mCornerY)/2;
+            mPointC.x = ex - (mCornerY-ey)/(mCornerX-ex)*(mCornerY-ey);
+            mPointC.y = mCornerY;
+            mPointG.x = mCornerX;
+            mPointG.y = ey - (mCornerX-ex)/(mCornerY-ey)* (mCornerX-ex);
             float fx = (mPointA.x + ex)/2;
             float fy = (mPointA.y + ey)/2;
-            mPointB.x = fx - (mHeight-fy)/(mWidth-fx)* (mHeight-fy);
-            mPointB.y = mHeight;
-            mPointH.x = mWidth;
-            mPointH.y = fy-(mWidth-fx)/(mHeight-fy)*(mWidth-fx);
+            mPointB.x = fx - (mCornerY-fy)/(mCornerX-fx)* (mCornerY-fy);
+            mPointB.y = mCornerY;
+            mPointH.x = mCornerX;
+            mPointH.y = fy-(mCornerX-fx)/(mCornerY-fy)*(mCornerX-fx);
             calculateIntersection(mPointA.x, mPointA.y, mPointC.x, mPointC.y, mPointB.x, mPointB.y, mPointH.x, mPointH.y, mPointM);
             calculateIntersection(mPointA.x, mPointA.y, mPointG.x, mPointG.y, mPointB.x, mPointB.y, mPointH.x, mPointH.y, mPointN);
             mPointO.x = ((mPointB.x+mPointM.x)/2+mPointC.x)/2;
@@ -348,7 +356,7 @@ public class TurnPageActivity extends BaseActivity {
             mPath1.moveTo(mPointA.x, mPointA.y);
             mPath1.lineTo(mPointM.x, mPointM.y);
             mPath1.quadTo(mPointC.x, mPointC.y, mPointB.x, mPointB.y);
-            mPath1.lineTo(mWidth, mHeight);
+            mPath1.lineTo(mCornerX, mCornerY);
             mPath1.lineTo(mPointH.x, mPointH.y);
             mPath1.quadTo(mPointG.x, mPointG.y, mPointN.x, mPointN.y);
             mPath1.close();
@@ -359,46 +367,138 @@ public class TurnPageActivity extends BaseActivity {
             mPath2.lineTo(mPointO.x, mPointO.y);
             mPath2.lineTo(mPointP.x, mPointP.y);
             mPath2.lineTo(mPointH.x, mPointH.y);
-            mPath2.lineTo(mWidth, mHeight);
+            mPath2.lineTo(mCornerX, mCornerY);
             mPath2.close();
             //==========计算角path==============
 
-            //==========计算下一页阴影宽度==============
-            mShadowWidthNext = (int) (Math.hypot(mWidth-mPointA.x, mHeight-mPointA.y)/4);
-            mShadowDrawableNext.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
-            //==========计算下一页阴影宽度==============
+            if (mState == STATE_TURNING_FROM_RB) {
+                //==========计算下一页阴影宽度==============
+                mShadowWidthNext = (int) (Math.hypot(mCornerX-mPointA.x, mCornerY-mPointA.y)/4);
+                mAngleShadowNext = (float) Math.atan((mCornerX-mPointB.x)/(mCornerY-mPointH.y));
+                mAngleShadowNext = (float) (180/Math.PI*mAngleShadowNext);
+                mShadowDrawableNext.setOrientation(GradientDrawable.Orientation.RIGHT_LEFT);
+                mShadowDrawableNext.setBounds((int)mPointH.x, (int)mPointH.y, (int)(mPointH.x+mShadowWidthNext), (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
+                //==========计算下一页阴影宽度==============
 
-            //==========计算当前页阴影==============
-            //直线ac:y = ax + b  与ac平行的阴影边:y = ax + c
-            //直线ag:y = mx + n  与ag平行的阴影边:y = mx + p
-            float a = (mPointA.y-mPointC.y)/(mPointA.x-mPointC.x);
-            float b = mPointA.y - a*mPointA.x;
-            float m = (mPointA.y-mPointG.y)/(mPointA.x-mPointG.x);
-            float n = mPointA.y-m*mPointA.x;
 
-            //y = ax + b  ax - y + b = 0
-            //y = ax + c  ax - y + c = 0
-            //mShadowWidthCurr = Math.abs(b-c)/Math.sqrt(a*a + 1*1);
-            //Math.abs(b-c) = mShadowWidthCurr*Math.sqrt(a*a + 1*1)
-            float c = 0f;
-            if (a > 0) {
-                c = (float) (b + mShadowWidthCurr*Math.sqrt(a*a + 1));
-            } else {
-                c = (float) (b - mShadowWidthCurr*Math.sqrt(a*a + 1));
+                //==========计算当前页阴影==============
+                //直线ac:y = ax + b  与ac平行的阴影边:y = ax + c
+                //直线ag:y = mx + n  与ag平行的阴影边:y = mx + p
+                float a = (mPointA.y-mPointC.y)/(mPointA.x-mPointC.x);
+                float b = mPointA.y - a*mPointA.x;
+                float m = (mPointA.y-mPointG.y)/(mPointA.x-mPointG.x);
+                float n = mPointA.y-m*mPointA.x;
+
+                //y = ax + b  ax - y + b = 0
+                //y = ax + c  ax - y + c = 0
+                //mShadowWidthCurr = Math.abs(b-c)/Math.sqrt(a*a + 1*1);
+                //Math.abs(b-c) = mShadowWidthCurr*Math.sqrt(a*a + 1*1)
+                float c = 0f;
+                float p = 0f;
+                if (a > 0) {
+                    c = (float) (b + mShadowWidthCurr*Math.sqrt(a*a + 1));
+                } else {
+                    c = (float) (b - mShadowWidthCurr*Math.sqrt(a*a + 1));
+                }
+                p = (float) (n - mShadowWidthCurr*Math.sqrt(m*m + 1));
+
+                //ax + c = mx + p
+                mPointQ.x = (p-c)/(a-m);
+                mPointQ.y = a*mPointQ.x + c;
+
+                mShadowDrawableH.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+                mShadowDrawableH.setBounds((int)mPointQ.x, (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mWidth+mShadowWidthCurr);
+                mShadowDrawableV.setOrientation(GradientDrawable.Orientation.RIGHT_LEFT);
+                mShadowDrawableV.setBounds((int)(mPointQ.x-mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x), (int)mPointQ.y+mHeight+mShadowWidthCurr);
+                mShadowDrawableC.setBounds((int)mPointQ.x, (int)mPointQ.y, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr);
+                mAngleShadowH = mAngle-90;
+                mAngleShadowV = mAngle+180;
+                mAngleShadowC = mAngle-90;
+                //if (LLog.PRINT_LOG) LLog.i("y = ax + b   a-b "+a+" - "+b);
+                //if (LLog.PRINT_LOG) LLog.i("y = mx + n   m-n "+m+" - "+n);
+
+                //辅助线
+                //if (canvas != null) {
+                //    mPaint.setStrokeWidth(4);
+                //    mPaint.setColor(Color.RED);
+                //    canvas.drawLine(0, p, -p/m, 0, mPaint);
+                //    canvas.drawLine(0, p, (mHeight-p)/m, mHeight, mPaint);
+                //    mPaint.setColor(Color.BLUE);
+                //    canvas.drawLine(0, c, -c/a, 0, mPaint);
+                //    canvas.drawLine(0, c, (mHeight-c)/a, mHeight, mPaint);
+                //}
+                //==========计算当前页阴影==============
+
+                mMatrixCorner.reset();
+                mMatrixCorner.setScale((float) mWidth / mBPCurr.getWidth(), (float) mHeight / mBPCurr.getHeight());
+                mMatrixCorner.postScale(-1, 1);
+                mMatrixCorner.postTranslate(mWidth, 0);
+                mMatrixCorner.postTranslate(mPointA.x, mPointA.y-mHeight);
+                mMatrixCorner.postRotate(mAngle, mPointA.x, mPointA.y);
+            } else if (mState == STATE_TURNING_FROM_LB) {
+                //==========计算下一页阴影宽度==============
+                mShadowWidthNext = (int) (Math.hypot(mCornerX-mPointA.x, mCornerY-mPointA.y)/4);
+                mAngleShadowNext = (float) Math.atan(mPointB.x/(mCornerY-mPointH.y));
+                mAngleShadowNext = (float) -(180/Math.PI*mAngleShadowNext);
+                mShadowDrawableNext.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+                mShadowDrawableNext.setBounds((int)(mPointH.x-mShadowWidthNext), (int)mPointH.y, (int)mPointH.x, (int)(mPointH.y+Math.hypot(mPointB.x-mPointH.x, mPointB.y-mPointH.y)));
+                //==========计算下一页阴影宽度==============
+
+
+                //==========计算当前页阴影==============
+                //直线ac:y = ax + b  与ac平行的阴影边:y = ax + c
+                //直线ag:y = mx + n  与ag平行的阴影边:y = mx + p
+                float a = (mPointA.y-mPointC.y)/(mPointA.x-mPointC.x);
+                float b = mPointA.y - a*mPointA.x;
+                float m = (mPointA.y-mPointG.y)/(mPointA.x-mPointG.x);
+                float n = mPointA.y-m*mPointA.x;
+
+                //y = ax + b  ax - y + b = 0
+                //y = ax + c  ax - y + c = 0
+                //mShadowWidthCurr = Math.abs(b-c)/Math.sqrt(a*a + 1*1);
+                //Math.abs(b-c) = mShadowWidthCurr*Math.sqrt(a*a + 1*1)
+                float c = 0f;
+                float p = 0f;
+                if (a < 0) {
+                    c = (float) (b + mShadowWidthCurr*Math.sqrt(a*a + 1));
+                } else {
+                    c = (float) (b - mShadowWidthCurr*Math.sqrt(a*a + 1));
+                }
+                p = (float) (n - mShadowWidthCurr*Math.sqrt(m*m + 1));
+
+                //ax + c = mx + p
+                mPointQ.x = (p-c)/(a-m);
+                mPointQ.y = a*mPointQ.x + c;
+
+                mShadowDrawableH.setOrientation(GradientDrawable.Orientation.RIGHT_LEFT);
+                mShadowDrawableH.setBounds((int)mPointQ.x-mShadowWidthCurr, (int)mPointQ.y+mShadowWidthCurr, (int)mPointQ.x, (int)mPointQ.y+mWidth+mShadowWidthCurr);
+                mShadowDrawableV.setOrientation(GradientDrawable.Orientation.LEFT_RIGHT);
+                mShadowDrawableV.setBounds((int)mPointQ.x, (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mHeight+mShadowWidthCurr);
+                mShadowDrawableC.setBounds((int)mPointQ.x, (int)mPointQ.y, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr);
+                mAngleShadowH = mAngle+270;
+                mAngleShadowV = mAngle;
+                mAngleShadowC = mAngle;
+                //if (LLog.PRINT_LOG) LLog.i("y = ax + b   a-b "+a+" - "+b);
+                //if (LLog.PRINT_LOG) LLog.i("y = mx + n   m-n "+m+" - "+n);
+
+                //辅助线
+                //if (canvas != null) {
+                //    mPaint.setStrokeWidth(4);
+                //    mPaint.setColor(Color.RED);
+                //    canvas.drawLine(0, p, -p/m, 0, mPaint);
+                //    canvas.drawLine(0, p, (mHeight-p)/m, mHeight, mPaint);
+                //    mPaint.setColor(Color.BLUE);
+                //    canvas.drawLine(0, c, -c/a, 0, mPaint);
+                //    canvas.drawLine(0, c, (mHeight-c)/a, mHeight, mPaint);
+                //}
+                //==========计算当前页阴影==============
+
+                mMatrixCorner.reset();
+                mMatrixCorner.setScale((float) mWidth / mBPCurr.getWidth(), (float) mHeight / mBPCurr.getHeight());
+                mMatrixCorner.postScale(-1, 1);
+                mMatrixCorner.postTranslate(mPointA.x, mPointA.y-mHeight);
+                mMatrixCorner.postRotate(mAngle+180, mPointA.x, mPointA.y);
             }
-            float p = (float) (n - mShadowWidthCurr*Math.sqrt(m*m + 1));
-
-            //if (LLog.PRINT_LOG) LLog.i("y = ax + b   a-b "+a+" - "+b);
-            //if (LLog.PRINT_LOG) LLog.i("y = mx + n   m-n "+m+" - "+n);
-
-            //ax + c = mx + p
-            mPointQ.x = (p-c)/(a-m);
-            mPointQ.y = a*mPointQ.x + c;
-
-            mShadowDrawableCurrB.setBounds((int)mPointQ.x, (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+getWidth()+mShadowWidthCurr);
-            mShadowDrawableCurrR.setBounds((int)(mPointQ.x-mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr, (int)(mPointQ.x), (int)mPointQ.y+getHeight()+mShadowWidthCurr);
-            mShadowDrawableCurrC.setBounds((int)mPointQ.x, (int)mPointQ.y, (int)(mPointQ.x+mShadowWidthCurr), (int)mPointQ.y+mShadowWidthCurr);
-            //==========计算当前页阴影==============
         }
 
         /**
@@ -411,7 +511,7 @@ public class TurnPageActivity extends BaseActivity {
          * @param y3    第二条直线上的点
          * @param x4    第二条直线上的点
          * @param y4    第二条直线上的点
-         * @param result
+         * @param result 存放交点坐标
          */
         private void calculateIntersection(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4, PointF result) {
             //y = ax + b
