@@ -8,6 +8,7 @@ import android.view.View;
 import dhl.anddemo.R;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
+import dhl.anddemo.test.TestAvtivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
 
 public class MainActivity extends BaseActivity {
@@ -33,6 +34,9 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.tv_turnpage:
                 startActivity(new Intent(getApplicationContext(), TurnPageActivity.class));
+                break;
+            case R.id.tv_test:
+                startActivity(new Intent(getApplicationContext(), TestAvtivity.class));
                 break;
         }
     }

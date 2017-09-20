@@ -54,7 +54,7 @@ public class App extends Application {
         if (mActivityStack.isEmpty() || activity == null) return null;
         Activity result = null;
         int index = mActivityStack.lastIndexOf(activity);
-        while (result == null && --index >= 0) {
+        while ((result == null || result.isFinishing()) && --index >= 0) {
             result = mActivityStack.get(index);
         }
         return result;
