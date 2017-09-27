@@ -1,0 +1,12 @@
+apply plugin: 'java'
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.squareup:javapoet:1.9.0'
+    compile 'com.google.auto.service:auto-service:1.0-rc3'
+    compile project(':lib-annotations')
+    compile project(':lib-viewbinding')
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"

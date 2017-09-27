@@ -14,6 +14,9 @@ import android.widget.TextView;
 import dhl.anddemo.R;
 import dhl.anddemo.base.BaseActivity;
 import dhl.anddemo.base.TitleBar;
+import dhl.annotation.viewbinding.BindClick;
+import dhl.annotation.viewbinding.BindView;
+import dhl.viewbinding.BindUtil;
 
 /**
  * Camera与Matrix的比较：<br/>
@@ -31,31 +34,61 @@ import dhl.anddemo.base.TitleBar;
 public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeListener {
 
     // views
-    private SeekBar mSeekbarXRotate;
-    private SeekBar mSeekbarYRotate;
-    private SeekBar mSeekbarZRotate;
-    private TextView mTVXRotate;
-    private TextView mTVYRotate;
-    private TextView mTVZRotate;
+    @BindView(R.id.seekbarXRotate)
+    public SeekBar mSeekbarXRotate;
+    @BindView(R.id.seekbarYRotate)
+    public SeekBar mSeekbarYRotate;
+    @BindView(R.id.seekbarZRotate)
+    public SeekBar mSeekbarZRotate;
+    @BindView(R.id.txtXRotate)
+    public TextView mTVXRotate;
+    @BindView(R.id.txtYRotate)
+    public TextView mTVYRotate;
+    @BindView(R.id.txtZRotate)
+    public TextView mTVZRotate;
 
-    private SeekBar mSeekbarXSkew;
-    private SeekBar mSeekbarYSkew;
-    private TextView mTVXSkew;
-    private TextView mTVYSkew;
+    @BindView(R.id.seekbarXSkew)
+    public SeekBar mSeekbarXSkew;
+    @BindView(R.id.seekbarYSkew)
+    public SeekBar mSeekbarYSkew;
+    @BindView(R.id.txtXSkew)
+    public TextView mTVXSkew;
+    @BindView(R.id.txtYSkew)
+    public TextView mTVYSkew;
 
-    private SeekBar mSeekbarXTranslate;
-    private SeekBar mSeekbarYTranslate;
-    private SeekBar mSeekbarZTranslate;
-    private TextView mTVXTranslate;
-    private TextView mTVYTranslate;
-    private TextView mTVZTranslate;
+    @BindView(R.id.seekbarXTranslate)
+    public SeekBar mSeekbarXTranslate;
+    @BindView(R.id.seekbarYTranslate)
+    public SeekBar mSeekbarYTranslate;
+    @BindView(R.id.seekbarZTranslate)
+    public SeekBar mSeekbarZTranslate;
+    @BindView(R.id.txtXTranslate)
+    public TextView mTVXTranslate;
+    @BindView(R.id.txtYTranslate)
+    public TextView mTVYTranslate;
+    @BindView(R.id.txtZTranslate)
+    public TextView mTVZTranslate;
 
-    private ImageView mIVResult;
+    @BindView(R.id.iv_image)
+    public ImageView mIVResult;
 
     private Camera mCamera;
     private int mRotateX, mRotateY, mRotateZ;
     private int mTranslateX, mTranslateY, mTranslateZ;
     private float mSkewX, mSkewY;
+
+    @BindClick({R.id.btn, R.id.btn1})
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.btn:
+                startActivity(new Intent(getApplicationContext(), MatrixEditActivity.class));
+                break;
+            case R.id.btn1:
+                startActivity(new Intent(getApplicationContext(), CarAnimationActivity.class));
+                break;
+        }
+    }
+
 
     //解决seekbar在scrollable容器(isInScrollingContainer())时滑动事件冲突
     private View.OnTouchListener mOnTouchListener = new View.OnTouchListener() {
@@ -76,6 +109,7 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.acti_camera_api);
+        BindUtil.bindView(this, "CameraApiActivity", getWindow().getDecorView());
 
         TitleBar.SimpleTitleBarClickListener titleBarClickListener = new TitleBar.SimpleTitleBarClickListener() {
             @Override
@@ -95,34 +129,34 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
         mCamera = new Camera();
         // initViews
         //rotate
-        mSeekbarXRotate = (SeekBar) findViewById(R.id.seekbarXRotate);
+        //mSeekbarXRotate = (SeekBar) findViewById(R.id.seekbarXRotate);
         mSeekbarXRotate.setOnSeekBarChangeListener(this);
-        mSeekbarYRotate = (SeekBar) findViewById(R.id.seekbarYRotate);
+        //mSeekbarYRotate = (SeekBar) findViewById(R.id.seekbarYRotate);
         mSeekbarYRotate.setOnSeekBarChangeListener(this);
-        mSeekbarZRotate = (SeekBar) findViewById(R.id.seekbarZRotate);
+        //mSeekbarZRotate = (SeekBar) findViewById(R.id.seekbarZRotate);
         mSeekbarZRotate.setOnSeekBarChangeListener(this);
-        mTVXRotate = (TextView) findViewById(R.id.txtXRotate);
-        mTVYRotate = (TextView) findViewById(R.id.txtYRotate);
-        mTVZRotate = (TextView) findViewById(R.id.txtZRotate);
+        //mTVXRotate = (TextView) findViewById(R.id.txtXRotate);
+        //mTVYRotate = (TextView) findViewById(R.id.txtYRotate);
+        //mTVZRotate = (TextView) findViewById(R.id.txtZRotate);
         // translate
-        mSeekbarXTranslate = (SeekBar) findViewById(R.id.seekbarXTranslate);
+        //mSeekbarXTranslate = (SeekBar) findViewById(R.id.seekbarXTranslate);
         mSeekbarXTranslate.setOnSeekBarChangeListener(this);
-        mSeekbarYTranslate = (SeekBar) findViewById(R.id.seekbarYTranslate);
+        //mSeekbarYTranslate = (SeekBar) findViewById(R.id.seekbarYTranslate);
         mSeekbarYTranslate.setOnSeekBarChangeListener(this);
-        mSeekbarZTranslate = (SeekBar) findViewById(R.id.seekbarZTranslate);
+        //mSeekbarZTranslate = (SeekBar) findViewById(R.id.seekbarZTranslate);
         mSeekbarZTranslate.setOnSeekBarChangeListener(this);
-        mTVXTranslate = (TextView) findViewById(R.id.txtXTranslate);
-        mTVYTranslate = (TextView) findViewById(R.id.txtYTranslate);
-        mTVZTranslate = (TextView) findViewById(R.id.txtZTranslate);
+        //mTVXTranslate = (TextView) findViewById(R.id.txtXTranslate);
+        //mTVYTranslate = (TextView) findViewById(R.id.txtYTranslate);
+        //mTVZTranslate = (TextView) findViewById(R.id.txtZTranslate);
         //skew
-        mSeekbarXSkew = (SeekBar) findViewById(R.id.seekbarXSkew);
+        //mSeekbarXSkew = (SeekBar) findViewById(R.id.seekbarXSkew);
         mSeekbarXSkew.setOnSeekBarChangeListener(this);
-        mSeekbarYSkew = (SeekBar) findViewById(R.id.seekbarYSkew);
+        //mSeekbarYSkew = (SeekBar) findViewById(R.id.seekbarYSkew);
         mSeekbarYSkew.setOnSeekBarChangeListener(this);
-        mTVXSkew = (TextView) findViewById(R.id.txtXSkew);
-        mTVYSkew = (TextView) findViewById(R.id.txtYSkew);
+        //mTVXSkew = (TextView) findViewById(R.id.txtXSkew);
+        //mTVYSkew = (TextView) findViewById(R.id.txtYSkew);
 
-        mIVResult = (ImageView) findViewById(R.id.iv_image);
+        //mIVResult = (ImageView) findViewById(R.id.iv_image);
 
         mSeekbarXRotate.setOnTouchListener(mOnTouchListener);
         mSeekbarYRotate.setOnTouchListener(mOnTouchListener);
@@ -132,19 +166,6 @@ public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeLi
         mSeekbarZTranslate.setOnTouchListener(mOnTouchListener);
         mSeekbarXSkew.setOnTouchListener(mOnTouchListener);
         mSeekbarYSkew.setOnTouchListener(mOnTouchListener);
-
-        findViewById(R.id.btn).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MatrixEditActivity.class));
-            }
-        });
-        findViewById(R.id.btn1).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), CarAnimationActivity.class));
-            }
-        });
 
         // refresh
         refreshImage();
