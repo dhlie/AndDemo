@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<!-- saved from url=(0061)http://pics.showself.com/upload_pics/operation/shall/c51.html -->
+<html><head lang="en"><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
+    <title>测试html</title>
+    <style type="text/css">
+        .wrap{display:block;word-break:break-all;}
+        .person{text-decoration:none;background:auto;color:#FF6BB0;}
+        .male{text-decoration:none;background:auto;color:#006df3;}
+        .female{text-decoration:none;background:auto;color:#e14180;}
+        .notice{text-decoration:none;background:auto;color:#238e39;TEXT-DECORATION:underline}
+        .number{color:#ee1a51;}
+        .armymedaldiv{display:inline-block;*display:inline;*zoom:1;float:none;vertical-align:middle;}
+        .armymedaldivbg{display:block; float:left; margin-top:-3px; margin-right:0; height:14px; width:35px; position:relative; padding-top:3px;}
+        .armymedal4name{font-size:12px;color:#fff;height:14px; width:35px; text-align:center; line-height:14px; margin-top:3px; display:block; position:absolute; left:0px; top:0px;}
+        .armymedal4armylevel{position:absolute; right:0px; top:14px;z-index:9;}
+        .armymedal4memberlevel{display:block; float:left; padding-left:0px;*margin-top:3px;}
+.STYLE2 {color: #0000FF}
+    </style>
+
+    <script>
+        var medalRootPath = "http://pics.showself.com/upload_pics/operation/medal/";
+        var armymedalRootPath = "http://pics.showself.com/upload_pics/armyservice/icon/";
+        var totalCount = 0;
+        var maxLength = 30;
+
+        window.onload = function () {
+            document.body.style.webkitTouchCallout = 'none';
+            document.body.style.webkitUserSelect = 'none';
+        };
+
+        function appendItem(htm) {
+            //处理勋章替换
+            htm = replaceMedal(htm);
+            var panel = document.getElementById('panel');
+            var nextItem = document.createElement('div');
+            nextItem.setAttribute('class', 'wrap');
+            nextItem.innerHTML = htm;
+            panel.appendChild(nextItem);
+
+            if (totalCount > maxLength) {
+                panel.removeChild(panel.firstChild);
+            } else {
+                totalCount++;
+            }
+            scrollToBottom();
+        }
+
+        function scrollToBottom() {
+            document.body.scrollTop = document.body.scrollHeight;
+        }
+
+        function setItemMaxLength(l) {
+            maxLength = l;
+        }
+
+        function clear() {
+            var panel = document.getElementById('panel');
+            for (var i = panel.childNodes.length - 1; i >= 0; i--) {
+                var childNode = panel.childNodes[i];
+                panel.removeChild(childNode);
+            }
+            totalCount = 0;
+        }
+        
+        function replaceMedal(htm) {
+
+            var wait2replace = document.createElement('div');
+            wait2replace.innerHTML = htm;
+            var allChildOfHtml = wait2replace.childNodes;
+            for (var i = 0; i < allChildOfHtml.length; i++) {
+                if (allChildOfHtml[i].tagName == 'MEDAL') {
+                    var medalImageElement = getImageTag(allChildOfHtml[i].innerHTML);
+                    if (medalImageElement) {
+                        wait2replace.replaceChild(medalImageElement, allChildOfHtml[i]);
+                    }
+                    else {
+                        wait2replace.removeChild(allChildOfHtml[i]);
+                    }
+                }
+                else if (allChildOfHtml[i].tagName == 'ARMYMEDAL') {
+                    var aname = allChildOfHtml[i].getAttribute("aname");
+                    var alevel = allChildOfHtml[i].getAttribute("alevel");
+                    var mlevel = allChildOfHtml[i].getAttribute("mlevel");
+                    var medalImageElement = replaceMedalGetUserArmyMedal(aname, alevel, mlevel);
+                    if (medalImageElement) {
+                        wait2replace.replaceChild(medalImageElement, allChildOfHtml[i]);
+                    }
+                    else {
+                        wait2replace.removeChild(allChildOfHtml[i]);
+                    }
+                }
+                else if (allChildOfHtml[i].tagName == 'GIFTNUM') {
+                    var imgurl = allChildOfHtml[i].getAttribute("imgurl");
+                    var imgnum = allChildOfHtml[i].getAttribute("imgnum");
+                    var giftImageElement = getGiftImage(imgurl);
+                    if (giftImageElement) {
+                        wait2replace.replaceChild(giftImageElement, allChildOfHtml[i]);
+                    }
+                    else {
+                        wait2replace.removeChild(allChildOfHtml[i]);
+                    }
+                    if(imgnum>1)
+                    {
+                        for(var k=0;k<imgnum-2;k++)
+                        {
+                            wait2replace.appendChild(getGiftImage(imgurl));
+                        }
+                    }
+                }
+            }
+            return wait2replace.innerHTML;
+        }
+        function getGiftImage(imgurl)
+        {
+            var imageElement = document.createElement('img');
+            imageElement.setAttribute('src', imgurl);
+            imageElement.setAttribute('height', 35);
+            imageElement.setAttribute('width', 35);
+            return imageElement;
+        }
+        function getImageTag(imgname) {
+            var imageElement = document.createElement('img');
+            imageElement.setAttribute('src', medalRootPath + imgname);
+            imageElement.setAttribute('height', 35);
+            imageElement.setAttribute('width', 35);
+            return imageElement;
+        }
+        //军团徽章处理
+        function replaceMedalGetUserArmyMedal(armyName, armyLevel, memberLevel) {
+            if ((armyName == undefined) || (armyName == "") || (armyLevel == undefined) || (armyLevel == "")
+                    || (memberLevel == undefined) || (memberLevel == "")) {
+                return null;
+            }
+            var strHtml = "";
+            var armymedaldiv = document.createElement('div');
+            armymedaldiv.setAttribute("class", "armymedaldiv");
+
+            strHtml += "<div class='armymedaldivbg'>";
+            strHtml += "<div style='overflow:hidden;'>";
+            strHtml += "<img src='" + replaceMedalGetArmyBackgroundPic(armyLevel) + "' style='vertical-align:top;'>";
+            strHtml += "</div>";
+            strHtml += "<a class='armymedal4name' >" + armyName + "</a>";
+            strHtml += "<div class='armymedal4armylevel'>";
+            strHtml += replaceMedalArmyGetArmyLevelPic(armyLevel);
+            strHtml += "</div>";
+            strHtml += "</div>";
+            strHtml += "<img src='" + replaceMedalGetArmyMemberLevelPic(memberLevel) + "' class='armymedal4memberlevel'>";
+            armymedaldiv.innerHTML = strHtml;
+            return armymedaldiv;
+        }
+        //根据军团等级获取军团背景
+        function replaceMedalGetArmyBackgroundPic(inArmyLevel) {
+            var armyLevel=parseInt(inArmyLevel);
+            var strBgPicUrl = "pas0-19.png";
+            if (armyLevel < 20) {
+                strBgPicUrl = "pas0-19.png";
+            }
+            else if (armyLevel < 40) {
+                strBgPicUrl = "pas20-39.png";
+            }
+            else if (armyLevel < 60) {
+                strBgPicUrl = "pas40-59.png";
+            }
+            else if (armyLevel < 80) {
+                strBgPicUrl = "pas60-79.png";
+            }
+            else if (armyLevel < 100) {
+                strBgPicUrl = "pas80-99.png";
+            }
+            return armymedalRootPath + strBgPicUrl;
+        }
+
+        function replaceMedalGetArmyMemberLevelPic(memberLevel) {
+            var mLevel=parseInt(memberLevel);
+            var strBgPicUrl = "c4.png";
+            if (mLevel == 1) {
+                strBgPicUrl = "c1.png";//神
+            }
+            else if (mLevel == 2) {
+                strBgPicUrl = "c2.png";//金
+            }
+            else if (mLevel == 3) {
+                strBgPicUrl = "c3.png";//银
+            }
+            else if (mLevel == 4) {
+                strBgPicUrl = "c4.png";//铜
+            }
+
+            return armymedalRootPath + strBgPicUrl;
+        }
+
+        //获取军团等级图标
+        function replaceMedalArmyGetArmyLevelPic(inLevel) {
+            var strLevelHtml = "";
+            var strPicType = "s";
+            var levelUrl = "";
+            var armyLevel=parseInt(inLevel);
+            if (armyLevel > 99) {
+                armyLevel = armyLevel % 100;
+            }
+            if (armyLevel < 10) {
+                levelUrl = armymedalRootPath + strPicType + armyLevel + ".png";
+                strLevelHtml = "<img src='" + levelUrl + "' style='float:left;'>"
+            } else {
+                levelUrl = armymedalRootPath + strPicType + Math.floor(armyLevel / 10) + ".png";
+                strLevelHtml = "<img src='" + levelUrl + "' style='float:left;'>"
+                levelUrl = armymedalRootPath + strPicType + (armyLevel % 10) + ".png";
+                strLevelHtml += "<img src='" + levelUrl + "' style='float:left;'>"
+            }
+            return strLevelHtml;
+        }
+    </script>
+<style type="text/css"></style></head>
+
+<body style="-webkit-user-select: none; background-color: rgb(254, 249, 243);">
+<div id="panel">
+    <div class="wrap"> <img height="13" width="13" src="./c51_files/xiaolaba.png"><font color="red"> 京东11.11大促销,全场优惠不断 </font></div><font color="red">
+    <div class="wrap"> <img height="13" width="13" src="./c51_files/xiaolaba.png"><font color="blue">认准官方帐号特征<img height="14" width="14" src="./c51_files/shall_role_xs.png"> <img height="14" width="14" src="./c51_files/shall_identity_xg.png"> <img height="14" width="14" src="./c51_files/shall_identity_gf.png">，谨防您的权益受损！</font>  </div>
+
+</font></div><font color="red">
+
+</font></body></html>
