@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
+    compileSdkVersion build_versions.compile_sdk
+    buildToolsVersion build_versions.build_tools
 
-    compileSdkVersion COMPILE_SDK_VERSION as int
-    buildToolsVersion BUILD_TOOLS_VERSION as String
 
     defaultConfig {
         applicationId "dhl.anddemo"
-        minSdkVersion MIN_SDK_VERSION as int
-        targetSdkVersion TARGET_SDK_VERSION as int
+        minSdkVersion build_versions.min_sdk
+        targetSdkVersion build_versions.target_sdk
         versionCode 1
         versionName "1.0"
     }
@@ -23,10 +23,10 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile "com.android.support:support-v4:${SUPPORT_V4_VERSION}"
-    compile "com.android.support:appcompat-v7:${APPCOMPAT_V7_VERSION}"
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation deps.support_v4
+    implementation deps.support_v7
+    implementation deps.constraint_layout
     annotationProcessor project(':lib-annotation-processor')
-    compile project(':lib-viewbinding')
+    implementation project(':lib-viewbinding')
 }

@@ -1,8 +1,8 @@
 package dhl.anddemo.base;
 
+import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -14,7 +14,7 @@ import dhl.anddemo.R;
  * Created by DuanHl on 2017/3/13.
  */
 
-public class BaseActivity extends AppCompatActivity {
+public class BaseActivity extends Activity {
 
     private boolean mSlideToFinishEnable = true;
 

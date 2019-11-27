@@ -2,8 +2,7 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@null</item><!-- 减少一层背景 -->
-        <item name="android:textAllCaps">false</item>
+        <!-- Customize your theme here. -->
     </style>
 
 </resources>

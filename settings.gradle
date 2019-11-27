@@ -1,1 +1,1 @@
-include ':app', ':lib-annotation-processor', ':lib-annotations', ':lib-viewbinding'
+include ':app', ':lib-annotation-processor', ':lib-annotations', ':lib-viewbinding', ':ipcserver'
