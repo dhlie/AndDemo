@@ -13,10 +13,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import dhl.anddemo.R;
+import dhl.anddemo.aidl.AidlActivity;
 import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
-import dhl.anddemo.test.TestAvtivity;
+import dhl.anddemo.test.TestActivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
 import dhl.anddemo.webview.WebActivity;
 
@@ -66,7 +67,8 @@ public class MainActivity extends BaseActivity {
         items.add(ClipRegionActivity.class);
         items.add(TurnPageActivity.class);
         items.add(WebActivity.class);
-        items.add(TestAvtivity.class);
+        items.add(TestActivity.class);
+        items.add(AidlActivity.class);
         return items;
     }
 

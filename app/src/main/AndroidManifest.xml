@@ -28,7 +28,8 @@
         <activity android:name="dhl.anddemo.clipregion.ClipRegionActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.turnpage.TurnPageActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.webview.WebActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
-        <activity android:name="dhl.anddemo.test.TestAvtivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
+        <activity android:name="dhl.anddemo.test.TestActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
+        <activity android:name="dhl.anddemo.aidl.AidlActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
     </application>
 
 </manifest>

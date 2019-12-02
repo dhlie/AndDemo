@@ -15,7 +15,7 @@ import dhl.viewbinding.BindUtil;
  * Created by DuanHl on 2017/9/17.
  */
 
-public class TestAvtivity extends BaseActivity {
+public class TestActivity extends BaseActivity {
 
     @BindView(R.id.button)
     public Button mBtn;

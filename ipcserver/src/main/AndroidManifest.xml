@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="cn.dhl.ipcserver">
+    
 
     <application
         android:allowBackup="true"
@@ -15,6 +16,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <service android:enabled="true" android:exported="true" android:name="cn.dhl.ipcserver.AidlDemoService">
+            <intent-filter>
+                <action android:name="cn.dhl.ipcservice_service"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>
