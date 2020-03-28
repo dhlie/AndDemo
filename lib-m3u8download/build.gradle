@@ -1,33 +1,23 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion build_versions.compile_sdk
     buildToolsVersion build_versions.build_tools
 
-
     defaultConfig {
-        applicationId "dhl.anddemo"
         minSdkVersion build_versions.min_sdk
         targetSdkVersion build_versions.target_sdk
         versionCode 1
         versionName "1.0"
     }
-
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation deps.support_v4
-    implementation deps.support_v7
-    implementation deps.constraint_layout
-    annotationProcessor project(':lib-annotation-processor')
-    implementation project(':lib-viewbinding')
-    implementation project(':lib-m3u8download')
 }

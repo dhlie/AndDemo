@@ -16,6 +16,7 @@ import dhl.anddemo.R;
 import dhl.anddemo.aidl.AidlActivity;
 import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
+import dhl.anddemo.m3u8.M3u8DownloadActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
 import dhl.anddemo.test.TestActivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
@@ -69,6 +70,7 @@ public class MainActivity extends BaseActivity {
         items.add(WebActivity.class);
         items.add(TestActivity.class);
         items.add(AidlActivity.class);
+        items.add(M3u8DownloadActivity.class);
         return items;
     }
 
