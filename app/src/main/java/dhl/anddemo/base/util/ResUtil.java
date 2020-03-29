@@ -45,4 +45,8 @@ public class ResUtil {
         drawable.addState(new int[0], defDrawable);
         return drawable;
     }
+
+    public static String getString(int resId) {
+        return App.getInstance().getString(resId);
+    }
 }

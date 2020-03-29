@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.view.ViewCompat;
@@ -18,15 +19,22 @@ import dhl.anddemo.base.util.PixelUtil;
 
 public class SlideFinishFrameLayout extends FrameLayout {
 
+    public static final int TYPE_TRANSLATE      = 1;//上一个界面左右滑动效果
+    public static final int TYPE_SCALE          = 2;//上一个界面缩放效果
+    public static final int TYPE = TYPE_SCALE;
+
     private Drawable        mShadowDrawable;
     private int             mShadowWidth = PixelUtil.dp2px(16);
     private Activity        mActivity;
     private Activity        mPreviousActivity;
     private SlideFinishDragHelper mDragger;
     private float           mScrollPercent;
-    private float           mSlidePercent = 0.2f;//前一个activity滚动的最大百分比 android:toXDelta="-20%p"
+    private final float     mSlidePercent = 0.2f;//前一个activity滚动的最大百分比 android:toXDelta="-20%p"
     private int             mScrimeMaxDistance;
     private boolean         mEnable = true;
+    private final float     mScale = 0.97f;//跟scale_in.xml/scale_out.xml中缩放值保持一致
+    private Paint mPaint = new Paint();
+
 
     public SlideFinishFrameLayout(Context context) {
         this(context, null);
@@ -42,6 +50,8 @@ public class SlideFinishFrameLayout extends FrameLayout {
         int colorStart = Color.parseColor("#00000000");
         int colorEnd = Color.parseColor("#7F000000");
         mShadowDrawable = new GradientDrawable(GradientDrawable.Orientation.LEFT_RIGHT, new int[]{colorStart, colorEnd});
+        mPaint.setColor(0xff000000);
+        mPaint.setStyle(Paint.Style.FILL);
     }
 
     public void attachToActivity(Activity act) {
@@ -57,6 +67,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
 
             @Override
             public boolean tryCaptureView(View child, int pointerId) {
+                if (getWidth() > getHeight()) return false;
                 return child == SlideFinishFrameLayout.this;
             }
 
@@ -97,7 +108,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
                 scrollTo(-left, 0);
                 final int width = getWidth();
                 mScrollPercent = (float)left/width;
-                if (left >= width && !mActivity.isFinishing()) {
+                if (left >= width) {
                     mActivity.finish();
                     mActivity.overridePendingTransition(0, 0);
                 }
@@ -115,6 +126,12 @@ public class SlideFinishFrameLayout extends FrameLayout {
                     finalX = 0;
                 }
 
+                //if (xvel > 4000 || (-getScrollX() > getWidth()/2 && xvel > -100)) {
+                //    finalX = getWidth();
+                //} else {
+                //    finalX = 0;
+                //
+                //}
                 if (mDragger.settleCapturedViewAt(finalX, 0)) {
                     ViewCompat.postInvalidateOnAnimation(SlideFinishFrameLayout.this);
                 }
@@ -167,19 +184,68 @@ public class SlideFinishFrameLayout extends FrameLayout {
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        long time = System.nanoTime();
-        drawScrim(canvas);
-        drawEdgeShadow(canvas);
+        //long time = System.nanoTime();
         super.dispatchDraw(canvas);
-        if (LLog.PRINT_LOG) LLog.i("liftcircly----dispatchDraw:"+(System.nanoTime()-time)/1000);
+        drawPrePage(canvas);
+        drawEdgeShadow(canvas);
+        //if (LLog.PRINT_LOG) LLog.i("liftcircly----dispatchDraw:"+(System.nanoTime()-time)/1000);
     }
 
-    private void drawScrim(Canvas canvas) {
-        if (getScrollX() != 0 && mPreviousActivity != null) {
+    private void drawPrePage(Canvas canvas) {
+        if (TYPE == TYPE_TRANSLATE) {
+            drawPrePageTranslate(canvas);
+        } else if (TYPE == TYPE_SCALE) {
+            drawPrePageScale(canvas);
+        }
+    }
+
+    /**
+     * 微信效果
+     * @param canvas
+     */
+    private void drawPrePageTranslate(Canvas canvas) {
+        final int scrollX = getScrollX();
+        final int height = getChildAt(0).getHeight();
+        if (scrollX != 0 && mPreviousActivity != null) {
             canvas.save();
-            canvas.clipRect(getScrollX(), 0, 0, getBottom());//优化过度绘制,只画可见部分
-            canvas.translate(getScrollX() - mScrimeMaxDistance * (1- mScrollPercent), 0);
+            canvas.clipRect(scrollX, 0, 0, height);//优化过度绘制,只画可见部分
+            canvas.translate(scrollX - mScrimeMaxDistance * (1- mScrollPercent), 0);
             mPreviousActivity.getWindow().getDecorView().draw(canvas);
+            canvas.restore();
+        }
+    }
+
+    /**
+     * 今日头条效果
+     * @param canvas
+     */
+    private void drawPrePageScale(Canvas canvas) {
+        final int scrollX = getScrollX();
+        final int width = getWidth();
+        final int height = getChildAt(0).getHeight();
+        if (scrollX != 0 && mPreviousActivity != null) {
+            final float scale = mScale + (1 - mScale)*mScrollPercent;
+
+            final float clipLeft = (width - width * scale)/2 + scrollX;
+            final float clipTop = (height - height * scale)/2;
+            final float clipRight = 0;
+            final float clipBottom = height - clipTop;
+
+            if (clipLeft < 0) {//绘制上一个activity
+                canvas.save();
+                canvas.clipRect(clipLeft, clipTop, clipRight, clipBottom);
+                canvas.translate(clipLeft, clipTop);
+                canvas.scale(scale, scale);
+                mPreviousActivity.getWindow().getDecorView().draw(canvas);
+                canvas.restore();
+            }
+
+            canvas.save();
+            canvas.drawRect(scrollX, 0, clipLeft > 0 ? 0 : clipLeft, height, mPaint);
+            if (clipLeft < 0) {
+                canvas.drawRect(clipLeft, 0, 0, clipTop, mPaint);
+                canvas.drawRect(clipLeft, clipBottom, 0, height, mPaint);
+            }
             canvas.restore();
         }
     }
@@ -193,4 +259,5 @@ public class SlideFinishFrameLayout extends FrameLayout {
             canvas.restore();
         }
     }
+
 }

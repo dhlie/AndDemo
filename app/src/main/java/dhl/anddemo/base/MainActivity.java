@@ -3,6 +3,7 @@ package dhl.anddemo.base;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,9 @@ import java.util.List;
 
 import dhl.anddemo.R;
 import dhl.anddemo.aidl.AidlActivity;
+import dhl.anddemo.base.dialog.BaseDialog;
+import dhl.anddemo.base.util.Consts;
+import dhl.anddemo.base.util.PermissionUtil;
 import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.m3u8.M3u8DownloadActivity;
@@ -24,12 +28,26 @@ import dhl.anddemo.webview.WebActivity;
 
 public class MainActivity extends BaseActivity {
 
+    private BaseDialog mPerExitDialog;
+
+    private PermissionUtil.BasePermissionCallback mBasePermissionCallback = new PermissionUtil.BasePermissionCallback(this) {
+        @Override
+        public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+        }
+
+        @Override
+        public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+            mPerExitDialog = PermissionUtil.showExitDialog(MainActivity.this, perms);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         initItemView();
+        requestPermission();
     }
 
     private void initItemView() {
@@ -50,7 +68,7 @@ public class MainActivity extends BaseActivity {
             tv.setText(clazz.getSimpleName());
             tv.setTextColor(Color.BLACK);
             tv.setPadding(PixelUtil.dp2px(16), 0, PixelUtil.dp2px(16), 0);
-            tv.setBackgroundResource(R.drawable.button_pressed_selector);
+            tv.setBackgroundResource(R.drawable.pressed_selector);
             tv.setOnClickListener(lis);
             tv.setTag(clazz);
 
@@ -72,6 +90,12 @@ public class MainActivity extends BaseActivity {
         items.add(AidlActivity.class);
         items.add(M3u8DownloadActivity.class);
         return items;
+    }
+
+    public void requestPermission() {
+        if (!PermissionUtil.hasPermission(this, PermissionUtil.sRequiredPers)) {
+            PermissionUtil.requestPermission(this, Consts.PERMISSION_CODE_REQUIRED, mBasePermissionCallback, PermissionUtil.sRequiredPers);
+        }
     }
 
 }

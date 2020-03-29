@@ -182,7 +182,7 @@ public class TitleBar extends FrameLayout {
         }
 
         if (mLeftView != null) {
-            mLeftView.setBackgroundResource(R.drawable.button_pressed_selector);
+            mLeftView.setBackgroundResource(R.drawable.pressed_selector);
             mLeftView.setOnClickListener(mClickListener);
             int width;
             if (drawable != null) {
@@ -222,7 +222,7 @@ public class TitleBar extends FrameLayout {
         }
         if (firstView != null) {
             btnCount++;
-            firstView.setBackgroundResource(R.drawable.button_pressed_selector);
+            firstView.setBackgroundResource(R.drawable.pressed_selector);
             firstView.setOnClickListener(mClickListener);
             if (fDrawable != null) {
                 fvWidth = (int) ((float)fDrawable.getIntrinsicWidth() * mTitleBarHeight / fDrawable.getIntrinsicHeight());
@@ -253,7 +253,7 @@ public class TitleBar extends FrameLayout {
         }
         if (secondView != null) {
             btnCount++;
-            secondView.setBackgroundResource(R.drawable.button_pressed_selector);
+            secondView.setBackgroundResource(R.drawable.pressed_selector);
             secondView.setOnClickListener(mClickListener);
             if (sDrawable != null) {
                 svWidth = (int) ((float)sDrawable.getIntrinsicWidth() * mTitleBarHeight / sDrawable.getIntrinsicHeight());
@@ -284,7 +284,7 @@ public class TitleBar extends FrameLayout {
         }
         if (thirdView != null) {
             btnCount++;
-            thirdView.setBackgroundResource(R.drawable.button_pressed_selector);
+            thirdView.setBackgroundResource(R.drawable.pressed_selector);
             thirdView.setOnClickListener(mClickListener);
             if (tDrawable != null) {
                 tvWidth = (int) ((float)tDrawable.getIntrinsicWidth() * mTitleBarHeight / tDrawable.getIntrinsicHeight());

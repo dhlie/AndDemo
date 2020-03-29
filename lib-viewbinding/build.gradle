@@ -19,6 +19,6 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile project(':lib-annotations')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    api project(':lib-annotations')
 }

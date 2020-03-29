@@ -3,12 +3,16 @@ package dhl.anddemo.base;
 import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
+import java.util.Arrays;
+
 import dhl.anddemo.R;
+import dhl.anddemo.base.util.PermissionUtil;
 
 /**
  * Created by DuanHl on 2017/3/13.
@@ -21,7 +25,11 @@ public class BaseActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         if (!(this instanceof MainActivity)) {
-            overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            if (SlideFinishFrameLayout.TYPE == SlideFinishFrameLayout.TYPE_SCALE) {
+                overridePendingTransition(R.anim.right_in, R.anim.scale_out);
+            } else if (SlideFinishFrameLayout.TYPE == SlideFinishFrameLayout.TYPE_TRANSLATE) {
+                overridePendingTransition(R.anim.right_in, R.anim.left_out);
+            }
         }
         super.onCreate(savedInstanceState);
         setupTransparencyStatus();
@@ -32,7 +40,11 @@ public class BaseActivity extends Activity {
     public void finish() {
         super.finish();
         if (!(this instanceof MainActivity)) {
-            overridePendingTransition(R.anim.left_in, R.anim.right_out);
+            if (SlideFinishFrameLayout.TYPE == SlideFinishFrameLayout.TYPE_SCALE) {
+                overridePendingTransition(R.anim.scale_in, R.anim.right_out);
+            } else if (SlideFinishFrameLayout.TYPE == SlideFinishFrameLayout.TYPE_TRANSLATE) {
+                overridePendingTransition(R.anim.scale_in, R.anim.right_out);
+            }
         }
     }
 
@@ -90,4 +102,22 @@ public class BaseActivity extends Activity {
             new SlideFinishFrameLayout(getApplicationContext()).attachToActivity(this);
         }
     }
+
+    //========================权限相关==========================
+    @Override
+    public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
+        if (Arrays.asList(PermissionUtil.sRequiredPers).contains(permission)) {
+            return false;
+        }
+        return super.shouldShowRequestPermissionRationale(permission);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        // Forward results to EasyPermissions
+        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+    }
+    //========================权限相关==========================
 }

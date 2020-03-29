@@ -6,4 +6,62 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+    <style name="SplashTheme" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:windowBackground">@color/white</item>
+    </style>
+
+    <!--对话框样式-->
+    <style name="BaseDialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.35</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBar">false</item>
+    </style>
+
+    <style name="ProgressDialogStyle" parent="BaseDialog">
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <!--中部对话框动画-->
+    <style name="DialogCenterAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_center_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_center_dismiss</item>
+    </style>
+
+    <!--底部对话框动画-->
+    <style name="DialogBottomAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_bottom_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_bottom_dismiss</item>
+    </style>
+
+    <!--顶部对话框动画-->
+    <style name="DialogTopAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_top_show</item>
+        <item name="android:windowExitAnimation">@anim/dialog_top_dismiss</item>
+    </style>
+
+    <style name="DialogButton">
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:paddingRight">12dp</item>
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:clickable">true</item>
+        <item name="android:gravity">center_vertical|center_horizontal</item>
+    </style>
+
+    <!-- 自定义progressDialog -->
+    <style name="SmallProgressBarStyleLoop">
+        <item name="android:indeterminateDrawable">@drawable/lp_loading_small_loop_progressbar</item>
+        <item name="android:minWidth">17dip</item>
+        <item name="android:maxWidth">17dip</item>
+        <item name="android:minHeight">17dip</item>
+        <item name="android:maxHeight">17dip</item>
+    </style>
 </resources>

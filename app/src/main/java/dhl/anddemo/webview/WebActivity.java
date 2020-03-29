@@ -3,6 +3,8 @@ package dhl.anddemo.webview;
 import android.graphics.Bitmap;
 import android.net.http.SslError;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.MessageQueue;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,6 +48,16 @@ public class WebActivity extends BaseActivity {
         mWebView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);//bug:webview有内容但是不显示,滑动一下才显示
         initWebView();
 
+        Looper.myQueue().addIdleHandler(new MessageQueue.IdleHandler() {
+            @Override
+            public boolean queueIdle() {
+                loadUrl();
+                return false;
+            }
+        });
+    }
+
+    private void loadUrl() {
         //方式1:加载网络html
         //mWebView.loadUrl("http://www.zhangyue.com/products/iReader");
         //mWebView.loadUrl("https://www.taobao.com/");
