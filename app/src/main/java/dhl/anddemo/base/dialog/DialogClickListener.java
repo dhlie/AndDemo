@@ -7,7 +7,9 @@ import android.view.View;
  */
 
 public interface DialogClickListener {
-    void onLeftBtnClick(View view);
-    void onRightBtnClick(View view);
-    void onMidBtnClick(View view);
+	void onLeftBtnClick(View view);
+
+	void onRightBtnClick(View view);
+
+	void onMidBtnClick(View view);
 }

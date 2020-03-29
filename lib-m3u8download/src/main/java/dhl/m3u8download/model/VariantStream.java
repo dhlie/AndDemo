@@ -8,57 +8,65 @@ import java.io.Serializable;
  * Description:
  */
 public class VariantStream implements Serializable {
-  /**The value is a decimal-integer of bits per second. Every EXT-X-STREAM-INF tag MUST include the BANDWIDTH attribute.*/
-  private int bandwidth;
+	/**
+	 * The value is a decimal-integer of bits per second. Every EXT-X-STREAM-INF tag MUST include the BANDWIDTH attribute.
+	 */
+	private int bandwidth;
 
-  /**Every EXT-X-STREAM-INF tag SHOULD include a CODECS attribute.*/
-  private String codecs;
+	/**
+	 * Every EXT-X-STREAM-INF tag SHOULD include a CODECS attribute.
+	 */
+	private String codecs;
 
-  /**The RESOLUTION attribute is OPTIONAL but is recommended if the Variant Stream includes video.*/
-  private String resolution;
+	/**
+	 * The RESOLUTION attribute is OPTIONAL but is recommended if the Variant Stream includes video.
+	 */
+	private String resolution;
 
-  /**The FRAME-RATE attribute is OPTIONAL but is recommended if the Variant Stream includes video.*/
-  private float frame_rate;
+	/**
+	 * The FRAME-RATE attribute is OPTIONAL but is recommended if the Variant Stream includes video.
+	 */
+	private float frame_rate;
 
-  private String uri;
+	private String uri;
 
-  public int getBandwidth() {
-    return bandwidth;
-  }
+	public int getBandwidth() {
+		return bandwidth;
+	}
 
-  public void setBandwidth(int bandwidth) {
-    this.bandwidth = bandwidth;
-  }
+	public void setBandwidth(int bandwidth) {
+		this.bandwidth = bandwidth;
+	}
 
-  public String getCodecs() {
-    return codecs;
-  }
+	public String getCodecs() {
+		return codecs;
+	}
 
-  public void setCodecs(String codecs) {
-    this.codecs = codecs;
-  }
+	public void setCodecs(String codecs) {
+		this.codecs = codecs;
+	}
 
-  public String getResolution() {
-    return resolution;
-  }
+	public String getResolution() {
+		return resolution;
+	}
 
-  public void setResolution(String resolution) {
-    this.resolution = resolution;
-  }
+	public void setResolution(String resolution) {
+		this.resolution = resolution;
+	}
 
-  public float getFrameRate() {
-    return frame_rate;
-  }
+	public float getFrameRate() {
+		return frame_rate;
+	}
 
-  public void setFrameRate(float frame_rate) {
-    this.frame_rate = frame_rate;
-  }
+	public void setFrameRate(float frame_rate) {
+		this.frame_rate = frame_rate;
+	}
 
-  public String getUri() {
-    return uri;
-  }
+	public String getUri() {
+		return uri;
+	}
 
-  public void setUri(String uri) {
-    this.uri = uri;
-  }
+	public void setUri(String uri) {
+		this.uri = uri;
+	}
 }

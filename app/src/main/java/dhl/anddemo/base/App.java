@@ -10,33 +10,33 @@ import android.os.Handler;
 
 public class App extends Application {
 
-    private static App sInstance;
-    private static Handler sHandler = new Handler();
-    private ActivityStack mActivityStack;
+	private static App sInstance;
+	private static Handler sHandler = new Handler();
+	private ActivityStack mActivityStack;
 
-    public static App getInstance() {
-        return sInstance;
-    }
+	public static App getInstance() {
+		return sInstance;
+	}
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        sInstance = this;
+	@Override
+	public void onCreate() {
+		super.onCreate();
+		sInstance = this;
 
-        mActivityStack = new ActivityStack();
-        mActivityStack.register(this);
-    }
+		mActivityStack = new ActivityStack();
+		mActivityStack.register(this);
+	}
 
-    public Activity getPreviousActivity(Activity activity) {
-        return mActivityStack.getPreviousActivity(activity);
-    }
+	public Activity getPreviousActivity(Activity activity) {
+		return mActivityStack.getPreviousActivity(activity);
+	}
 
-    public static void postToUiThread(Runnable action) {
-        postToUiThread(action, 0);
-    }
+	public static void postToUiThread(Runnable action) {
+		postToUiThread(action, 0);
+	}
 
-    public static void postToUiThread(Runnable action, int delay) {
-        sHandler.postDelayed(action, delay);
-    }
+	public static void postToUiThread(Runnable action, int delay) {
+		sHandler.postDelayed(action, delay);
+	}
 
 }

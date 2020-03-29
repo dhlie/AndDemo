@@ -6,9 +6,13 @@ package dhl.m3u8download;
  * Description:
  */
 public interface M3u8DownloadListener {
-  void onStart(String id);
-  void onStop(String id);
-  void onProgress(String id, long length, long downloadLength);
-  void onFinish(String id);
-  void onError(String id, M3u8DownloadException error);
+	void onStart(String id);
+
+	void onStop(String id);
+
+	void onProgress(String id, long length, long downloadLength);
+
+	void onFinish(String id);
+
+	void onError(String id, M3u8DownloadException error);
 }

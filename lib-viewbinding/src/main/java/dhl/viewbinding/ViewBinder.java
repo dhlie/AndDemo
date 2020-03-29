@@ -8,6 +8,6 @@ import android.view.View;
 
 public interface ViewBinder<T> {
 
-    void bind(T target, View finder);
+	void bind(T target, View finder);
 
 }

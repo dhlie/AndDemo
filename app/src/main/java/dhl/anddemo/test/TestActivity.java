@@ -17,27 +17,27 @@ import dhl.viewbinding.BindUtil;
 
 public class TestActivity extends BaseActivity {
 
-    @BindView(R.id.button)
-    public Button mBtn;
-    @BindView(R.id.textView)
-    public View mView;
+	@BindView(R.id.button)
+	public Button mBtn;
+	@BindView(R.id.textView)
+	public View mView;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.acti_test);
-        BindUtil.bindView(this, "TestAvtivity", getWindow().getDecorView());
-    }
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.acti_test);
+		BindUtil.bindView(this, "TestAvtivity", getWindow().getDecorView());
+	}
 
-    @BindClick({R.id.button, R.id.button2})
-    public void clickEvent(View view) {
-        switch (view.getId()) {
-            case R.id.button:
-                Toast.makeText(getApplicationContext(), "button", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.button2:
-                Toast.makeText(getApplicationContext(), "button2", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
+	@BindClick({R.id.button, R.id.button2})
+	public void clickEvent(View view) {
+		switch (view.getId()) {
+			case R.id.button:
+				Toast.makeText(getApplicationContext(), "button", Toast.LENGTH_SHORT).show();
+				break;
+			case R.id.button2:
+				Toast.makeText(getApplicationContext(), "button2", Toast.LENGTH_SHORT).show();
+				break;
+		}
+	}
 }

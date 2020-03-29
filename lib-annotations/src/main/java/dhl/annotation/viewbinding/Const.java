@@ -6,6 +6,6 @@ package dhl.annotation.viewbinding;
 
 public class Const {
 
-    public static final String CLASS_SUFFIX = "$ViewBinder";
+	public static final String CLASS_SUFFIX = "$ViewBinder";
 
 }

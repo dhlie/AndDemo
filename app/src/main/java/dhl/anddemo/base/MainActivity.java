@@ -28,74 +28,74 @@ import dhl.anddemo.webview.WebActivity;
 
 public class MainActivity extends BaseActivity {
 
-    private BaseDialog mPerExitDialog;
+	private BaseDialog mPerExitDialog;
 
-    private PermissionUtil.BasePermissionCallback mBasePermissionCallback = new PermissionUtil.BasePermissionCallback(this) {
-        @Override
-        public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-        }
+	private PermissionUtil.BasePermissionCallback mBasePermissionCallback = new PermissionUtil.BasePermissionCallback(this) {
+		@Override
+		public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+		}
 
-        @Override
-        public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-            mPerExitDialog = PermissionUtil.showExitDialog(MainActivity.this, perms);
-        }
-    };
+		@Override
+		public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+			mPerExitDialog = PermissionUtil.showExitDialog(MainActivity.this, perms);
+		}
+	};
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
 
-        initItemView();
-        requestPermission();
-    }
+		initItemView();
+		requestPermission();
+	}
 
-    private void initItemView() {
-        List<Class> items = initItems();
-        LinearLayout viewGroup = (LinearLayout) findViewById(R.id.ll_container);
-        LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelUtil.dp2px(48));
-        LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
-        View.OnClickListener lis = new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Class clazz = (Class) view.getTag();
-                startActivity(new Intent(getApplicationContext(), clazz));
-            }
-        };
-        for (Class clazz : items) {
-            TextView tv = new TextView(getApplicationContext());
-            tv.setGravity(Gravity.CENTER_VERTICAL);
-            tv.setText(clazz.getSimpleName());
-            tv.setTextColor(Color.BLACK);
-            tv.setPadding(PixelUtil.dp2px(16), 0, PixelUtil.dp2px(16), 0);
-            tv.setBackgroundResource(R.drawable.pressed_selector);
-            tv.setOnClickListener(lis);
-            tv.setTag(clazz);
+	private void initItemView() {
+		List<Class> items = initItems();
+		LinearLayout viewGroup = (LinearLayout) findViewById(R.id.ll_container);
+		LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelUtil.dp2px(48));
+		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
+		View.OnClickListener lis = new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				Class clazz = (Class) view.getTag();
+				startActivity(new Intent(getApplicationContext(), clazz));
+			}
+		};
+		for (Class clazz : items) {
+			TextView tv = new TextView(getApplicationContext());
+			tv.setGravity(Gravity.CENTER_VERTICAL);
+			tv.setText(clazz.getSimpleName());
+			tv.setTextColor(Color.BLACK);
+			tv.setPadding(PixelUtil.dp2px(16), 0, PixelUtil.dp2px(16), 0);
+			tv.setBackgroundResource(R.drawable.pressed_selector);
+			tv.setOnClickListener(lis);
+			tv.setTag(clazz);
 
-            View divider = new View(getApplicationContext());
-            divider.setBackgroundColor(getResources().getColor(R.color.divider_line));
+			View divider = new View(getApplicationContext());
+			divider.setBackgroundColor(getResources().getColor(R.color.divider_line));
 
-            viewGroup.addView(tv, params1);
-            viewGroup.addView(divider, params2);
-        }
-    }
+			viewGroup.addView(tv, params1);
+			viewGroup.addView(divider, params2);
+		}
+	}
 
-    private List<Class> initItems() {
-        List<Class> items = new ArrayList<>();
-        items.add(CameraApiActivity.class);
-        items.add(ClipRegionActivity.class);
-        items.add(TurnPageActivity.class);
-        items.add(WebActivity.class);
-        items.add(TestActivity.class);
-        items.add(AidlActivity.class);
-        items.add(M3u8DownloadActivity.class);
-        return items;
-    }
+	private List<Class> initItems() {
+		List<Class> items = new ArrayList<>();
+		items.add(CameraApiActivity.class);
+		items.add(ClipRegionActivity.class);
+		items.add(TurnPageActivity.class);
+		items.add(WebActivity.class);
+		items.add(TestActivity.class);
+		items.add(AidlActivity.class);
+		items.add(M3u8DownloadActivity.class);
+		return items;
+	}
 
-    public void requestPermission() {
-        if (!PermissionUtil.hasPermission(this, PermissionUtil.sRequiredPers)) {
-            PermissionUtil.requestPermission(this, Consts.PERMISSION_CODE_REQUIRED, mBasePermissionCallback, PermissionUtil.sRequiredPers);
-        }
-    }
+	public void requestPermission() {
+		if (!PermissionUtil.hasPermission(this, PermissionUtil.sRequiredPers)) {
+			PermissionUtil.requestPermission(this, Consts.PERMISSION_CODE_REQUIRED, mBasePermissionCallback, PermissionUtil.sRequiredPers);
+		}
+	}
 
 }

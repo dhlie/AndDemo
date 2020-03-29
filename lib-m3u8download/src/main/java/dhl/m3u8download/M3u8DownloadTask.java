@@ -15,198 +15,200 @@ import dhl.m3u8download.model.MediaSegment;
  */
 public class M3u8DownloadTask implements Callable {
 
-  interface DownloadListener {
-    void onProgress(M3u8DownloadTask worker, long start, long length, long downloadLength);
-    void onFinished(M3u8DownloadTask worker);
-    void onError(M3u8DownloadTask worker, M3u8DownloadException e);
-  }
+	interface DownloadListener {
+		void onProgress(M3u8DownloadTask worker, long start, long length, long downloadLength);
 
-  private static final long SEGMENT_LENGTH = 1000;
-  private static final int MAX_RETRY_TIMES = 2;
+		void onFinished(M3u8DownloadTask worker);
 
-  private ExecutorService executorService;
-  private MediaPlaylist playlist;
-  private int startIndex;//下载范围 [startIndex, endIndex]
-  private int endIndex;
-  private String tsDir;
-  private Future future = null;
-  private volatile boolean stop;
-  private long start;
-  private long length;
-  private long downloadLength;
-  private DownloadListener listener;
-  private List<String> flingUris;
-  private int seq;
-  private int retryTimes;
+		void onError(M3u8DownloadTask worker, M3u8DownloadException e);
+	}
 
-  public M3u8DownloadTask(int seq, String saveDir, int startIndex, int endIndex, MediaPlaylist playlist) {
-    this.seq = seq;
-    this.playlist = playlist;
-    this.startIndex = startIndex;
-    this.endIndex = endIndex;
-    start = M3u8DownloadTask.calculateStart(startIndex);
-    length = M3u8DownloadTask.calculateLength(endIndex - startIndex + 1);
-    tsDir = saveDir;
-  }
+	private static final long SEGMENT_LENGTH = 1000;
+	private static final int MAX_RETRY_TIMES = 2;
 
-  public void setExecutorService(ExecutorService service) {
-    executorService = service;
-  }
+	private ExecutorService executorService;
+	private MediaPlaylist playlist;
+	private int startIndex;//下载范围 [startIndex, endIndex]
+	private int endIndex;
+	private String tsDir;
+	private Future future = null;
+	private volatile boolean stop;
+	private long start;
+	private long length;
+	private long downloadLength;
+	private DownloadListener listener;
+	private List<String> flingUris;
+	private int seq;
+	private int retryTimes;
 
-  public void setFlingUris(List<String> flingUris) {
-    this.flingUris = flingUris;
-  }
+	public M3u8DownloadTask(int seq, String saveDir, int startIndex, int endIndex, MediaPlaylist playlist) {
+		this.seq = seq;
+		this.playlist = playlist;
+		this.startIndex = startIndex;
+		this.endIndex = endIndex;
+		start = M3u8DownloadTask.calculateStart(startIndex);
+		length = M3u8DownloadTask.calculateLength(endIndex - startIndex + 1);
+		tsDir = saveDir;
+	}
 
-  private MediaSegment getMediaSegment(int index) {
-    return playlist.getMediaSegments().get(index);
-  }
+	public void setExecutorService(ExecutorService service) {
+		executorService = service;
+	}
 
-  public void setDownloadListener(DownloadListener listener) {
-    this.listener = listener;
-  }
+	public void setFlingUris(List<String> flingUris) {
+		this.flingUris = flingUris;
+	}
 
-  public int getSeq() {
-    return seq;
-  }
+	private MediaSegment getMediaSegment(int index) {
+		return playlist.getMediaSegments().get(index);
+	}
 
-  public static long calculateStart(int startIndex) {
-    return startIndex * SEGMENT_LENGTH;
-  }
+	public void setDownloadListener(DownloadListener listener) {
+		this.listener = listener;
+	}
 
-  public static long calculateLength(int count) {
-    return count * SEGMENT_LENGTH;
-  }
+	public int getSeq() {
+		return seq;
+	}
 
-  public boolean isStart() {
-    synchronized (this) {
-      return future != null;
-    }
-  }
+	public static long calculateStart(int startIndex) {
+		return startIndex * SEGMENT_LENGTH;
+	}
 
-  public void start() {
-    synchronized (this) {
-      if (future == null) {
-        future = executorService.submit(this);
-      }
-    }
-  }
+	public static long calculateLength(int count) {
+		return count * SEGMENT_LENGTH;
+	}
 
-  public void stop() {
-    synchronized (this) {
-      stop = true;
-      if (future != null) {
-        future.cancel(true);
-      }
-    }
-  }
+	public boolean isStart() {
+		synchronized (this) {
+			return future != null;
+		}
+	}
 
-  @Override
-  public Object call() throws Exception {
-    synchronized (this) {
-      if (stop) {
-        return "";
-      }
-    }
+	public void start() {
+		synchronized (this) {
+			if (future == null) {
+				future = executorService.submit(this);
+			}
+		}
+	}
 
-    try {
-      for (int i = startIndex; i <= endIndex; i++) {
-        synchronized (this) {
-          if (stop) {
-            M3u8Util.log("Task stop.", startIndex + "", endIndex + "", i + "");
-            return "";
-          }
-        }
+	public void stop() {
+		synchronized (this) {
+			stop = true;
+			if (future != null) {
+				future.cancel(true);
+			}
+		}
+	}
 
-        MediaSegment mediaSegment = getMediaSegment(i);
-        String uri = playlist.getMediaSegmentUrl(mediaSegment);
-        String name = M3u8Util.getSaveName(uri);
-        if (name == null || name.isEmpty()) {
-          throw new M3u8DownloadException(M3u8DownloadException.ERRNO_ERROR_SAVE_PATH, "getSaveName error, uri:" + uri);
-        }
-        String tsPath = M3u8Util.joinPath(tsDir, name);
+	@Override
+	public Object call() throws Exception {
+		synchronized (this) {
+			if (stop) {
+				return "";
+			}
+		}
 
-        synchronized (M3u8DownloadTask.class) {
-          if (flingUris.contains(uri) || M3u8Util.isCacheValid(tsPath)) {
-            long length = calculateLength(i - startIndex + 1);
-            notifyProgress(length);
-            continue;
-          }
-          flingUris.add(uri);
-        }
+		try {
+			for (int i = startIndex; i <= endIndex; i++) {
+				synchronized (this) {
+					if (stop) {
+						M3u8Util.log("Task stop.", startIndex + "", endIndex + "", i + "");
+						return "";
+					}
+				}
 
-        try {
-          M3u8Util.log(String.valueOf(seq), "download", uri);
-          HttpDownloader.download(uri, tsPath);
-        } finally {
-          synchronized (M3u8DownloadTask.class) {
-            flingUris.remove(uri);
-          }
-        }
-        if (M3u8Util.getFileLength(tsPath) > 0) {
-          long length = calculateLength(i - startIndex + 1);
-          notifyProgress(length);
-        } else {
-          M3u8Util.deleteFile(tsPath);
-          throw new M3u8DownloadException(M3u8DownloadException.ERRNO_DOWNLOAD_FILE_INVALID, "");
-        }
-      }
-      notifyFinished();
-    } catch (M3u8DownloadException e) {
-      notifyError(e);
-    } catch (Exception e) {
-      notifyError(new M3u8DownloadException(e));
-    }
-    return "";
-  }
+				MediaSegment mediaSegment = getMediaSegment(i);
+				String uri = playlist.getMediaSegmentUrl(mediaSegment);
+				String name = M3u8Util.getSaveName(uri);
+				if (name == null || name.isEmpty()) {
+					throw new M3u8DownloadException(M3u8DownloadException.ERRNO_ERROR_SAVE_PATH, "getSaveName error, uri:" + uri);
+				}
+				String tsPath = M3u8Util.joinPath(tsDir, name);
 
-  private void notifyProgress(long downLength) {
-    if (downLength > downloadLength) {
-      downloadLength = downLength;
-      if (listener != null) {
-        listener.onProgress(this, start, length, downloadLength);
-      }
-    }
-  }
+				synchronized (M3u8DownloadTask.class) {
+					if (flingUris.contains(uri) || M3u8Util.isCacheValid(tsPath)) {
+						long length = calculateLength(i - startIndex + 1);
+						notifyProgress(length);
+						continue;
+					}
+					flingUris.add(uri);
+				}
 
-  private void notifyFinished() {
-    if (listener != null) {
-      listener.onFinished(this);
-    }
-  }
+				try {
+					M3u8Util.log(String.valueOf(seq), "download", uri);
+					HttpDownloader.download(uri, tsPath);
+				} finally {
+					synchronized (M3u8DownloadTask.class) {
+						flingUris.remove(uri);
+					}
+				}
+				if (M3u8Util.getFileLength(tsPath) > 0) {
+					long length = calculateLength(i - startIndex + 1);
+					notifyProgress(length);
+				} else {
+					M3u8Util.deleteFile(tsPath);
+					throw new M3u8DownloadException(M3u8DownloadException.ERRNO_DOWNLOAD_FILE_INVALID, "");
+				}
+			}
+			notifyFinished();
+		} catch (M3u8DownloadException e) {
+			notifyError(e);
+		} catch (Exception e) {
+			notifyError(new M3u8DownloadException(e));
+		}
+		return "";
+	}
 
-  private void notifyError(M3u8DownloadException e) {
-    synchronized (this) {
-      if (canRetry()) {
-        e.printStackTrace();
-        M3u8Util.log(String.valueOf(seq), "retry", String.valueOf(retryTimes));
+	private void notifyProgress(long downLength) {
+		if (downLength > downloadLength) {
+			downloadLength = downLength;
+			if (listener != null) {
+				listener.onProgress(this, start, length, downloadLength);
+			}
+		}
+	}
 
-        future = null;
-        start();
-        return;
-      }
-    }
+	private void notifyFinished() {
+		if (listener != null) {
+			listener.onFinished(this);
+		}
+	}
 
-    if (listener != null) {
-      listener.onError(this, e);
-    }
-  }
+	private void notifyError(M3u8DownloadException e) {
+		synchronized (this) {
+			if (canRetry()) {
+				e.printStackTrace();
+				M3u8Util.log(String.valueOf(seq), "retry", String.valueOf(retryTimes));
 
-  private boolean canRetry() {
-    synchronized (this) {
-      retryTimes++;
-      return !stop && retryTimes <= MAX_RETRY_TIMES;
-    }
-  }
+				future = null;
+				start();
+				return;
+			}
+		}
 
-  public long getStart() {
-    return start;
-  }
+		if (listener != null) {
+			listener.onError(this, e);
+		}
+	}
 
-  public long getLength() {
-    return length;
-  }
+	private boolean canRetry() {
+		synchronized (this) {
+			retryTimes++;
+			return !stop && retryTimes <= MAX_RETRY_TIMES;
+		}
+	}
 
-  public long getDownloadLength() {
-    return downloadLength;
-  }
+	public long getStart() {
+		return start;
+	}
+
+	public long getLength() {
+		return length;
+	}
+
+	public long getDownloadLength() {
+		return downloadLength;
+	}
 }

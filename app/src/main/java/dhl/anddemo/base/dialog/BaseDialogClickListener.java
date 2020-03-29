@@ -7,18 +7,18 @@ import android.view.View;
  */
 
 public class BaseDialogClickListener implements DialogClickListener {
-    @Override
-    public void onLeftBtnClick(View view) {
+	@Override
+	public void onLeftBtnClick(View view) {
 
-    }
+	}
 
-    @Override
-    public void onRightBtnClick(View view) {
+	@Override
+	public void onRightBtnClick(View view) {
 
-    }
+	}
 
-    @Override
-    public void onMidBtnClick(View view) {
+	@Override
+	public void onMidBtnClick(View view) {
 
-    }
+	}
 }

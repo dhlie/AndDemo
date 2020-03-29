@@ -27,75 +27,75 @@ import dhl.viewbinding.BindUtil;
 
 public class AidlActivity extends BaseActivity {
 
-    @BindView(R.id.titlebar)
-    public TitleBar mTitleBar;
-    @BindView(R.id.bindservice)
-    public Button mBtnBind;
-    @BindView(R.id.unbindservice)
-    public Button mBtnUnbind;
+	@BindView(R.id.titlebar)
+	public TitleBar mTitleBar;
+	@BindView(R.id.bindservice)
+	public Button mBtnBind;
+	@BindView(R.id.unbindservice)
+	public Button mBtnUnbind;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.acti_aidl);
-        BindUtil.bindView(this, "AidlActivity", getWindow().getDecorView());
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.acti_aidl);
+		BindUtil.bindView(this, "AidlActivity", getWindow().getDecorView());
 
-        TitleBar.SimpleTitleBarClickListener titleBarClickListener = new TitleBar.SimpleTitleBarClickListener() {
-            @Override
-            public void onLeftClick(View v) {
-                finish();
-            }
+		TitleBar.SimpleTitleBarClickListener titleBarClickListener = new TitleBar.SimpleTitleBarClickListener() {
+			@Override
+			public void onLeftClick(View v) {
+				finish();
+			}
 
-            @Override
-            public void onRightFirstClick(View v) {
-            }
-        };
-        mTitleBar.setTitleBarClickListener(titleBarClickListener);
-        mTitleBar.setTitle(getClass().getSimpleName());
-    }
+			@Override
+			public void onRightFirstClick(View v) {
+			}
+		};
+		mTitleBar.setTitleBarClickListener(titleBarClickListener);
+		mTitleBar.setTitle(getClass().getSimpleName());
+	}
 
-    @BindClick({R.id.bindservice, R.id.unbindservice})
-    public void clickEvent(View view) {
-        switch (view.getId()) {
-            case R.id.bindservice:
-                startRemoteService();
-                break;
-            case R.id.unbindservice:
-                Toast.makeText(getApplicationContext(), "button2", Toast.LENGTH_SHORT).show();
-                break;
-        }
-    }
+	@BindClick({R.id.bindservice, R.id.unbindservice})
+	public void clickEvent(View view) {
+		switch (view.getId()) {
+			case R.id.bindservice:
+				startRemoteService();
+				break;
+			case R.id.unbindservice:
+				Toast.makeText(getApplicationContext(), "button2", Toast.LENGTH_SHORT).show();
+				break;
+		}
+	}
 
-    private void startRemoteService() {
-        LLog.i("startRemoteService");
-        Intent intent = new Intent();
-        ComponentName cm = new ComponentName("cn.dhl.ipcserver", "cn.dhl.ipcserver.AidlDemoService");
-        intent.setComponent(cm);
-        intent.setPackage(getPackageName());
+	private void startRemoteService() {
+		LLog.i("startRemoteService");
+		Intent intent = new Intent();
+		ComponentName cm = new ComponentName("cn.dhl.ipcserver", "cn.dhl.ipcserver.AidlDemoService");
+		intent.setComponent(cm);
+		intent.setPackage(getPackageName());
 
-        bindService(intent, new ServiceConnection() {
-            @Override
-            public void onServiceConnected(ComponentName name, IBinder service) {
-                LLog.i("onServiceConnected");
-                ITestAidlInterface inter = ITestAidlInterface.Stub.asInterface(service);
-                try {
-                    String result = inter.basicTypes(0, 0L, true, 0f, 0d, "string from client");
-                    Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
+		bindService(intent, new ServiceConnection() {
+			@Override
+			public void onServiceConnected(ComponentName name, IBinder service) {
+				LLog.i("onServiceConnected");
+				ITestAidlInterface inter = ITestAidlInterface.Stub.asInterface(service);
+				try {
+					String result = inter.basicTypes(0, 0L, true, 0f, 0d, "string from client");
+					Toast.makeText(getApplicationContext(), result, Toast.LENGTH_SHORT).show();
 
-                    City city = new City();
-                    city.name = "shenzhen";
-                    City ci = inter.changeCityName(city);
-                    LLog.i("city name:"+ci.name);
+					City city = new City();
+					city.name = "shenzhen";
+					City ci = inter.changeCityName(city);
+					LLog.i("city name:" + ci.name);
 
-                } catch (RemoteException e) {
-                    e.printStackTrace();
-                }
-            }
+				} catch (RemoteException e) {
+					e.printStackTrace();
+				}
+			}
 
-            @Override
-            public void onServiceDisconnected(ComponentName name) {
-                LLog.i("onServiceDisconnected");
-            }
-        }, Context.BIND_AUTO_CREATE);
-    }
+			@Override
+			public void onServiceDisconnected(ComponentName name) {
+				LLog.i("onServiceDisconnected");
+			}
+		}, Context.BIND_AUTO_CREATE);
+	}
 }

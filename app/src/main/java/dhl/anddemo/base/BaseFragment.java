@@ -10,13 +10,13 @@ import dhl.anddemo.base.util.PermissionUtil;
 
 public class BaseFragment extends Fragment {
 
-    //========================权限相关==========================
-    @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+	//========================权限相关==========================
+	@Override
+	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
 
-        // EasyPermissions handles the request result.
-        PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-    }
-    //========================权限相关==========================
+		// EasyPermissions handles the request result.
+		PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
+	}
+	//========================权限相关==========================
 }
