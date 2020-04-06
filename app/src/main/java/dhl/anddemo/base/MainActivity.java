@@ -53,7 +53,7 @@ public class MainActivity extends BaseActivity {
 	private void initItemView() {
 		List<Class> items = initItems();
 		LinearLayout viewGroup = (LinearLayout) findViewById(R.id.ll_container);
-		LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelUtil.dp2px(48));
+		LinearLayout.LayoutParams params1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, PixelUtil.dip2px(48));
 		LinearLayout.LayoutParams params2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1);
 		View.OnClickListener lis = new View.OnClickListener() {
 			@Override
@@ -67,7 +67,7 @@ public class MainActivity extends BaseActivity {
 			tv.setGravity(Gravity.CENTER_VERTICAL);
 			tv.setText(clazz.getSimpleName());
 			tv.setTextColor(Color.BLACK);
-			tv.setPadding(PixelUtil.dp2px(16), 0, PixelUtil.dp2px(16), 0);
+			tv.setPadding(PixelUtil.dip2px(16), 0, PixelUtil.dip2px(16), 0);
 			tv.setBackgroundResource(R.drawable.pressed_selector);
 			tv.setOnClickListener(lis);
 			tv.setTag(clazz);

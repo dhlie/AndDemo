@@ -27,7 +27,7 @@ public class DeviceInfo {
 			if (resourceId > 0) {
 				mStatusBarHeight = context.getResources().getDimensionPixelSize(resourceId);
 			} else {
-				mStatusBarHeight = PixelUtil.dp2px(25);
+				mStatusBarHeight = PixelUtil.dip2px(25);
 			}
 		}
 		return mStatusBarHeight;

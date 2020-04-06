@@ -78,7 +78,7 @@ public class TurnPageActivity extends BaseActivity {
 		private Path mPath2 = new Path();//下一页可见部分
 		private float mAngle;//翻起的书角水平转动的角度
 		private BitmapShader mShaderCorner;
-		private int mShadowWidthCurr = PixelUtil.dp2px(10);//当前页上的阴影宽度
+		private int mShadowWidthCurr = PixelUtil.dip2px(10);//当前页上的阴影宽度
 		private int mShadowWidthNext;//下一页的阴影宽度
 		private GradientDrawable mShadowDrawableH;//水平边的阴影
 		private GradientDrawable mShadowDrawableV;//垂直边的阴影

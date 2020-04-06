@@ -10,7 +10,7 @@ import dhl.anddemo.base.App;
 
 public class PixelUtil {
 
-	public static int dp2px(int dp) {
+	public static int dip2px(int dp) {
 		final float f = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, App.getInstance().getResources().getDisplayMetrics());
 		final int res = (int) (f + 0.5f);
 		if (res != 0) return res;

@@ -30,7 +30,7 @@ public class PtrDefaultHeader extends FrameLayout implements IPtrHeader {
 	public PtrDefaultHeader(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 
-		int pd = PixelUtil.dp2px(2);
+		int pd = PixelUtil.dip2px(2);
 		setPadding(0, pd, 0, pd);
 		mIVAnim = new ImageView(context.getApplicationContext());
 		mIVAnim.setImageResource(R.drawable.small_loop_progressbar);

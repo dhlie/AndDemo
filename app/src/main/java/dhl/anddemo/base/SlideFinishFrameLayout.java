@@ -24,7 +24,7 @@ public class SlideFinishFrameLayout extends FrameLayout {
 	public static final int TYPE = TYPE_SCALE;
 
 	private Drawable mShadowDrawable;
-	private int mShadowWidth = PixelUtil.dp2px(16);
+	private int mShadowWidth = PixelUtil.dip2px(16);
 	private Activity mActivity;
 	private Activity mPreviousActivity;
 	private SlideFinishDragHelper mDragger;

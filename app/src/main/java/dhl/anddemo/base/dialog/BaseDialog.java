@@ -86,14 +86,14 @@ public class BaseDialog extends Dialog {
 
 		DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
 		if (mWidth == WindowManager.LayoutParams.MATCH_PARENT) {
-			mWidth = metrics.widthPixels - (PixelUtil.dp2px(mHorizontalMargin) << 1);
+			mWidth = metrics.widthPixels - (PixelUtil.dip2px(mHorizontalMargin) << 1);
 		} else if (mWidth == WindowManager.LayoutParams.WRAP_CONTENT) {
-			params.horizontalMargin = (float) PixelUtil.dp2px(mHorizontalMargin) / metrics.widthPixels;
+			params.horizontalMargin = (float) PixelUtil.dip2px(mHorizontalMargin) / metrics.widthPixels;
 		}
 		if (mHeight == WindowManager.LayoutParams.MATCH_PARENT) {
-			mHeight = metrics.heightPixels - (PixelUtil.dp2px(mVerticalMargin) << 1);
+			mHeight = metrics.heightPixels - (PixelUtil.dip2px(mVerticalMargin) << 1);
 		} else if (mHeight == WindowManager.LayoutParams.WRAP_CONTENT) {
-			params.verticalMargin = (float) PixelUtil.dp2px(mVerticalMargin) / metrics.heightPixels;
+			params.verticalMargin = (float) PixelUtil.dip2px(mVerticalMargin) / metrics.heightPixels;
 		}
 		params.width = mWidth;
 		params.height = mHeight;

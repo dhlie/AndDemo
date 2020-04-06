@@ -9,56 +9,56 @@ import java.io.Serializable;
  */
 public class Key implements Serializable {
 
-	/**
-	 * The methods defined are: NONE, AES-128, and SAMPLE-AES.
-	 */
-	private String method;
+  /**
+   * The methods defined are: NONE, AES-128, and SAMPLE-AES.
+   */
+  private String method;
 
-	private String uri;
+  private String uri;
 
-	private String iv;
+  private String iv;
 
-	private String keyformat;
+  private String keyformat;
 
-	private String keyformatVersions;
+  private String keyformatVersions;
 
-	public String getMethod() {
-		return method;
-	}
+  public String getMethod() {
+    return method;
+  }
 
-	public void setMethod(String method) {
-		this.method = method;
-	}
+  public void setMethod(String method) {
+    this.method = method;
+  }
 
-	public String getUri() {
-		return uri;
-	}
+  public String getUri() {
+    return uri;
+  }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 
-	public String getIv() {
-		return iv;
-	}
+  public String getIv() {
+    return iv;
+  }
 
-	public void setIv(String iv) {
-		this.iv = iv;
-	}
+  public void setIv(String iv) {
+    this.iv = iv;
+  }
 
-	public String getKeyformat() {
-		return keyformat;
-	}
+  public String getKeyformat() {
+    return keyformat;
+  }
 
-	public void setKeyformat(String keyformat) {
-		this.keyformat = keyformat;
-	}
+  public void setKeyformat(String keyformat) {
+    this.keyformat = keyformat;
+  }
 
-	public String getKeyformatVersions() {
-		return keyformatVersions;
-	}
+  public String getKeyformatVersions() {
+    return keyformatVersions;
+  }
 
-	public void setKeyformatVersions(String keyformatVersions) {
-		this.keyformatVersions = keyformatVersions;
-	}
+  public void setKeyformatVersions(String keyformatVersions) {
+    this.keyformatVersions = keyformatVersions;
+  }
 }

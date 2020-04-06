@@ -32,7 +32,7 @@ public class ToastUtil {
 		sTVToast = view.findViewById(R.id.tv_toast);
 		sToast.setDuration(Toast.LENGTH_SHORT);
 		sToast.setView(view);
-		sToast.setGravity(Gravity.BOTTOM, 0, PixelUtil.dp2px(100));
+		sToast.setGravity(Gravity.BOTTOM, 0, PixelUtil.dip2px(100));
 
 		try {
 			Field mTNField = Toast.class.getDeclaredField("mTN");
@@ -45,7 +45,7 @@ public class ToastUtil {
 			Paint.FontMetrics fm = sTVToast.getPaint().getFontMetrics();
 			float lineHeight = fm.bottom - fm.top;
 			params.width = WindowManager.LayoutParams.MATCH_PARENT;
-			params.height = (int) (lineHeight * 3 + PixelUtil.dp2px(20) + 0.5f);
+			params.height = (int) (lineHeight * 3 + PixelUtil.dip2px(20) + 0.5f);
 		} catch (NoSuchFieldException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {

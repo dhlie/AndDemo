@@ -9,75 +9,75 @@ import java.io.Serializable;
  */
 public class MediaSegment implements Serializable {
 
-	/**
-	 * REQUIRED 格式：#EXTINF:<duration>,[<title>]
-	 */
-	private float duration;
+  /**
+   * REQUIRED 格式：#EXTINF:<duration>,[<title>]
+   */
+  private float duration;
 
-	/**
-	 * #EXT-X-BYTERANGE:<n>[@<o>]
-	 */
-	private int rangeLength;
+  /**
+   * #EXT-X-BYTERANGE:<n>[@<o>]
+   */
+  private int rangeLength;
 
-	private int rangeStart;
+  private int rangeStart;
 
-	/**
-	 * #EXT-X-DISCONTINUITY
-	 */
-	private boolean discontinuity;
+  /**
+   * #EXT-X-DISCONTINUITY
+   */
+  private boolean discontinuity;
 
-	/**
-	 * #EXT-X-KEY:<attribute-list>
-	 */
-	private Key key;
+  /**
+   * #EXT-X-KEY:<attribute-list>
+   */
+  private Key key;
 
-	private String uri;
+  private String uri;
 
-	public float getDuration() {
-		return duration;
-	}
+  public float getDuration() {
+    return duration;
+  }
 
-	public void setDuration(float duration) {
-		this.duration = duration;
-	}
+  public void setDuration(float duration) {
+    this.duration = duration;
+  }
 
-	public int getRangeLength() {
-		return rangeLength;
-	}
+  public int getRangeLength() {
+    return rangeLength;
+  }
 
-	public void setRangeLength(int rangeLength) {
-		this.rangeLength = rangeLength;
-	}
+  public void setRangeLength(int rangeLength) {
+    this.rangeLength = rangeLength;
+  }
 
-	public int getRangeStart() {
-		return rangeStart;
-	}
+  public int getRangeStart() {
+    return rangeStart;
+  }
 
-	public void setRangeStart(int rangeStart) {
-		this.rangeStart = rangeStart;
-	}
+  public void setRangeStart(int rangeStart) {
+    this.rangeStart = rangeStart;
+  }
 
-	public boolean isDiscontinuity() {
-		return discontinuity;
-	}
+  public boolean isDiscontinuity() {
+    return discontinuity;
+  }
 
-	public void setDiscontinuity(boolean discontinuity) {
-		this.discontinuity = discontinuity;
-	}
+  public void setDiscontinuity(boolean discontinuity) {
+    this.discontinuity = discontinuity;
+  }
 
-	public Key getKey() {
-		return key;
-	}
+  public Key getKey() {
+    return key;
+  }
 
-	public void setKey(Key key) {
-		this.key = key;
-	}
+  public void setKey(Key key) {
+    this.key = key;
+  }
 
-	public String getUri() {
-		return uri;
-	}
+  public String getUri() {
+    return uri;
+  }
 
-	public void setUri(String uri) {
-		this.uri = uri;
-	}
+  public void setUri(String uri) {
+    this.uri = uri;
+  }
 }

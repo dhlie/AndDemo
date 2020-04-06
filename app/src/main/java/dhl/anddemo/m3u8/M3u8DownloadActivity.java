@@ -15,13 +15,14 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import dhl.anddemo.R;
+import dhl.anddemo.base.App;
 import dhl.anddemo.base.BaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.annotation.viewbinding.BindClick;
 import dhl.annotation.viewbinding.BindView;
 import dhl.m3u8download.M3u8DownloadException;
 import dhl.m3u8download.M3u8DownloadListener;
-import dhl.m3u8download.M3u8DownloadWorker;
+import dhl.m3u8download.M3u8Downloader;
 import dhl.m3u8download.M3u8Util;
 import dhl.viewbinding.BindUtil;
 
@@ -46,8 +47,6 @@ public class M3u8DownloadActivity extends BaseActivity {
 	@BindView(R.id.tv_status)
 	public TextView mTVStatus;
 
-	//master:https://www.dailymotion.com/cdn/manifest/video/x7mwvsh.m3u8?sec=D5vghDNHRkqU5NAhhFipC4VPvgenRRQ5MkKvuzCLriw8okmCDqHvJiP4fF_9755e1tZPkzqkRxnAYArwuoFx5g
-	//media:https://proxy-34.sg1.dailymotion.com/sec(_MR2-nuL8DGH1FsPGkJ4SSRJHvdlcNIw7vCcbfTERTfWeSldR6YUCfSG7pHXPgc-zUL0O82qifJ7DyLevTWqCv8hMeN2ZPympnosDRqwL-E)/video/779/847/461748977_mp4_h264_aac_l2.m3u8
 	private String mDefaultUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/gear0/prog_index.m3u8";
 
 	ExecutorService mThreadPoolExecutor = new ThreadPoolExecutor(
@@ -124,7 +123,7 @@ public class M3u8DownloadActivity extends BaseActivity {
 	}
 
 	String mPath = null;
-	M3u8DownloadWorker mWorker;
+	M3u8Downloader mWorker;
 
 	private void download() {
 
@@ -137,33 +136,63 @@ public class M3u8DownloadActivity extends BaseActivity {
 			mTVStatus.setText("already download");
 			return;
 		}
-		mWorker = new M3u8DownloadWorker(url, mPath);
+		mWorker = new M3u8Downloader(url, mPath);
 		mWorker.setExecutorService(mThreadPoolExecutor);
 		mWorker.setListener(new M3u8DownloadListener() {
 			@Override
 			public void onStart(String id) {
-				mTVStatus.setText("Download start");
+				App.postToUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mTVStatus.setText("Download start");
+					}
+				});
+			}
+
+			@Override
+			public void onTotalSizeConfirmed(String id, long length) {
+
 			}
 
 			@Override
 			public void onStop(String id) {
-				mTVStatus.setText("Download stop");
+				App.postToUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mTVStatus.setText("Download stop");
+					}
+				});
 			}
 
 			@Override
-			public void onProgress(String id, long length, long downloadLength) {
+			public void onProgress(String id, final long length, final long downloadLength) {
 				M3u8Util.log("progress", length + "", downloadLength + "");
-				mTVStatus.setText(String.format("Download %.2f%%\n%d/%d", (double) downloadLength / length * 100, downloadLength, length));
+				App.postToUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mTVStatus.setText(String.format("Download %.2f%%\n%d/%d", (double) downloadLength / length * 100, downloadLength, length));
+					}
+				});
 			}
 
 			@Override
 			public void onFinish(String id) {
-				mTVStatus.setText("Download finish");
+				App.postToUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mTVStatus.setText("Download finish");
+					}
+				});
 			}
 
 			@Override
 			public void onError(String id, M3u8DownloadException error) {
-				mTVStatus.setText("Download error");
+				App.postToUiThread(new Runnable() {
+					@Override
+					public void run() {
+						mTVStatus.setText("Download error");
+					}
+				});
 			}
 		});
 		mWorker.start();
