@@ -22,10 +22,6 @@ public class MasterPlaylist extends Playlist {
     variantStreams.add(stream);
   }
 
-  public String getPlaylistUrl(VariantStream stream) {
-    return getResUrl(url, stream.getUri());
-  }
-
   public List<VariantStream> getVariantStreams() {
     return variantStreams;
   }

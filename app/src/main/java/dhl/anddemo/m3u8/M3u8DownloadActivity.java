@@ -2,7 +2,9 @@ package dhl.anddemo.m3u8;
 
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -47,7 +49,11 @@ public class M3u8DownloadActivity extends BaseActivity {
 	@BindView(R.id.tv_status)
 	public TextView mTVStatus;
 
-	private String mDefaultUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/gear0/prog_index.m3u8";
+	//single .ts file, with byte-ranges in the playlists
+	//"https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
+	//encrypted
+	//"https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8"
+	private String mDefaultUrl = "https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8";
 
 	ExecutorService mThreadPoolExecutor = new ThreadPoolExecutor(
 					10,
@@ -103,10 +109,19 @@ public class M3u8DownloadActivity extends BaseActivity {
 			mTVStatus.setText("file invalid");
 			return;
 		}
-		Intent intent = new Intent(Intent.ACTION_VIEW);
 		File file = new File(mPath);
-		Uri uri = Uri.fromFile(file);
-		intent.setDataAndType(uri, "video/*");
+		Intent intent = new Intent(Intent.ACTION_VIEW);
+		Uri data;
+		// 判断版本大于等于7.0
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+			// "dhl.anddemo.fileprovider" 即是在清单文件中配置的 authorities
+			data = FileProvider.getUriForFile(getApplicationContext(), "dhl.anddemo.fileprovider", file);
+			// 给目标应用一个临时授权
+			intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+		} else {
+			data = Uri.fromFile(file);
+		}
+		intent.setDataAndType(data, "video/*");
 		startActivity(intent);
 	}
 

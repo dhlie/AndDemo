@@ -165,10 +165,6 @@ public class PlaylistParser {
           }
           segment.setDiscontinuity(true);
         } else if (line.startsWith(MEDIA_TAG_KEY)) {
-          boolean supportEncrypt = false;
-          if (!supportEncrypt) {
-            throw new M3u8DownloadException(M3u8DownloadException.ERRNO_ENCRYPT_STREAM, "No support encrypt stream");
-          }
           //#EXT-X-KEY:<attribute-list>
           if (segment == null) {
             segment = new MediaSegment();
@@ -212,9 +208,13 @@ public class PlaylistParser {
     Matcher matcher = pattern.matcher(tag);
     Map<String, String> map = new HashMap<>();
     while (matcher.find()) {
-      String pair = matcher.group();
-      String[] kv = pair.split("=");
-      map.put(kv[0], kv[1]);
+			String pair = matcher.group();
+			String[] kv = pair.split("=");
+			String value = kv[1];
+			if (value.length() >= 2 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
+				value = value.substring(1, value.length() - 1);
+			}
+			map.put(kv[0], value);
     }
     return map;
   }

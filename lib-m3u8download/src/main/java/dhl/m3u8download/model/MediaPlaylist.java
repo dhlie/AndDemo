@@ -32,10 +32,6 @@ public class MediaPlaylist extends Playlist {
 
   private Float duration;
 
-  public String getMediaSegmentUrl(MediaSegment ts) {
-    return getResUrl(url, ts.getUri());
-  }
-
   public void addMediaSegment(MediaSegment ts) {
     if (ts == null) {
       return;
@@ -87,5 +83,10 @@ public class MediaPlaylist extends Playlist {
     }
     return dur;
   }
+
+  public int getMediaSegmentSequence(MediaSegment segment) {
+  	int index = mediaSegments.indexOf(segment);
+  	return index + sequence;
+	}
 
 }

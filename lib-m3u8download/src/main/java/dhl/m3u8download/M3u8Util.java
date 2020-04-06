@@ -5,8 +5,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.LruCache;
 
+import java.io.ByteArrayOutputStream;
 import java.io.Closeable;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
@@ -35,7 +37,7 @@ public class M3u8Util {
 
   private static final String M3U8_DIR = "m3u8/";
 
-  private static final boolean DEBUG = true;
+  private static final boolean DEBUG = false;
 
   private static final String TAG = "M3u8Util";
 
@@ -197,6 +199,28 @@ public class M3u8Util {
       }
     }
   }
+
+  public static String readFile(String path) {
+		FileInputStream fis = null;
+		ByteArrayOutputStream bos = null;
+		byte[] buf = getBuffer();
+		try {
+			fis = new FileInputStream(path);
+			bos = new ByteArrayOutputStream();
+			int len = -1;
+			while ((len = fis.read(buf)) != -1) {
+				bos.write(buf, 0, len);
+			}
+			return new String(bos.toByteArray(), "utf-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			close(fis);
+			close(bos);
+			putBuffer(buf);
+		}
+		return null;
+	}
 
   public static boolean rename(String src, String dst) {
     if (src == null || dst == null) {

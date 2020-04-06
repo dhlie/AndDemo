@@ -1,9 +1,10 @@
 package dhl.m3u8download;
 
-import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -12,6 +13,11 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+
+import dhl.m3u8download.model.Key;
 import dhl.m3u8download.model.MasterPlaylist;
 import dhl.m3u8download.model.MediaPlaylist;
 import dhl.m3u8download.model.MediaSegment;
@@ -192,7 +198,7 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
       });
       VariantStream stream = variantStreams.get(variantStreams.size() / 2);
 
-      String playlistUri = masterPlaylist.getPlaylistUrl(stream);
+      String playlistUri = masterPlaylist.getResUrl(stream.getUri());
       synchronized (this) {
         if (stop) {
           return;
@@ -259,41 +265,18 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
     }
 
     String tmpFile = filePath + ".tmp";
-    BufferedOutputStream out = null;
-    byte[] buf = null;
+    OutputStream out = null;
     try {
-      String tsDir = getTsDir();
-      out = new BufferedOutputStream(new FileOutputStream(tmpFile));
-      buf = M3u8Util.getBuffer();
-      int len = -1;
+      out = new FileOutputStream(tmpFile);
       for (MediaSegment segment : playlist.getMediaSegments()) {
-        FileInputStream fis = null;
-        try {
-          String uri = playlist.getMediaSegmentUrl(segment);
-          String name = M3u8Util.getSaveName(uri);
-          String tsPath = M3u8Util.joinPath(tsDir, name);
-          File tsFile = new File(tsPath);
-          if (!tsFile.exists() || !tsFile.isFile()) {
-            throw new M3u8DownloadException(M3u8DownloadException.ERRNO_MERGE_SEGMENTS, "merge fail:ts file invalid");
-          }
 
-          fis = new FileInputStream(tsFile);
-          if (segment.getRangeStart() > 0) {
-            fis.skip(segment.getRangeStart());
-          }
-          int rangeLength = segment.getRangeLength();
-          int readLen = 0;
-          while ((len = fis.read(buf)) != -1) {
-            if (rangeLength > 0 && readLen + len > rangeLength) {
-              out.write(buf, 0, rangeLength - readLen);
-              break;
-            }
-            out.write(buf, 0, len);
-            readLen += len;
-          }
-        } finally {
-          M3u8Util.close(fis);
-        }
+				Key key = segment.getKey();
+				if (key != null && !SegmentDownloader.ENCRYPT_METHOD_NONE.equals(key.getMethod())) {
+					decryptMediaSegment(segment, out);
+					continue;
+				}
+
+				readeSegmentToStream(segment, out);
       }
       M3u8Util.rename(tmpFile, filePath);
       if (M3u8Util.getFileLength(filePath) <= 0) {
@@ -301,16 +284,91 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
         M3u8Util.deleteFile(filePath);
         throw new M3u8DownloadException(M3u8DownloadException.ERRNO_MERGE_SEGMENTS, "rename fail");
       }
-      M3u8Util.deleteDir(tsDir);
+      M3u8Util.deleteDir(getTsDir());
     } catch (M3u8DownloadException e) {
       throw e;
     } catch (Exception e) {
       throw new M3u8DownloadException(e);
     } finally {
       M3u8Util.close(out);
-      M3u8Util.putBuffer(buf);
     }
   }
+
+  private void readeSegmentToStream(MediaSegment segment, OutputStream out) throws Exception {
+		String tsDir = getTsDir();
+		String uri = playlist.getResUrl(segment.getUri());
+		String name = M3u8Util.getSaveName(uri);
+		String tsPath = M3u8Util.joinPath(tsDir, name);
+		File tsFile = new File(tsPath);
+		if (!tsFile.exists() || !tsFile.isFile()) {
+			throw new M3u8DownloadException(M3u8DownloadException.ERRNO_MERGE_SEGMENTS, "merge fail:ts file invalid");
+		}
+
+		FileInputStream fis = null;
+		byte[] buf = null;
+		try {
+			fis = new FileInputStream(tsFile);
+			buf = M3u8Util.getBuffer();
+			if (segment.getRangeStart() > 0) {
+				fis.skip(segment.getRangeStart());
+			}
+			int readLen = 0;
+			int len = -1;
+			int rangeLength = segment.getRangeLength();
+			while ((len = fis.read(buf)) != -1) {
+				if (rangeLength > 0 && readLen + len > rangeLength) {
+					out.write(buf, 0, rangeLength - readLen);
+					break;
+				}
+				out.write(buf, 0, len);
+				readLen += len;
+			}
+		} finally {
+			M3u8Util.close(fis);
+			M3u8Util.putBuffer(buf);
+		}
+	}
+
+  private void decryptMediaSegment(MediaSegment segment, OutputStream out) throws Exception{
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		readeSegmentToStream(segment, bos);
+		byte[] contentByte = bos.toByteArray();
+
+		Key key = segment.getKey();
+		String keyName = M3u8Util.getSaveName(playlist.getResUrl(key.getUri()));
+		String keyPath = M3u8Util.joinPath(getTsDir(), keyName);
+		String keyStr = M3u8Util.readFile(keyPath);
+		if (keyStr == null || keyStr.length() == 0) {
+			M3u8Util.deleteFile(keyPath);
+			throw new M3u8DownloadException(M3u8DownloadException.ERRNO_DOWNLOAD_FILE_INVALID, "key file is invalid");
+		}
+		String ivStr = key.getIv();
+		if (ivStr == null || ivStr.length() == 0) {
+			ivStr = makeEncryptIV(playlist.getMediaSegmentSequence(segment));
+		}
+
+		byte[] decryptBytes = decrypt(contentByte, keyStr.getBytes("utf-8"), ivStr.getBytes("utf-8"));
+		out.write(decryptBytes);
+	}
+
+	private byte[] decrypt(byte[] content, byte[] key, byte[] iv) throws Exception {
+		SecretKeySpec keySpec = new SecretKeySpec(key ,"AES");
+		IvParameterSpec ivSpec = new IvParameterSpec(iv);
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
+		return cipher.doFinal(content);
+	}
+
+	private String makeEncryptIV(int seq) {
+		int ivLength = 16;
+		String str = Integer.toBinaryString(seq);
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0, j = ivLength - str.length(); i < j; i++) {
+			sb.append('0');
+		}
+		sb.append(str);
+		return sb.toString();
+	}
 
   @Override
   public void onProgress(SegmentDownloader worker, int start, int length, int downLength) {
@@ -364,18 +422,15 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
   @Override
   public void onError(SegmentDownloader worker, final M3u8DownloadException error) {
     synchronized (this) {
-      if (stop) {
-        error.printStackTrace();
-        M3u8Util.log("Task cancel");
-        return;
-      }
-
+    	if (stop) {
+    		return;
+			}
       for (SegmentDownloader task : runningTasks) {
         task.stop();
       }
+			notifyError(error);
       stop = true;
-    }
-    notifyError(error);
+		}
   }
 
   private void notifyStart() {
@@ -430,9 +485,11 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
 
   private void notifyError(final M3u8DownloadException error) {
     if (stop) {
-      M3u8Util.log("Task cancel");
+      M3u8Util.log("Task stoped");
       return;
     }
+
+		error.printStackTrace();
     if (listener != null) {
       listener.onError(urlString, error);
     }

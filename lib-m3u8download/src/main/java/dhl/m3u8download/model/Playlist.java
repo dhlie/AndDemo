@@ -13,19 +13,19 @@ public class Playlist implements Serializable {
 
   protected String url;
 
-  public String getResUrl(String playlistUrl, String resUri) {
+  public String getResUrl(String resUri) {
     if (resUri == null || resUri.length() == 0) {
       return resUri;
     }
     if (resUri.startsWith("http")) {
       return resUri;
     } else if (resUri.startsWith("/")) {
-      Uri playlistUri = Uri.parse(playlistUrl);
+      Uri playlistUri = Uri.parse(url);
       Uri subUri = new Uri.Builder().scheme(playlistUri.getScheme()).authority(playlistUri.getAuthority())
               .path(resUri).build();
       return subUri.toString();
     } else {
-      String streamUrl = playlistUrl.substring(0, playlistUrl.lastIndexOf('/') + 1);
+      String streamUrl = url.substring(0, url.lastIndexOf('/') + 1);
       streamUrl = streamUrl + resUri;
       return streamUrl;
     }

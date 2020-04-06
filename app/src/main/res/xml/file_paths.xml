@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <external-cache-path name="cache_download" path="download"/>
+    <files-path name="name" path="path" /> <!--对应getFilesDir()-->
+    <cache-path name="name" path="path" /> <!--对应getCacheDir()-->
+    <external-path name="hls" path="hls" /> <!--对应Environment.getExternalStorageDirectory()-->
+    <external-files-path name="name" path="hls" /> <!--对应getExternalFilesDir()-->
+    <external-cache-path name="name" path="path" /> <!--对应getExternalCacheDir()-->
+</paths>
