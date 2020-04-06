@@ -53,7 +53,7 @@ public class M3u8DownloadActivity extends BaseActivity {
 	//"https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
 	//encrypted
 	//"https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8"
-	private String mDefaultUrl = "https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8";
+	private String mDefaultUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/gear2/prog_index.m3u8";
 
 	ExecutorService mThreadPoolExecutor = new ThreadPoolExecutor(
 					10,
@@ -153,6 +153,7 @@ public class M3u8DownloadActivity extends BaseActivity {
 		}
 		mWorker = new M3u8Downloader(url, mPath);
 		mWorker.setExecutorService(mThreadPoolExecutor);
+		mWorker.setDownloadThreadCount(2);
 		mWorker.setListener(new M3u8DownloadListener() {
 			@Override
 			public void onStart(String id) {

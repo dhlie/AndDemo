@@ -460,8 +460,8 @@ public class M3u8Downloader implements Callable, SegmentDownloader.SegmentDownlo
           totalDownLength += task.getDownloadLength();
         }
         downloadLength = totalDownLength;
-      }
-      listener.onProgress(urlString, totalLength, downloadLength);
+				listener.onProgress(urlString, totalLength, downloadLength);
+			}
     }
   }
 
