@@ -50,10 +50,10 @@ public class M3u8DownloadActivity extends BaseActivity {
   public TextView mTVStatus;
 
   //single .ts file, with byte-ranges in the playlists
-  //"https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/gear2/prog_index.m3u8"
+  //private String mDefaultUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/gear2/prog_index.m3u8";
   //encrypted
-  //"https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8"
-  private String mDefaultUrl = "https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8";
+  //private String mDefaultUrl = "https://d2y4aoza0fc2pu.cloudfront.net/20200304/1pondo-020117_475/1000kb/hls/index.m3u8";
+  private String mDefaultUrl = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_4x3/gear3/prog_index.m3u8";
 
   ExecutorService mThreadPoolExecutor = new ThreadPoolExecutor(
           10,
@@ -62,6 +62,7 @@ public class M3u8DownloadActivity extends BaseActivity {
           TimeUnit.SECONDS,
           new LinkedBlockingQueue<Runnable>());
   String mSaveDir = "/sdcard/hls";
+  int mDownloadThreadCount = 2;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +154,7 @@ public class M3u8DownloadActivity extends BaseActivity {
     }
     mWorker = new M3u8Downloader(url, mPath);
     mWorker.setExecutorService(mThreadPoolExecutor);
-    mWorker.setDownloadThreadCount(2);
+    mWorker.setDownloadThreadCount(mDownloadThreadCount);
     mWorker.setListener(new M3u8DownloadListener() {
       @Override
       public void onStart(String id) {
@@ -182,7 +183,7 @@ public class M3u8DownloadActivity extends BaseActivity {
 
       @Override
       public void onProgress(String id, final long length, final long downloadLength) {
-        M3u8Util.log("progress", length + "", downloadLength + "");
+        M3u8Util.log("progress:", downloadLength + "", "/", length + "");
         App.postToUiThread(new Runnable() {
           @Override
           public void run() {
