@@ -1,12 +1,5 @@
 package dhl.m3u8download;
 
-import dhl.m3u8download.model.Key;
-import dhl.m3u8download.model.MasterPlaylist;
-import dhl.m3u8download.model.MediaPlaylist;
-import dhl.m3u8download.model.MediaSegment;
-import dhl.m3u8download.model.Playlist;
-import dhl.m3u8download.model.VariantStream;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.StringReader;
@@ -15,6 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import dhl.m3u8download.model.Key;
+import dhl.m3u8download.model.MasterPlaylist;
+import dhl.m3u8download.model.MediaPlaylist;
+import dhl.m3u8download.model.MediaSegment;
+import dhl.m3u8download.model.Playlist;
+import dhl.m3u8download.model.VariantStream;
 
 
 /**
@@ -66,6 +66,13 @@ public class PlaylistParser {
   private static final String KEY_ATTR_IV = "IV";
   private static final String KEY_ATTR_KEYFORMAT = "KEYFORMAT";
   private static final String KEY_ATTR_KEYFORMATVERSIONS = "KEYFORMATVERSIONS";
+
+  /**
+   * encrypt method
+   */
+  public static final String ENCRYPT_METHOD_NONE = "NONE";
+  public static final String ENCRYPT_METHOD_AES = "AES-128";
+  public static final String ENCRYPT_METHOD_SAMPLE_AES = "SAMPLE-AES";
 
   public static Playlist parsePlaylist(String path) throws Exception {
     BufferedReader reader = null;
@@ -208,13 +215,13 @@ public class PlaylistParser {
     Matcher matcher = pattern.matcher(tag);
     Map<String, String> map = new HashMap<>();
     while (matcher.find()) {
-			String pair = matcher.group();
-			String[] kv = pair.split("=");
-			String value = kv[1];
-			if (value.length() >= 2 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
-				value = value.substring(1, value.length() - 1);
-			}
-			map.put(kv[0], value);
+      String pair = matcher.group();
+      String[] kv = pair.split("=");
+      String value = kv[1];
+      if (value.length() >= 2 && value.charAt(0) == '"' && value.charAt(value.length() - 1) == '"') {
+        value = value.substring(1, value.length() - 1);
+      }
+      map.put(kv[0], value);
     }
     return map;
   }

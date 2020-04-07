@@ -85,8 +85,8 @@ public class MediaPlaylist extends Playlist {
   }
 
   public int getMediaSegmentSequence(MediaSegment segment) {
-  	int index = mediaSegments.indexOf(segment);
-  	return index + sequence;
-	}
+    int index = mediaSegments.indexOf(segment);
+    return index + sequence;
+  }
 
 }

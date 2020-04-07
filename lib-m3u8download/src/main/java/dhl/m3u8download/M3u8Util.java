@@ -25,7 +25,7 @@ import static android.text.format.DateUtils.SECOND_IN_MILLIS;
 public class M3u8Util {
 
   public static final String MEDIA_SUFFIX = "ts";
-  private static final String FILE_SUFFIX = ".ts";
+  private static final String FILE_SUFFIX = "." + MEDIA_SUFFIX;
 
   public static final int MAX_REDIRECTS = 5;
 
@@ -201,26 +201,26 @@ public class M3u8Util {
   }
 
   public static String readFile(String path) {
-		FileInputStream fis = null;
-		ByteArrayOutputStream bos = null;
-		byte[] buf = getBuffer();
-		try {
-			fis = new FileInputStream(path);
-			bos = new ByteArrayOutputStream();
-			int len = -1;
-			while ((len = fis.read(buf)) != -1) {
-				bos.write(buf, 0, len);
-			}
-			return new String(bos.toByteArray(), "utf-8");
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			close(fis);
-			close(bos);
-			putBuffer(buf);
-		}
-		return null;
-	}
+    FileInputStream fis = null;
+    ByteArrayOutputStream bos = null;
+    byte[] buf = getBuffer();
+    try {
+      fis = new FileInputStream(path);
+      bos = new ByteArrayOutputStream();
+      int len = -1;
+      while ((len = fis.read(buf)) != -1) {
+        bos.write(buf, 0, len);
+      }
+      return new String(bos.toByteArray(), "utf-8");
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      close(fis);
+      close(bos);
+      putBuffer(buf);
+    }
+    return null;
+  }
 
   public static boolean rename(String src, String dst) {
     if (src == null || dst == null) {
