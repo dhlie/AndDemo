@@ -7,6 +7,7 @@ import android.widget.Toast;
 
 import dhl.anddemo.R;
 import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.view.BadgeTextView;
 import dhl.annotation.viewbinding.BindClick;
 import dhl.annotation.viewbinding.BindView;
 import dhl.viewbinding.BindUtil;
@@ -17,10 +18,8 @@ import dhl.viewbinding.BindUtil;
 
 public class TestActivity extends BaseActivity {
 
-	@BindView(R.id.button)
-	public Button mBtn;
-	@BindView(R.id.textView)
-	public View mView;
+  @BindView(R.id.textView)
+	public BadgeTextView mBadgeTextView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +28,11 @@ public class TestActivity extends BaseActivity {
 		BindUtil.bindView(this, "TestAvtivity", getWindow().getDecorView());
 	}
 
-	@BindClick({R.id.button, R.id.button2})
+	@BindClick({R.id.textView})
 	public void clickEvent(View view) {
 		switch (view.getId()) {
-			case R.id.button:
+			case R.id.textView:
 				Toast.makeText(getApplicationContext(), "button", Toast.LENGTH_SHORT).show();
-				break;
-			case R.id.button2:
-				Toast.makeText(getApplicationContext(), "button2", Toast.LENGTH_SHORT).show();
 				break;
 		}
 	}

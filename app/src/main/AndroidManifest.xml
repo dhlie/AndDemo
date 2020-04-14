@@ -19,6 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_launcher_round"
         android:theme="@style/AppTheme"
+        android:supportsRtl="true"
         android:name="dhl.anddemo.base.App">
 
         <!-- https://developer.android.com/guide/practices/screens-distribution#MaxAspectRatio -->

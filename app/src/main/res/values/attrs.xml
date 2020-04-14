@@ -14,4 +14,12 @@
         <attr name="rightThirdText" format="string" />
     </declare-styleable>
 
+    <!-- BadgeTextView -->
+    <declare-styleable name="BadgeTextView">
+        <attr name="badgeRadius" format="dimension" />
+        <attr name="badgePadding" format="dimension" />
+        <attr name="badgeColor" format="color" />
+        <attr name="badgeBackground" format="color" />
+    </declare-styleable>
+
 </resources>
