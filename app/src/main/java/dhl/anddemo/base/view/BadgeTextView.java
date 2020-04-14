@@ -11,8 +11,12 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
+
+import java.util.Locale;
 
 import dhl.anddemo.R;
 
@@ -101,7 +105,7 @@ public class BadgeTextView extends AppCompatTextView {
 
     boolean isRTL = false;
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-      isRTL = getTextDirection() == TEXT_DIRECTION_RTL;
+      isRTL = TextUtils.getLayoutDirectionFromLocale(Locale.getDefault()) == View.LAYOUT_DIRECTION_RTL;
     }
 
     int lastLine = lineCount - 1;
