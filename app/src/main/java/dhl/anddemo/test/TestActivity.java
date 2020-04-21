@@ -1,5 +1,6 @@
 package dhl.anddemo.test;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -25,7 +26,7 @@ public class TestActivity extends BaseActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.acti_test);
-		BindUtil.bindView(this, "TestAvtivity", getWindow().getDecorView());
+		BindUtil.bindView(this, "TestActivity", getWindow().getDecorView());
 	}
 
 	@BindClick({R.id.textView})
@@ -33,6 +34,12 @@ public class TestActivity extends BaseActivity {
 		switch (view.getId()) {
 			case R.id.textView:
 				Toast.makeText(getApplicationContext(), "button", Toast.LENGTH_SHORT).show();
+
+        View tv = findViewById(R.id.tvtt);
+        System.out.println("left:"+tv.getLeft() + "  right:"+tv.getRight()+"  wid:"+tv.getWidth());
+
+        Drawable drawable = view.getContext().getResources().getDrawable(0);
+        System.out.println(drawable.toString());
 				break;
 		}
 	}
