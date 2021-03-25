@@ -99,7 +99,7 @@ public class PlaylistParser {
           stream.setBandwidth(Integer.parseInt(map.get(MASTER_ATTR_BANDWIDTH)));
           stream.setCodecs(map.get(MASTER_ATTR_CODECS));
           if (map.containsKey(MASTER_ATTR_FRAME_RATE)) {
-            stream.setFrameRate(Integer.parseInt(map.get(MASTER_ATTR_FRAME_RATE)));
+            stream.setFrameRate(Float.parseFloat(map.get(MASTER_ATTR_FRAME_RATE)));
           }
           stream.setResolution(map.get(MASTER_ATTR_RESOLUTION));
           stream.setName(map.get(MASTER_ATTR_NAME));
@@ -250,7 +250,7 @@ public class PlaylistParser {
             stream.setBandwidth(Integer.parseInt(map.get(MASTER_ATTR_BANDWIDTH)));
             stream.setCodecs(map.get(MASTER_ATTR_CODECS));
             if (map.containsKey(MASTER_ATTR_FRAME_RATE)) {
-              stream.setFrameRate(Integer.parseInt(map.get(MASTER_ATTR_FRAME_RATE)));
+              stream.setFrameRate(Float.parseFloat(map.get(MASTER_ATTR_FRAME_RATE)));
             }
             stream.setResolution(map.get(MASTER_ATTR_RESOLUTION));
           }
