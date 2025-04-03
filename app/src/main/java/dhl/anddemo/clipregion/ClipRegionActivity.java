@@ -4,9 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Path;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
-import android.graphics.Region;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 import dhl.anddemo.R;
 import dhl.anddemo.base.BaseActivity;
 import dhl.anddemo.base.TitleBar;
+import dhl.anddemo.base.util.PixelUtil;
 
 /**
  * Created by DuanHl on 2017/5/16.
@@ -43,35 +45,22 @@ public class ClipRegionActivity extends BaseActivity {
 		titleBar.setTitle(getClass().getSimpleName());
 
 		mTVOP = (TextView) findViewById(R.id.tv_op);
-		String text = "演示clipPath(Path path, Region.Op op)第二个参数的含义\nOP.UNION";
+		PorterDuff.Mode mode = PorterDuff.Mode.SRC_OVER;
+		String text = mode.toString();
 		mTVOP.setText(text);
 		FrameLayout fl = (FrameLayout) findViewById(R.id.view_clip);
 		mClipView = new ClipRegionView(this);
-		mClipView.setOP(Region.Op.UNION);
+		mClipView.setMode(mode);
 		fl.addView(mClipView);
 	}
 
 	public void onClick(View view) {
 		Button btn = (Button) view;
 		String text = btn.getText().toString();
-		text = "演示clipPath(Path path, Region.Op op)第二个参数的含义\n" + text;
-		mTVOP.setText(text);
-		Region.Op op = null;
-		if (text.contains(".DIFFERENCE")) {
-			op = Region.Op.DIFFERENCE;
-		} else if (text.contains("REVERSE_DIFFERENCE")) {
-			op = Region.Op.REVERSE_DIFFERENCE;
-		} else if (text.contains("REPLACE")) {
-			op = Region.Op.REPLACE;
-		} else if (text.contains("INTERSECT")) {
-			op = Region.Op.INTERSECT;
-		} else if (text.contains("UNION")) {
-			op = Region.Op.UNION;
-		} else if (text.contains("XOR")) {
-			op = Region.Op.XOR;
-		}
-		mClipView.setOP(op);
+		PorterDuff.Mode mode = PorterDuff.Mode.valueOf(text);
+		mClipView.setMode(mode);
 		mClipView.invalidate();
+		mTVOP.setText(text);
 	}
 
 	private static class ClipRegionView extends View {
@@ -80,8 +69,8 @@ public class ClipRegionActivity extends BaseActivity {
 		private Rect mRectOne = new Rect();
 		private int mRadius;
 		private int mCenterX, mCenterY;
-		private Region.Op mOP;
-		private Path mPath;
+		private PorterDuff.Mode mMode;
+		private PorterDuffXfermode mXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_OVER);
 
 		public ClipRegionView(Context context) {
 			super(context);
@@ -90,37 +79,59 @@ public class ClipRegionActivity extends BaseActivity {
 			mPaint.setAntiAlias(true);
 			mPaint.setStrokeWidth(6);
 			mPaint.setTextSize(getResources().getDimensionPixelSize(R.dimen.titlebar_title_textsize));
-			mPath = new Path();
 		}
 
-		public void setOP(Region.Op op) {
-			mOP = op;
+		public void setMode(PorterDuff.Mode mode) {
+			mMode = mode;
+			mXfermode = new PorterDuffXfermode(mMode);
 		}
 
 		@Override
 		protected void onSizeChanged(int w, int h, int oldw, int oldh) {
 			int rectWidt = w / 4;
 			mRectOne.set(rectWidt, h / 2 - rectWidt, w - rectWidt, h / 2 + rectWidt);
-			mRadius = w / 4;
+			mRadius = w / 6;
 			mCenterX = w - mRadius;
 			mCenterY = h - mRadius;
 		}
 
 		@Override
 		protected void onDraw(Canvas canvas) {
-			canvas.save();
-			canvas.clipRect(mRectOne);
-			mPath.reset();
-			mPath.addCircle(mCenterX, mCenterY, mRadius, Path.Direction.CCW);
-			canvas.clipPath(mPath, mOP);
+			//border
+			mPaint.setStyle(Paint.Style.STROKE);
+			mPaint.setColor(Color.GRAY);
+			mPaint.setStrokeWidth(20);
+			canvas.drawRect(0, 0, getWidth(), getHeight(), mPaint);
+
+			//border
+			mPaint.setStrokeWidth(6);
+			canvas.drawRect(mRectOne, mPaint);
+			canvas.drawCircle(mCenterX, mCenterY, mRadius, mPaint);
+
+			mPaint.setStyle(Paint.Style.FILL);
+            int saveId = 0;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                saveId = canvas.saveLayer(0, 0, getWidth(), getHeight(), mPaint);
+            }
 			drawRect(canvas);
+			drawText(canvas);
+			mPaint.setXfermode(mXfermode);
 			drawCircle(canvas);
-			canvas.restore();
+			mPaint.setXfermode(null);
+			canvas.restoreToCount(saveId);//图层恢复
 		}
 
 		private void drawRect(Canvas canvas) {
 			mPaint.setColor(Color.RED);
 			canvas.drawRect(mRectOne, mPaint);
+		}
+
+		private void drawText(Canvas canvas) {
+			mPaint.setColor(Color.RED);
+			mPaint.setTextSize(PixelUtil.sp2px(40));
+			String text = "hello world test";
+			float textWidth = mPaint.measureText(text);
+			canvas.drawText(text, (getWidth() - textWidth) / 2, mRectOne.bottom + 150, mPaint);
 		}
 
 		private void drawCircle(Canvas canvas) {

@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import java.util.Arrays;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.util.PermissionUtil;
 
 /**
  * Created by DuanHl on 2017/3/13.
@@ -103,21 +102,4 @@ public class BaseActivity extends Activity {
 		}
 	}
 
-	//========================权限相关==========================
-	@Override
-	public boolean shouldShowRequestPermissionRationale(@NonNull String permission) {
-		if (Arrays.asList(PermissionUtil.sRequiredPers).contains(permission)) {
-			return false;
-		}
-		return super.shouldShowRequestPermissionRationale(permission);
-	}
-
-	@Override
-	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
-		super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-		// Forward results to EasyPermissions
-		PermissionUtil.onRequestPermissionsResult(this, requestCode, permissions, grantResults);
-	}
-	//========================权限相关==========================
 }

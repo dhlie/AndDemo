@@ -16,8 +16,6 @@ import java.util.List;
 import dhl.anddemo.R;
 import dhl.anddemo.aidl.AidlActivity;
 import dhl.anddemo.base.dialog.BaseDialog;
-import dhl.anddemo.base.util.Consts;
-import dhl.anddemo.base.util.PermissionUtil;
 import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.m3u8.M3u8DownloadActivity;
@@ -30,24 +28,12 @@ public class MainActivity extends BaseActivity {
 
 	private BaseDialog mPerExitDialog;
 
-	private PermissionUtil.BasePermissionCallback mBasePermissionCallback = new PermissionUtil.BasePermissionCallback(this) {
-		@Override
-		public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-		}
-
-		@Override
-		public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-			mPerExitDialog = PermissionUtil.showExitDialog(MainActivity.this, perms);
-		}
-	};
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
 		initItemView();
-		requestPermission();
 	}
 
 	private void initItemView() {
@@ -90,12 +76,6 @@ public class MainActivity extends BaseActivity {
 		items.add(AidlActivity.class);
 		items.add(M3u8DownloadActivity.class);
 		return items;
-	}
-
-	public void requestPermission() {
-		if (!PermissionUtil.hasPermission(this, PermissionUtil.sRequiredPers)) {
-			PermissionUtil.requestPermission(this, Consts.PERMISSION_CODE_REQUIRED, mBasePermissionCallback, PermissionUtil.sRequiredPers);
-		}
 	}
 
 }
