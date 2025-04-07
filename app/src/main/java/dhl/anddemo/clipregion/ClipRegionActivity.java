@@ -108,14 +108,45 @@ public class ClipRegionActivity extends BaseActivity {
 			canvas.drawRect(mRectOne, mPaint);
 			canvas.drawCircle(mCenterX, mCenterY, mRadius, mPaint);
 
+			/**
+			 * 使用 PorterDuff.Mode 注意事项:https://www.jianshu.com/p/2a967143f894
+			 * 1. 图层混合模式仅作用于src源图像
+			 * 2. 禁用硬件加速
+			 * 	  原因: 在Android api 14之后,图层混合的有些api是不支持硬件加速的,系统的硬件加速是默认开启的,所以在使用图层混合模式之前,禁用掉硬件加速
+			 * 	  <code>
+			 * 	      setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+			 * 	  </code>
+			 * 3. 离屏绘制
+			 * 	  原因: 在不采用离屏绘制的情况下,控件的背景会影响图层混合模式的计算结果,导致得到期望之外的效果
+			 * 	  通过使用离屏绘制(离屏缓冲),把要绘制的内容单独绘制在缓冲层,保证Xfermode的使用不会出现错误的结果
+			 * 	  离屏绘制有两种使用方式,一般使用第一种方式就足够了:
+			 * 	  1. canvas.saveLayer(RectF, Paint)
+			 * 	  	<code>
+			 * 	  	   int saveId= canvas.saveLayer(0, 0, width, height, Canvas.ALL_SAVE_FLAG);
+			 * 	  	   canvas.translate(x, y);
+			 *         canvas.drawBitmap(mDstB, 0, 0, paint);//绘制操作
+			 *         paint.setXfermode(xfermode);//设置xfermode
+			 *         canvas.drawBitmap(mSrcB, 0, 0, paint);//绘制操作
+			 *         paint.setXfermode(null); //用完清除
+			 *         canvas.restoreToCount(saveId);//图层恢复
+			 * 	  	</code>
+			 * 	  2. View.setLayerType() 直接把整个View都绘制在离屏缓冲中
+			 * 	  	<code>
+			 * 	  	   setLayerType(LAYER_TYPE_HARDWARE,paint);//使用GPU缓冲
+			 * 		   setLayerType(LAYER_TYPE_SOFTWARE,paint);//使用一个Bitmap缓冲
+			 * 	  	</code>
+			 *
+			 */
 			mPaint.setStyle(Paint.Style.FILL);
             int saveId = 0;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 saveId = canvas.saveLayer(0, 0, getWidth(), getHeight(), mPaint);
             }
+			//draw dst
 			drawRect(canvas);
 			drawText(canvas);
 			mPaint.setXfermode(mXfermode);
+			//draw src
 			drawCircle(canvas);
 			mPaint.setXfermode(null);
 			canvas.restoreToCount(saveId);//图层恢复
