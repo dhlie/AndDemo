@@ -52,6 +52,7 @@ android {
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     annotationProcessor(project(":lib-annotation-processor"))
+    implementation(project(":lib-base"))
     implementation(project(":lib-viewbinding"))
     implementation(project(":lib-m3u8download"))
 

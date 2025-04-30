@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.os.Handler;
 
+import com.dhl.base.ContextHolder;
+
 /**
  * Created by DuanHl on 2017/3/14.
  */
@@ -25,6 +27,7 @@ public class App extends Application {
 
 		mActivityStack = new ActivityStack();
 		mActivityStack.register(this);
+		ContextHolder.appContext = this;
 	}
 
 	public Activity getPreviousActivity(Activity activity) {

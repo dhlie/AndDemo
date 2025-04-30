@@ -6,14 +6,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 
 /**
  * Created by DuanHl on 2017/4/19.
  */
 
-public class CarAnimationActivity extends BaseActivity implements SeekBar.OnSeekBarChangeListener {
+public class CarAnimationActivity extends BuBaseActivity implements SeekBar.OnSeekBarChangeListener {
 
 	private SeekBar mSeekbarYRotate;
 	private TextView mTVYRotate;

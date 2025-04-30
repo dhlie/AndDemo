@@ -11,11 +11,12 @@ import android.graphics.PorterDuffXfermode
 import android.graphics.Rect
 import android.graphics.Shader
 import android.graphics.drawable.Drawable
+import android.os.Looper
 import android.util.Log
-import androidx.annotation.IntRange
+import androidx.annotation.FloatRange
 import com.dhl.base.dp
+import kotlin.math.abs
 import kotlin.math.cos
-import kotlin.math.sqrt
 import kotlin.math.tan
 
 /**
@@ -25,14 +26,16 @@ import kotlin.math.tan
  * Description:
  *
  */
-class FlowLightDrawable : Drawable() {
+class ShimmerDrawable : Drawable() {
+
+    private val DEBUG = true
 
     private var paint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var colors = intArrayOf(0x00FFFFFF, 0x0DFFFFFF, 0x00FFFFFF)
+    private var colors = intArrayOf(0x00FFFFFF, 0xFFFFFFFF.toInt(), 0x00FFFFFF)
     private var positions = floatArrayOf(0f, 0.5f, 1f)
     private var duration: Int = 2000
     private var lightWidth = 20.dp
-    private var angle = 30 //光影和垂直方向的夹角
+    private var angle = 30f //光影和垂直方向的夹角,范围(-90, 90)
     private var roundRadius = 0f
     private var backgroundColor: Int = 0
     private var mode: PorterDuff.Mode? = null
@@ -52,12 +55,16 @@ class FlowLightDrawable : Drawable() {
     fun setup(
         backgroundColor: Int = this.backgroundColor,
         roundRadius: Float = this.roundRadius,
-        @IntRange(0, 90) angle: Int = this.angle,
+        @FloatRange(-90.0, 90.0, fromInclusive = false, toInclusive = false)angle: Float = this.angle,
         lightWidth: Int = this.lightWidth,
         colors: IntArray = this.colors,
         positions: FloatArray = this.positions,
         mode: PorterDuff.Mode? = this.mode,
+        duration: Int = this.duration,
     ) {
+        if (Looper.myLooper() !== Looper.getMainLooper()) {
+            throw IllegalStateException("must be called on main thread")
+        }
         this.backgroundColor = backgroundColor
         this.roundRadius = roundRadius
         this.angle = angle
@@ -65,6 +72,7 @@ class FlowLightDrawable : Drawable() {
         this.colors = colors
         this.positions = positions
         this.mode = mode
+        this.duration = duration
         reset()
     }
 
@@ -91,13 +99,6 @@ class FlowLightDrawable : Drawable() {
             )
         }
 
-        lightHeight = sqrt(bounds.width() * bounds.width().toDouble() + bounds.height() * bounds.height()).toInt()
-        val radians = Math.toRadians(angle.toDouble())
-        val a1 = if (angle == 0) 0 else (bounds.height() / 2f * tan(radians)).toInt()
-        val a2 = lightWidth / cos(radians)
-        lightFromX = -(a1 + a2).toInt()
-        lightToX = bounds.width() + (bounds.height() / 2f * tan(radians)).toInt()
-
         val linearGradient = LinearGradient(
             0f,
             0f,
@@ -113,11 +114,26 @@ class FlowLightDrawable : Drawable() {
             paint.setXfermode(PorterDuffXfermode(mode))
         }
         paint.shader = linearGradient
+
+        val radians = Math.toRadians(abs(angle.toDouble()))
+        if (angle >= 0) {
+            val d1 = (bounds.height() * tan(radians)).toInt()
+            val d2 = lightWidth / cos(radians)
+            lightFromX = -(d1 + d2).toInt()
+            lightToX = bounds.width()
+            lightHeight = (tan(radians) * lightWidth + bounds.height() / cos(radians)).toInt()
+        } else {
+            val d1 = tan(radians) *  bounds.height()
+            val d2 = lightWidth / cos(radians)
+            lightFromX = -(d1 + d2).toInt()
+            lightToX = bounds.width()
+            lightHeight = (bounds.height() / cos(radians) + tan(radians) * lightWidth).toInt()
+        }
+        invalidateSelf()
     }
 
-    fun startAnim(startTime: Long, duration: Int = this.duration) {
+    fun startAnim(startTime: Long) {
         this.startTime = startTime
-        this.duration = duration
         isRunning = true
         invalidateSelf()
     }
@@ -144,17 +160,26 @@ class FlowLightDrawable : Drawable() {
         val saveCount = canvas.save()
         roundRectPath?.let { canvas.clipPath(it) }
         canvas.drawColor(backgroundColor)
-        canvas.translate(currX.toFloat(), 0f)
-        canvas.rotate(angle.toFloat(), 0f, bounds.height() / 2f)
-        val extra = (lightHeight - bounds.height()) / 2f
-        canvas.drawRect(0f, -extra, lightWidth.toFloat(), bounds.height() + extra, paint)
+        if (angle >= 0) {
+            canvas.translate(currX.toFloat(), bounds.height().toFloat())
+            canvas.rotate(angle, 0f, 0f)
+            canvas.drawRect(0f, -lightHeight.toFloat(), lightWidth.toFloat(), 0f, paint)
+        } else {
+            canvas.translate(currX.toFloat(), 0f)
+            canvas.rotate(angle, 0f, 0f)
+            canvas.drawRect(0f, 0f, lightWidth.toFloat(), lightHeight.toFloat(), paint)
+        }
+
         canvas.restoreToCount(saveCount)
 
         invalidateSelf()
-        Log.i(
-            "FlowLightDrawable",
-            "@${hashCode()} percent:$percent currx:$currX fromX:$lightFromX toX:$lightToX lightHeight:$lightHeight bounds:$bounds angle:$angle"
-        )
+
+        if (DEBUG) {
+            Log.i(
+                "FlowLightDrawable",
+                "@${hashCode()} percent:$percent currx:$currX fromX:$lightFromX toX:$lightToX lightHeight:$lightHeight bounds:$bounds angle:$angle"
+            )
+        }
     }
 
     override fun setAlpha(alpha: Int) {

@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.anddemo.base.util.PixelUtil;
 
@@ -24,7 +24,7 @@ import dhl.anddemo.base.util.PixelUtil;
  * Created by DuanHl on 2017/5/16.
  */
 
-public class ClipRegionActivity extends BaseActivity {
+public class ClipRegionActivity extends BuBaseActivity {
 
 	private TextView mTVOP;
 	private ClipRegionView mClipView;

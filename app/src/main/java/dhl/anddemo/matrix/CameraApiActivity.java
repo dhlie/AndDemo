@@ -12,7 +12,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.annotation.viewbinding.BindClick;
 import dhl.annotation.viewbinding.BindView;
@@ -32,7 +32,7 @@ import dhl.viewbinding.BindUtil;
  *
  * @version Time：2011-9-26 下午04:17:49
  */
-public class CameraApiActivity extends BaseActivity implements OnSeekBarChangeListener {
+public class CameraApiActivity extends BuBaseActivity implements OnSeekBarChangeListener {
 
 	// views
 	@BindView(R.id.seekbarXRotate)

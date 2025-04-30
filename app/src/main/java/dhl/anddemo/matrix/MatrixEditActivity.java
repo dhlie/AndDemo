@@ -9,13 +9,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 
 /**
  * Created by DuanHl on 2016/3/15.
  */
-public class MatrixEditActivity extends BaseActivity {
+public class MatrixEditActivity extends BuBaseActivity {
 
 	private EditText mET11, mET12, mET13, mET21, mET22, mET23, mET31, mET32, mET33;
 	private ImageView mIVResult;

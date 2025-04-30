@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#333333"
+    android:orientation="vertical">
+
+    <com.dhl.base.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarLayout="@layout/title_bar_common"
+        app:titleBarText="Shimmer"
+        app:titleBarTextColor="@color/white"
+        app:titleBarBackRes="@drawable/ic_menu_back"
+        app:titleBarBackground="@color/titlebar_background"/>
+
+    <com.dhl.base.view.ShimmerFrameLayout
+        android:id="@+id/fl1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginHorizontal="24dp">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_height="200dp"
+            android:src="@drawable/poker"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="220dp"
+            android:text="setLayerType(LAYER_TYPE_HARDWARE, Paint())\n离屏绘制:\n
+			 * 	  原因: 在不采用离屏绘制的情况下,控件的背景会影响图层混合模式的计算结果,导致得到期望之外的效果
+			 * 	  通过使用离屏绘制(离屏缓冲),把要绘制的内容单独绘制在缓冲层,保证Xfermode的使用不会出现错误的结果"
+            android:textColor="#999999"/>
+
+    </com.dhl.base.view.ShimmerFrameLayout>
+
+    <com.dhl.base.view.ShimmerFrameLayout
+        android:id="@+id/fl2"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginHorizontal="24dp">
+    </com.dhl.base.view.ShimmerFrameLayout>
+
+</LinearLayout>

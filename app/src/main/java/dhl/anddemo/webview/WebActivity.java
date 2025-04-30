@@ -16,16 +16,15 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
-import dhl.anddemo.base.util.Dirs;
 import dhl.anddemo.base.util.LLog;
 
 /**
  * Created by DuanHl on 2017/11/8.
  */
 
-public class WebActivity extends BaseActivity {
+public class WebActivity extends BuBaseActivity {
 
 	private WebView mWebView;
 

@@ -14,7 +14,7 @@ import android.widget.Toast;
 import cn.dhl.aidl.ITestAidlInterface;
 import cn.dhl.ipcserver.City;
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.anddemo.base.util.LLog;
 import dhl.annotation.viewbinding.BindClick;
@@ -25,7 +25,7 @@ import dhl.viewbinding.BindUtil;
  * Created by DuanHl on 2017/9/17.
  */
 
-public class AidlActivity extends BaseActivity {
+public class AidlActivity extends BuBaseActivity {
 
 	@BindView(R.id.titlebar)
 	public TitleBar mTitleBar;

@@ -19,11 +19,12 @@ import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.m3u8.M3u8DownloadActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
+import dhl.anddemo.shimmer.ShimmerActivity;
 import dhl.anddemo.test.TestActivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
 import dhl.anddemo.webview.WebActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BuBaseActivity {
 
 	private BaseDialog mPerExitDialog;
 
@@ -52,8 +53,8 @@ public class MainActivity extends BaseActivity {
 			tv.setGravity(Gravity.CENTER_VERTICAL);
 			tv.setText(clazz.getSimpleName());
 			tv.setTextColor(Color.BLACK);
-			tv.setPadding(PixelUtil.dip2px(16), 0, PixelUtil.dip2px(16), 0);
-			tv.setBackgroundResource(R.drawable.pressed_selector);
+			tv.setPadding(PixelUtil.dip2px(16), PixelUtil.dip2px(8), PixelUtil.dip2px(16), PixelUtil.dip2px(8));
+			tv.setForeground(getResources().getDrawable(com.dhl.base.R.drawable.bg_selectable_item));
 			tv.setOnClickListener(lis);
 			tv.setTag(clazz);
 
@@ -74,6 +75,7 @@ public class MainActivity extends BaseActivity {
 		items.add(TestActivity.class);
 		items.add(AidlActivity.class);
 		items.add(M3u8DownloadActivity.class);
+		items.add(ShimmerActivity.class);
 		return items;
 	}
 

@@ -6,7 +6,6 @@ import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.widget.FrameLayout
-import com.dhl.base.view.FlowLightDrawable
 
 
 /**
@@ -16,9 +15,9 @@ import com.dhl.base.view.FlowLightDrawable
  * Description:
  *
  */
-class FlowLightFrameLayout : FrameLayout {
+class ShimmerFrameLayout : FrameLayout {
 
-    private val flowLightDrawable = FlowLightDrawable()
+    private val shimmerDrawable = ShimmerDrawable()
 
     constructor(context: Context) : this(context, null)
 
@@ -31,23 +30,23 @@ class FlowLightFrameLayout : FrameLayout {
     ) {
         setWillNotDraw(false)
         setLayerType(LAYER_TYPE_HARDWARE, Paint())
-        flowLightDrawable.callback = this
+        shimmerDrawable.callback = this
     }
 
-    fun getShimmerDrawable() = flowLightDrawable
+    fun getShimmerDrawable() = shimmerDrawable
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         super.onSizeChanged(w, h, oldw, oldh)
-        flowLightDrawable.setBounds(0, 0, w, h)
+        shimmerDrawable.setBounds(0, 0, w, h)
     }
 
     override fun verifyDrawable(who: Drawable): Boolean {
-        return super.verifyDrawable(who) || who === flowLightDrawable
+        return super.verifyDrawable(who) || who === shimmerDrawable
     }
 
     override fun dispatchDraw(canvas: Canvas) {
         super.dispatchDraw(canvas)
-        flowLightDrawable.draw(canvas)
+        shimmerDrawable.draw(canvas)
     }
 
 }

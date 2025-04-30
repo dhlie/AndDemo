@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 
 import dhl.anddemo.R;
 import dhl.anddemo.base.App;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.annotation.viewbinding.BindClick;
 import dhl.annotation.viewbinding.BindView;
@@ -33,7 +33,7 @@ import dhl.viewbinding.BindUtil;
  * Created by DuanHl on 2017/11/8.
  */
 
-public class M3u8DownloadActivity extends BaseActivity {
+public class M3u8DownloadActivity extends BuBaseActivity {
 
   @BindView(R.id.et_url)
   public EditText mETInput;

@@ -20,7 +20,7 @@ import android.view.ViewConfiguration;
 import android.widget.FrameLayout;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.TitleBar;
 import dhl.anddemo.base.util.LLog;
 import dhl.anddemo.base.util.PixelUtil;
@@ -30,7 +30,7 @@ import dhl.anddemo.base.util.PixelUtil;
  * 参考文章:http://blog.csdn.net/hmg25/article/details/6306479
  */
 
-public class TurnPageActivity extends BaseActivity {
+public class TurnPageActivity extends BuBaseActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

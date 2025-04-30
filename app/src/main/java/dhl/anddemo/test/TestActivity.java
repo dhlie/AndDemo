@@ -3,11 +3,10 @@ package dhl.anddemo.test;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import dhl.anddemo.R;
-import dhl.anddemo.base.BaseActivity;
+import dhl.anddemo.base.BuBaseActivity;
 import dhl.anddemo.base.view.BadgeTextView;
 import dhl.annotation.viewbinding.BindClick;
 import dhl.annotation.viewbinding.BindView;
@@ -17,7 +16,7 @@ import dhl.viewbinding.BindUtil;
  * Created by DuanHl on 2017/9/17.
  */
 
-public class TestActivity extends BaseActivity {
+public class TestActivity extends BuBaseActivity {
 
   @BindView(R.id.textView)
 	public BadgeTextView mBadgeTextView;

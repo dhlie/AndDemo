@@ -1,15 +1,5 @@
 <resources>
 
-    <!-- Base application theme. -->
-    <style name="AppTheme" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@null</item><!-- 减少一层背景 -->
-        <item name="android:textAllCaps">false</item>
-    </style>
-
-    <style name="SplashTheme" parent="android:Theme.Material.Light.NoActionBar">
-        <item name="android:windowBackground">@color/white</item>
-    </style>
-
     <!--对话框样式-->
     <style name="BaseDialog">
         <item name="android:windowFrame">@null</item>
