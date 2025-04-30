@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- DayNight colors start -->
+    <color name="dayColorPrimary">#14D3C0</color>
+    <color name="nightColorPrimary">#14D3C0</color>
+
+    <color name="dayColorControlNormal">#E4E4E4</color>
+    <color name="nightColorControlNormal">#616161</color>
+
+    <color name="dayColorControlHighlight">#0F000000</color>
+    <color name="nightColorControlHighlight">#33FFFFFF</color>
+
+    <color name="dayLineBg">#E0E4E9</color>
+    <color name="nightLineBg">#414141</color>
+
+    <color name="dayBgPrimary">#F2F3F6</color>
+    <color name="nightBgPrimary">#141218</color>
+    <color name="dayBgSecondary">#FFFFFF</color>
+    <color name="nightBgSecondary">#2B292F</color>
+
+    <color name="dayTextMain">#1A1A1A</color>
+    <color name="nightTextMain">#D2D2D2</color>
+    <color name="dayTextSecondary">#878787</color>
+    <color name="nightTextSecondary">#7E7E7E</color>
+    <color name="dayTextDisable">#BDBDBD</color>
+    <color name="nightTextDisable">#5A5A5A</color>
+
+    <color name="dayLoadingStartColor">#FFFFFF</color>
+    <color name="nightLoadingStartColor">#FFFFFF</color>
+    <color name="dayLoadingEndColor">#929292</color>
+    <color name="nightLoadingEndColor">#9B9B9B</color>
+
+    <color name="dayThumbColor">#FFFFFF</color>
+    <color name="nightThumbColor">#E4E4E4</color>
+
+    <color name="dayShadowColor">#BDBDBD</color>
+    <color name="nightShadowColor">#1F000000</color>
+    <!-- DayNight colors end -->
+
+    <color name="transparent">#00000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="ripple_color">@color/colorControlHighlight</color>
+    <color name="warning">#FFC600</color>
+
+</resources>

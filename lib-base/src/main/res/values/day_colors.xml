@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Theme color -->
+    <!-- colorPrimary: 应用的主要色调, ActionBar 默认使用该颜色,Toolbar导航栏的底色 -->
+    <color name="colorPrimary">@color/dayColorPrimary</color>
+    <!-- colorControlNormal: CheckBox, RadioButton, SwitchCompat, ProgressBar, 等默认状态的颜色; EditText 未获取焦点时的颜色 -->
+    <color name="colorControlNormal">@color/dayColorControlNormal</color>
+    <!-- 在某些时候 colorControlActivated 是 colorAccent 的替代品。这种情况下 colorControlActivate 的颜色是会覆盖 colorAccent 的颜色的。也就是说，如果你没有设置的话默认的颜色就是 colorAccent 的颜色 -->
+    <color name="colorControlActivated">@color/colorAccent</color>
+    <!-- colorAccent: CheckBox, RadioButton, SwitchCompat, ProgressBar 等控件的选中效果默认采用该颜色; EditTex获取焦点的时候的下划线和光标颜色 -->
+    <color name="colorAccent">@color/colorPrimary</color>
+    <!-- colorControlHighlight: 控件按压时的色调 -->
+    <color name="colorControlHighlight">@color/dayColorControlHighlight</color>
+
+    <color name="line_bg">@color/dayLineBg</color>
+
+    <color name="bg_primary">@color/dayBgPrimary</color>
+    <color name="bg_secondary">@color/dayBgSecondary</color>
+
+    <color name="shadow_color">@color/dayShadowColor</color>
+
+    <color name="text_primary">@color/dayTextMain</color>
+    <color name="text_secondary">@color/dayTextSecondary</color>
+    <color name="text_tertiary">@color/dayTextSecondary</color>
+    <color name="text_disable">@color/dayTextDisable</color>
+
+    <color name="loading_start_color">@color/dayLoadingStartColor</color>
+    <color name="loading_end_color">@color/dayLoadingEndColor</color>
+
+    <color name="thumb_color">@color/dayThumbColor</color>
+
+</resources>

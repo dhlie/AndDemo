@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <attr name="bg_color" format="color" />
+    <attr name="text_color" format="color" />
+
+    <declare-styleable name="TitleBar">
+        <attr name="titleBarLayout" format="reference" />
+        <attr name="titleBarText" format="string" />
+        <attr name="titleBarTextColor" format="color" />
+        <attr name="titleBarBackRes" format="reference" />
+        <attr name="titleBarBackground" format="reference" />
+    </declare-styleable>
+
+    <declare-styleable name="PositionIndicatorView">
+        <attr name="circleRadius" format="dimension" />
+        <!--两个圆点之间的距离-->
+        <attr name="circlePadding" format="dimension" />
+        <attr name="unselectColor" format="color" />
+        <attr name="selectColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="ClearableEditText">
+        <!--清空按钮图标-->
+        <attr name="clearDrawable" format="reference" />
+        <attr name="clearDrawablePaddingEnd" format="dimension" />
+        <!--是否一直显示清空按钮-->
+        <attr name="alwaysShowClearBtn" format="boolean" />
+        <!--alwaysShowClearBtn 为 false 时, 哪些情况下隐藏清空按钮-->
+        <attr name="hideClearBtn" format="enum">
+            <enum name="empty_content" value="1" />
+            <enum name="loss_focus" value="2" />
+            <enum name="empty_or_loss_focus" value="3" />
+        </attr>
+    </declare-styleable>
+
+    <declare-styleable name="BoldTextView">
+        <attr name="stroke_width" format="float" />
+    </declare-styleable>
+
+    <declare-styleable name="LoadingView">
+        <attr name="oval_width" format="float" />
+        <attr name="oval_height" format="float" />
+        <attr name="anim_duration" format="integer" />
+        <!-- 三原色色值, 格式为 #ff0000,#00ff00,#0000ff, 只能放三种颜色 -->
+        <attr name="colors" format="string" />
+        <attr name="bg_color" />
+    </declare-styleable>
+
+    <declare-styleable name="SwitchView">
+        <attr name="thumbColor" format="color" />
+        <attr name="onColor" format="color" />
+        <attr name="offColor" format="color" />
+        <attr name="borderColor" format="color" />
+        <attr name="borderWidth" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="NavigationBar">
+        <attr name="showBack" format="boolean" />
+        <attr name="title" format="string" />
+        <attr name="titleColor" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="WheelView">
+        <attr name="text_size" format="dimension" />
+        <!-- 选中文字的上下padding -->
+        <attr name="text_padding_vertical" format="dimension" />
+        <attr name="text_selected_color" format="color" />
+        <!-- 选中的文字是否加粗 -->
+        <attr name="text_selected_bold" format="boolean" />
+        <attr name="text_color" />
+        <attr name="divider_color" format="color" />
+        <attr name="divider_height" format="dimension" />
+        <!-- 是否循环滚动 -->
+        <attr name="cyclic" format="boolean" />
+        <!-- wheel 半径, 半径越大弯曲程度越小, 为 0 时不弯曲 -->
+        <attr name="wheel_radius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="AZIndexView">
+        <attr name="letter_orientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+        <attr name="letter_view" format="reference" />
+        <attr name="bg_color" />
+        <attr name="text_color" />
+        <attr name="select_color" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="FontWeightTextView">
+        <attr name="android:textFontWeight" format="integer" />
+        <attr name="textFontWeight" format="integer" />
+    </declare-styleable>
+
+    <declare-styleable name="SlideMenuLayout">
+        <attr name="rightMenuLayout" format="reference" />
+    </declare-styleable>
+</resources>

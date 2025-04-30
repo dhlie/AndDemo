@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@drawable/shape_bg_color_corner_12">
+
+    <com.dhl.base.view.FontWeightTextView
+        android:id="@+id/tvTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:gravity="center"
+        android:paddingHorizontal="16dp"
+        tools:text="@string/dialog_hint"
+        android:textColor="@color/text_primary"
+        android:textSize="17sp"
+        android:visibility="gone"
+        app:textFontWeight="600"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <FrameLayout
+        android:id="@+id/flContent"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTitle">
+
+        <TextView
+            android:id="@+id/tvContent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:lineSpacingMultiplier="1.1"
+            android:paddingHorizontal="16dp"
+            android:textColor="@color/text_primary"
+            android:textSize="14sp"
+            android:paddingTop="4dp"
+            android:paddingBottom="24dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitle"
+            tools:text="adfaewfeweewfaeffeadfaewfeweewfaeffeweewfaefadfaewfeweewfaeffeweewfaefadfaewfeweewfaeffeweewfaefadfaewfeweewfaeffeweewfaefweewfaef" />
+
+    </FrameLayout>
+
+    <View
+        android:id="@+id/dividerHor"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider_line_size"
+        android:background="@color/line_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/flContent" />
+
+    <com.dhl.base.view.FontWeightTextView
+        android:id="@+id/btnPositive"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:foreground="@drawable/bg_selectable_item"
+        android:gravity="center"
+        android:text="@string/confirm"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:textFontWeight="500"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerHor" />
+
+    <View
+        android:id="@+id/dividerVer"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/divider_line_size"
+        android:background="@color/line_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnPositive" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/groupNegBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="btnNegative,dividerVer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerHor"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/btnNegative"
+        android:layout_width="0dp"
+        android:layout_height="44dp"
+        android:foreground="@drawable/bg_selectable_item_bottom_corner12"
+        android:gravity="center"
+        android:text="@string/cancel"
+        android:textColor="@color/text_tertiary"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerVer" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="title_bar_height">48dp</dimen>
+    <dimen name="dialog_width">288dp</dimen>
+    <dimen name="divider_line_size">0.5dp</dimen>
+</resources>
