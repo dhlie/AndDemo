@@ -1,2 +1,0 @@
-include ':app', ':lib-annotation-processor', ':lib-annotations', ':lib-viewbinding', ':ipcserver',
-    ':lib-m3u8download'

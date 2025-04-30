@@ -77,9 +77,9 @@ public class WebActivity extends BaseActivity {
 		settings.setCacheMode(WebSettings.LOAD_NO_CACHE);
 		settings.setDomStorageEnabled(true); // 开启 DOM storage API 功能
 		settings.setDatabaseEnabled(true);   //开启 database storage API 功能
-		settings.setAppCacheEnabled(true);//开启 Application Caches 功能
-		settings.setAppCachePath(Dirs.createDirs(Dirs.getCacheDir()).getPath());
-		settings.setAppCacheMaxSize(50 * 1024 * 1024);
+		//settings.setAppCacheEnabled(true);//开启 Application Caches 功能
+		//settings.setAppCachePath(Dirs.createDirs(Dirs.getCacheDir()).getPath());
+		//settings.setAppCacheMaxSize(50 * 1024 * 1024);
 		settings.setSavePassword(false);
 		settings.setSaveFormData(false);
 		settings.setSupportZoom(true);

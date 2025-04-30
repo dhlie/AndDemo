@@ -9,12 +9,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
-import android.support.v7.widget.AppCompatTextView;
 import android.text.Layout;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+
+import androidx.appcompat.widget.AppCompatTextView;
 
 import java.util.Locale;
 

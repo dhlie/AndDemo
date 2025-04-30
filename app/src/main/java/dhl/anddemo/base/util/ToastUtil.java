@@ -2,7 +2,6 @@ package dhl.anddemo.base.util;
 
 import android.graphics.Paint;
 import android.os.Looper;
-import android.support.annotation.StringRes;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +9,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
 
 import java.lang.reflect.Field;
 

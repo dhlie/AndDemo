@@ -2,11 +2,12 @@ package dhl.anddemo.base.dialog;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 import dhl.anddemo.R;
 import dhl.anddemo.base.util.PixelUtil;

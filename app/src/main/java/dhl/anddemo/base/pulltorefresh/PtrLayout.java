@@ -2,7 +2,6 @@ package dhl.anddemo.base.pulltorefresh;
 
 import android.content.Context;
 import android.os.Build;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -11,6 +10,8 @@ import android.view.ViewGroup;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.widget.AbsListView;
+
+import androidx.core.view.ViewCompat;
 
 /**
  * Created by DuanHl on 2015/11/24.

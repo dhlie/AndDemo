@@ -2,10 +2,11 @@ package dhl.anddemo.base.dialog;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import dhl.anddemo.R;
 

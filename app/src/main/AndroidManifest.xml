@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="dhl.anddemo"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <supports-screens
         android:anyDensity="true"
@@ -27,7 +26,9 @@
         <!-- Use a letterbox on screens larger than 2.4 -->
         <meta-data android:name="android.max_aspect" android:value="2.4" />
 
-        <activity android:name="dhl.anddemo.base.MainActivity"  android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait" android:launchMode="singleTop"
+        <activity android:name="dhl.anddemo.base.MainActivity"  android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" android:launchMode="singleTop"
             android:windowSoftInputMode="adjustResize|stateHidden"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -47,7 +48,7 @@
         <activity android:name="dhl.anddemo.m3u8.M3u8DownloadActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
 
         <provider
-            android:name="android.support.v4.content.FileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="dhl.anddemo.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">

@@ -3,9 +3,10 @@ package dhl.anddemo.base.dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 import dhl.anddemo.R;
 

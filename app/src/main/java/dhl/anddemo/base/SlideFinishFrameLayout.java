@@ -7,12 +7,13 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+
+import androidx.core.view.ViewCompat;
 
 import dhl.anddemo.base.util.LLog;
 import dhl.anddemo.base.util.PixelUtil;

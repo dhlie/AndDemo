@@ -4,11 +4,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.content.FileProvider;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+
+import androidx.core.content.FileProvider;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;

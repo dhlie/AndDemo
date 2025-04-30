@@ -9,5 +9,5 @@ dependencies {
     implementation project(':lib-annotations')
 }
 
-sourceCompatibility = build_versions.javaSourceCompatibility
-targetCompatibility = build_versions.javaTargetCompatibility
+//sourceCompatibility = build_versions.javaSourceCompatibility
+//targetCompatibility = build_versions.javaTargetCompatibility
