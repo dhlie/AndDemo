@@ -160,7 +160,7 @@ class SlideMenuLayout : FrameLayout {
         super.onFinishInflate()
         val count = childCount
         if (count != 1) {
-            throw IllegalStateException("SlideMenuLayout must has only one child")
+            throw IllegalStateException("SlideMenuLayout must has one(only one) child")
         }
 
         contentView = getChildAt(0)
@@ -265,18 +265,25 @@ class SlideMenuLayout : FrameLayout {
                 onTouchDown(event)
             }
             MotionEvent.ACTION_MOVE -> {
-                val x = event.x.toInt()
-                val y = event.y.toInt()
-                val dx = x - downX
-                val dy = y - downY
-                if (checkSlop(dx, dy, mTouchSlop) && abs(dx) > abs(dy)) {
-                    if (canScrollHorizontally(dx)) {
-                        intercept = true
-                        downX = x
-                        downY = y
-                        requestDisallowInterceptTouchEvent(true)
-                        setState(STATE_DRAGGING)
-                        slideListener?.onPreDrag(this)
+                if (mState == STATE_TOUCH_DOWN) {
+                    val x = event.x.toInt()
+                    val y = event.y.toInt()
+                    val dx = x - downX
+                    val dy = y - downY
+                    if (checkSlop(dx, dy, mTouchSlop)) {
+                        if (abs(dx) > abs(dy)) {
+                            if (canScrollHorizontally(dx)) {
+                                intercept = true
+                                downX = x
+                                downY = y
+                                setState(STATE_DRAGGING)
+                                slideListener?.onPreDrag(this)
+                            } else {
+                                parent?.requestDisallowInterceptTouchEvent(false)
+                            }
+                        } else {
+                            parent?.requestDisallowInterceptTouchEvent(false)
+                        }
                     }
                 }
             }
@@ -317,13 +324,18 @@ class SlideMenuLayout : FrameLayout {
                     val y = event.y.toInt()
                     val dx = x - downX
                     val dy = y - downY
-                    if (checkSlop(dx, dy, mTouchSlop) && abs(dx) > abs(dy)) {
-                        if (canScrollHorizontally(dx)) {
-                            downX = x
-                            downY = y
-                            requestDisallowInterceptTouchEvent(true)
-                            setState(STATE_DRAGGING)
-                            slideListener?.onPreDrag(this)
+                    if (checkSlop(dx, dy, mTouchSlop)) {
+                        if (abs(dx) > abs(dy)) {
+                            if (canScrollHorizontally(dx)) {
+                                downX = x
+                                downY = y
+                                setState(STATE_DRAGGING)
+                                slideListener?.onPreDrag(this)
+                            } else {
+                                parent?.requestDisallowInterceptTouchEvent(false)
+                            }
+                        } else {
+                            parent?.requestDisallowInterceptTouchEvent(false)
                         }
                     }
                 } else if (mState == STATE_DRAGGING) {
@@ -346,18 +358,19 @@ class SlideMenuLayout : FrameLayout {
         mDownTransX = contentView!!.translationX
         setState(STATE_TOUCH_DOWN)
         slideListener?.onTouchDown(this)
+        parent?.requestDisallowInterceptTouchEvent(true)
     }
 
     override fun canScrollHorizontally(direction: Int): Boolean {
         val contentView = contentView
         val rightMenuLayout = rightMenuLayout
         if (contentView == null || rightMenuLayout == null) {
-            return canScrollHorizontally(direction)
+            return super.canScrollHorizontally(direction)
         }
-        if (direction < 0) {
-            return contentView.translationX > -rightMenuWidthWithMargin
+        return if (direction < 0) {
+            contentView.translationX > -rightMenuWidthWithMargin
         } else {
-            return contentView.translationX < 0
+            contentView.translationX < 0
         }
     }
 

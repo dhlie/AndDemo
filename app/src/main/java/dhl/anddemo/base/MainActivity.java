@@ -21,6 +21,7 @@ import dhl.anddemo.m3u8.M3u8DownloadActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
 import dhl.anddemo.pop.PopActivity;
 import dhl.anddemo.shimmer.ShimmerActivity;
+import dhl.anddemo.slidemenu.SlideMenuActivity;
 import dhl.anddemo.test.TestActivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
 import dhl.anddemo.webview.WebActivity;
@@ -80,6 +81,7 @@ public class MainActivity extends BuBaseActivity {
 		items.add(ShimmerActivity.class);
 		items.add(WheelViewActivity.class);
 		items.add(PopActivity.class);
+		items.add(SlideMenuActivity.class);
 		return items;
 	}
 

@@ -949,11 +949,11 @@ public class SlideFinishDragHelper {
 		}
 
 		if (LLog.PRINT_LOG) {
-			boolean can = checkV && ViewCompat.canScrollHorizontally(v, -dx);
+			boolean can = checkV && ViewCompat.canScrollHorizontally(v, dx);
 			LLog.i(v + "    canScroll:" + can);
 			return can;
 		}
-		return checkV && ViewCompat.canScrollHorizontally(v, -dx);
+		return checkV && ViewCompat.canScrollHorizontally(v, dx);
 	}
 
 	/**

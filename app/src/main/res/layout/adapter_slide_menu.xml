@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dhl.base.view.SlideMenuLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="56dp"
+    app:rightMenuLayout="@layout/slide_menu_right"
+    android:background="@color/main_background">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/clMenu1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_secondary"
+        android:foreground="@drawable/bg_selectable_item_bottom_corner8">
+
+        <TextView
+            android:id="@+id/tvText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            tools:text="这是一个左滑菜单"
+            android:textColor="@color/text_primary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</com.dhl.base.view.SlideMenuLayout>
