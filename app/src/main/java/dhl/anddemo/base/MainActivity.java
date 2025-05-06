@@ -19,10 +19,12 @@ import dhl.anddemo.base.util.PixelUtil;
 import dhl.anddemo.clipregion.ClipRegionActivity;
 import dhl.anddemo.m3u8.M3u8DownloadActivity;
 import dhl.anddemo.matrix.CameraApiActivity;
+import dhl.anddemo.pop.PopActivity;
 import dhl.anddemo.shimmer.ShimmerActivity;
 import dhl.anddemo.test.TestActivity;
 import dhl.anddemo.turnpage.TurnPageActivity;
 import dhl.anddemo.webview.WebActivity;
+import dhl.anddemo.wheelview.WheelViewActivity;
 
 public class MainActivity extends BuBaseActivity {
 
@@ -76,6 +78,8 @@ public class MainActivity extends BuBaseActivity {
 		items.add(AidlActivity.class);
 		items.add(M3u8DownloadActivity.class);
 		items.add(ShimmerActivity.class);
+		items.add(WheelViewActivity.class);
+		items.add(PopActivity.class);
 		return items;
 	}
 

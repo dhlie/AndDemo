@@ -46,6 +46,8 @@
         <activity android:name="dhl.anddemo.aidl.AidlActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.m3u8.M3u8DownloadActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
         <activity android:name="dhl.anddemo.shimmer.ShimmerActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
+        <activity android:name="dhl.anddemo.wheelview.WheelViewActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
+        <activity android:name="dhl.anddemo.pop.PopActivity" android:configChanges="keyboardHidden|orientation|screenSize" android:screenOrientation="portrait"/>
 
         <provider
             android:name="androidx.core.content.FileProvider"

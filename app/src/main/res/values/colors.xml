@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="main_background">#FFFFFF</color>
+    <color name="main_background">@color/bg_primary</color>
     <color name="transparent">@android:color/transparent</color>
     <color name="titlebar_background">#263238</color>
     <color name="titlebar_textColor">#FFFFFF</color>

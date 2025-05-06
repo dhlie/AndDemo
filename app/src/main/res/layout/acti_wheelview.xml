@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/main_background"
+    android:orientation="vertical">
+
+    <com.dhl.base.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarLayout="@layout/title_bar_common"
+        app:titleBarText="WheelView"
+        app:titleBarTextColor="@color/white"
+        app:titleBarBackRes="@drawable/ic_menu_back"
+        app:titleBarBackground="@color/titlebar_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <com.dhl.base.view.WheelView
+        android:id="@+id/wheelView"
+        android:layout_width="0dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="16dp"
+        android:background="@drawable/shape_bg_color_corner_8"
+        app:layout_constraintEnd_toStartOf="@+id/wheelView2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/wheelView3"
+        app:layout_constraintBottom_toBottomOf="@+id/wheelView3"
+        app:divider_color="#5925dc"
+        app:text_selected_color="#5925dc" />
+
+    <TextView
+        android:id="@+id/tvWVLabel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/wheelView"
+        app:layout_constraintEnd_toEndOf="@+id/wheelView"
+        app:layout_constraintTop_toBottomOf="@+id/wheelView"
+        android:layout_marginTop="6dp"
+        android:gravity="center" />
+
+    <com.dhl.base.view.WheelView
+        android:id="@+id/wheelView2"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        app:layout_constraintStart_toEndOf="@+id/wheelView"
+        app:layout_constraintEnd_toStartOf="@+id/wheelView3"
+        app:layout_constraintTop_toTopOf="@+id/wheelView3"
+        app:layout_constraintBottom_toBottomOf="@+id/wheelView3"
+        android:layout_marginStart="16dp"
+        app:text_padding_vertical="8dp"
+        app:text_size="16sp"
+        app:cyclic="false"
+        app:divider_color="#276ef9"
+        app:divider_height="2dp"
+        app:text_selected_color="#276ef9"
+        android:background="@drawable/shape_bg_color_corner_12" />
+
+    <TextView
+        android:id="@+id/tvWVLabel2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/wheelView2"
+        app:layout_constraintEnd_toEndOf="@+id/wheelView2"
+        app:layout_constraintTop_toBottomOf="@+id/wheelView2"
+        android:layout_marginTop="6dp"
+        android:gravity="center" />
+
+    <com.dhl.base.view.WheelView
+        android:id="@+id/wheelView3"
+        android:layout_width="0dp"
+        android:layout_height="300dp"
+        app:layout_constraintStart_toEndOf="@+id/wheelView2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:text_size="16sp"
+        app:cyclic="true"
+        app:divider_color="@color/colorPrimary"
+        app:text_selected_color="@color/colorPrimary"
+        app:text_padding_vertical="6dp"
+        app:text_selected_bold="true"
+        android:background="@drawable/shape_bg_color_corner_12" />
+
+    <TextView
+        android:id="@+id/tvWVLabel3"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/wheelView3"
+        app:layout_constraintEnd_toEndOf="@+id/wheelView3"
+        app:layout_constraintTop_toBottomOf="@+id/wheelView3"
+        android:layout_marginTop="6dp"
+        android:gravity="center" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

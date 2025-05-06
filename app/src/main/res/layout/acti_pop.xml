@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/bg_primary"
+    android:orientation="vertical">
+
+    <com.dhl.base.view.TitleBar
+        android:id="@+id/titleBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:titleBarLayout="@layout/title_bar_common"
+        app:titleBarText="WheelView"
+        app:titleBarTextColor="@color/white"
+        app:titleBarBackRes="@drawable/ic_menu_back"
+        app:titleBarBackground="@color/titlebar_background"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleBar"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="24dp">
+
+            <View
+                android:id="@+id/vTop"
+                android:layout_width="0dp"
+                android:layout_height="400dp"
+                android:background="#ffffff"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/btnPopTop"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/vTop"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_primary_color_corner_4"
+                android:foreground="@drawable/bg_selectable_item_corner4"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="上" />
+
+            <TextView
+                android:id="@+id/btnPopLeft"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintEnd_toStartOf="@+id/btnPopTop"
+                app:layout_constraintTop_toBottomOf="@+id/btnPopTop"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_primary_color_corner_4"
+                android:foreground="@drawable/bg_selectable_item_corner4"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="左" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pop\nWindow"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="@+id/btnPopTop"
+                app:layout_constraintEnd_toEndOf="@+id/btnPopTop"
+                app:layout_constraintTop_toTopOf="@+id/btnPopLeft"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPopLeft" />
+
+            <TextView
+                android:id="@+id/btnPopRight"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toEndOf="@+id/btnPopTop"
+                app:layout_constraintTop_toTopOf="@+id/btnPopLeft"
+                app:layout_constraintBottom_toBottomOf="@+id/btnPopLeft"
+                android:layout_marginStart="16dp"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:background="@drawable/shape_primary_color_corner_4"
+                android:foreground="@drawable/bg_selectable_item_corner4"
+                android:text="右" />
+
+            <TextView
+                android:id="@+id/btnPopBottom"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="@+id/btnPopTop"
+                app:layout_constraintEnd_toEndOf="@+id/btnPopTop"
+                app:layout_constraintTop_toBottomOf="@+id/btnPopLeft"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/shape_primary_color_corner_4"
+                android:foreground="@drawable/bg_selectable_item_corner4"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:text="下" />
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="500dp"
+                android:background="#ffffff"
+                android:layout_marginTop="16dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btnPopBottom"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
