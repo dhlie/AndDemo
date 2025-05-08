@@ -32,7 +32,9 @@ class SlideMenuActivity : BuBaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActiSlideMenuBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        binding.titleBar.ivBack?.setOnClickListener {
+            finish()
+        }
         binding.clMenu1.roundCorner(8.dp)
 
         binding.rvList.layoutManager = LinearLayoutManager(this)

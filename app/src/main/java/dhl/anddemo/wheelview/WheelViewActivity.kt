@@ -20,6 +20,9 @@ class WheelViewActivity : BuBaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActiWheelviewBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.titleBar.ivBack?.setOnClickListener {
+            finish()
+        }
         initWheelView()
     }
 

@@ -24,6 +24,9 @@ class PopActivity : BuBaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActiPopBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.titleBar.ivBack?.setOnClickListener {
+            finish()
+        }
         initPopWindow()
     }
 
