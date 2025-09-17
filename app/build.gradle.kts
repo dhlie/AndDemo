@@ -20,11 +20,17 @@ android {
             storeFile = file("./pw_alias_debug123.keystore")
             storePassword = "debug123"
             keyPassword = "debug123"
-            keyAlias = "debug123"
+            keyAlias = "debug"
         }
     }
 
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("release")
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+        }
         release {
             isMinifyEnabled = true
             isShrinkResources = true
