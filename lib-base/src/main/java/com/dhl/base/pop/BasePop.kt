@@ -120,6 +120,10 @@ open class BasePop(private val context: Context, private val builder: Builder) :
         //container.setBackgroundColor(0x10000000)
 
         contentView = builder.contentView
+
+        //先测量一下尺寸, 显示的时候会用到
+        //一定要使用 container 测量, 用 [contentView] 测量, 结果不会是 layoutParams 设置的宽高
+        container.measure(0, 0)
     }
 
     override fun setContentView(contentView: View?) {
@@ -131,6 +135,8 @@ open class BasePop(private val context: Context, private val builder: Builder) :
             super.setContentView(container)
         }
     }
+
+    fun getContainerSize() = Pair(container.measuredWidth, container.measuredHeight)
 
     /**
      * 更新 [builder.contentView] 的margin, 四周留出距离显示箭头和阴影
@@ -254,7 +260,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
      * @param offsetX 内容(不包含箭头)水平方向上的偏移
      * @param offsetY 箭头垂直方向上的偏移
      */
-    fun showAtLocationDown(anchorView: View, arrowX: Int, arrowY: Int, offsetX: Int, offsetY: Int) {
+    fun showAtLocationDown(anchorView: View, arrowX: Int = -1, arrowY: Int = -1, offsetX: Int = 0, offsetY: Int = 0) {
         val displayView = builder.contentView ?: return
 
         val anchorPosition = intArrayOf(0, 0)
@@ -268,8 +274,6 @@ open class BasePop(private val context: Context, private val builder: Builder) :
             arrY = anchorPosition[1] + anchorView.measuredHeight
         }
 
-        //一定要使用 container 测量, 用 [displayView] 测量, 结果不会是 layoutParams 设置的宽高
-        container.measure(0, 0)
         val contentWidth = displayView.measuredWidth
         val contentHeight = displayView.measuredHeight
         val contentMargin = builder.contentMargin
@@ -284,7 +288,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
                     val popCenterX = popPosition[0] + w / 2
                     val dx = arrX - popCenterX
                     builder.setTriangleOffset(if (builder.trianglePlacement == TrianglePlacement.TOP) -dx else dx)
-                    log { "setOnSizeChangeListener:w:$w h:$h popcx:$popCenterX cx:$arrX offset:${builder.triangleOffset}" }
+                    log("setOnSizeChangeListener:w:$w h:$h popcx:$popCenterX cx:$arrX offset:${builder.triangleOffset}")
                     updateContentBackground()
                 }
             }
@@ -329,7 +333,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
      * @param offsetX 内容(不包含箭头)水平方向上的偏移
      * @param offsetY 箭头垂直方向上的偏移
      */
-    fun showAtLocationUp(anchorView: View, arrowX: Int, arrowY: Int, offsetX: Int, offsetY: Int) {
+    fun showAtLocationUp(anchorView: View, arrowX: Int = -1, arrowY: Int = -1, offsetX: Int = 0, offsetY: Int = 0) {
         val displayView = builder.contentView ?: return
 
         val anchorPosition = intArrayOf(0, 0)
@@ -343,8 +347,6 @@ open class BasePop(private val context: Context, private val builder: Builder) :
             arrY = anchorPosition[1]
         }
 
-        //一定要使用 container 测量, 用 [displayView] 测量, 结果不会是 layoutParams 设置的宽高
-        container.measure(0, 0)
         val contentWidth = displayView.measuredWidth
         val contentHeight = displayView.measuredHeight
         val contentMargin = builder.contentMargin
@@ -359,7 +361,8 @@ open class BasePop(private val context: Context, private val builder: Builder) :
                     val popCenterX = popPosition[0] + w / 2
                     val dx = arrX - popCenterX
                     builder.setTriangleOffset(if (builder.trianglePlacement == TrianglePlacement.TOP) -dx else dx)
-                    log { "setOnSizeChangeListener:w:$w h:$h popcx:$popCenterX cx:$arrX offset:${builder.triangleOffset}" }
+                    log("setOnSizeChangeListener:w:$w h:$h popcx:$popCenterX cx:$arrX offset:${builder.triangleOffset}")
+
                     updateContentBackground()
                 }
             }
@@ -404,7 +407,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
      * @param offsetX 箭头水平方向上的偏移
      * @param offsetY 内容(不包含箭头)垂直方向上的偏移
      */
-    fun showAtLocationLeft(anchorView: View, arrowX: Int, arrowY: Int, offsetX: Int, offsetY: Int) {
+    fun showAtLocationLeft(anchorView: View, arrowX: Int = -1, arrowY: Int = -1, offsetX: Int = 0, offsetY: Int = 0) {
         val displayView = builder.contentView ?: return
 
         val anchorPosition = intArrayOf(0, 0)
@@ -418,8 +421,6 @@ open class BasePop(private val context: Context, private val builder: Builder) :
             arrY = anchorPosition[1] + anchorView.measuredHeight / 2
         }
 
-        //一定要使用 container 测量, 用 [displayView] 测量, 结果不会是 layoutParams 设置的宽高
-        container.measure(0, 0)
         val contentWidth = displayView.measuredWidth
         val contentHeight = displayView.measuredHeight
         val contentMargin = builder.contentMargin
@@ -434,7 +435,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
                     val popCenterY = popPosition[1] + h / 2
                     val dy = arrY - popCenterY
                     builder.setTriangleOffset(if (builder.trianglePlacement == TrianglePlacement.END) -dy else dy)
-                    log { "setOnSizeChangeListener:w:$w h:$h popcx:$popCenterY cx:$arrX offset:${builder.triangleOffset}" }
+                    log("setOnSizeChangeListener:w:$w h:$h popcx:$popCenterY cx:$arrX offset:${builder.triangleOffset}")
                     updateContentBackground()
                 }
             }
@@ -480,7 +481,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
      * @param offsetX 箭头水平方向上的偏移
      * @param offsetY 内容(不包含箭头)垂直方向上的偏移
      */
-    fun showAtLocationRight(anchorView: View, arrowX: Int, arrowY: Int, offsetX: Int, offsetY: Int) {
+    fun showAtLocationRight(anchorView: View, arrowX: Int = -1, arrowY: Int = -1, offsetX: Int = 0, offsetY: Int = 0) {
         val displayView = builder.contentView ?: return
 
         val anchorPosition = intArrayOf(0, 0)
@@ -494,8 +495,6 @@ open class BasePop(private val context: Context, private val builder: Builder) :
             arrY = anchorPosition[1] + anchorView.measuredHeight / 2
         }
 
-        //一定要使用 container 测量, 用 [displayView] 测量, 结果不会是 layoutParams 设置的宽高
-        container.measure(0, 0)
         val contentWidth = displayView.measuredWidth
         val contentHeight = displayView.measuredHeight
         val contentMargin = builder.contentMargin
@@ -510,7 +509,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
                     val popCenterY = popPosition[1] + h / 2
                     val dy = arrY - popCenterY
                     builder.setTriangleOffset(if (builder.trianglePlacement == TrianglePlacement.END) -dy else dy)
-                    log { "setOnSizeChangeListener:w:$w h:$h popcx:$popCenterY cx:$arrX offset:${builder.triangleOffset}" }
+                    log("setOnSizeChangeListener:w:$w h:$h popcx:$popCenterY cx:$arrX offset:${builder.triangleOffset}")
                     updateContentBackground()
                 }
             }
@@ -651,4 +650,7 @@ open class BasePop(private val context: Context, private val builder: Builder) :
         }
     }
 
+    private fun log(msg: String) {
+        log { msg }
+    }
 }
